@@ -1,0 +1,107 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #EEEEEE;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;  
+}
+
+table{background-color: ;
+  color: black;
+}
+        /* تحديد عناصر القائمة المنبثقة */
+        .menu-checkbox:checked + .menu-btn + .menu-list {
+          display: block;
+      }
+
+      /* تعديلات الصورة في النافذة المنبثقة */
+      #modal-image {
+          max-width: 80%; /* تعيين العرض الأقصى للصورة ليكون 80٪ من عرض النافذة */
+          height: auto; /* السماح بالارتفاع ليتغير تلقائيًا استنادًا إلى العرض */
+          display: block;
+          margin: 0 auto;
+          padding: 20px;
+          box-sizing: border-box;
+      }
+
+      /* تعديلات على نافذة المعلومات */
+      #modal-info {
+          text-align: center;
+      }
+.W1{
+  color: #750E21;
+  text-align: center;
+  
+}
+
+header {
+  background-color:#222831 ;
+  border: 5px solid #76ABAE;
+  border-radius: 8px;   // لانحناء البوردير//
+  width: 200px;
+  margin-top: 10px;
+  padding: 20px;
+  text-align: center;
+  height: 100px;
+  width: auto;
+}
+
+/*حجم صور الاشتراكات في الجدول */
+.TBimg { height: 70px;
+  width: auto;
+  
+}
+.image-container {
+  margin: 10px;
+  position: relative;
+}
+.thumbnail {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.mig-logo{
+  float: right;
+  
+  height: auto;
+  width: 100px;
+}
+
+
+
+
+.padUP{
+  margin-top: 5px;
+}
+
+/* اطار حول نص معين */
+.border-per{
+  padding: 5px;
+  margin: 8px;
+  border: 5px solid black;
+  display: flex;
+  }
+
+
+footer {
+  color: black;
+  text-align: center;
+  padding: 5px;
+  background-color: #F5E8C7;
+  margin-top: 10px;
+  border: 5px solid #76ABAE;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+}
+
+

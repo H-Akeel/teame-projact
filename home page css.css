@@ -1,0 +1,54 @@
+body {
+  
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url();
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;  
+}
+
+.hh1 {
+  color: #76ABAE;
+}
+
+
+
+header {
+  background-color:#222831 ;
+  border: 5px solid #76ABAE;
+  border-radius: 8px;   // لانحناء البوردير//
+  width: 200px;
+  margin-top: 10px;
+  padding: 20px;
+  text-align: center;
+  height: 100px;
+  width: auto;
+}
+
+.mig-logo{
+  float: right;
+  height: auto;
+  width: 100px;
+}
+.mig-logo2{
+
+margin-right: 30px;
+text-align: center;
+font-size: 19px;
+}
+.divbody{
+  font-size: 20px;
+  text-align: center;
+  margin-top: 5px;
+  border: 7px solid #76ABAE;
+  background-color: #EEEEEE;
+}
+
+footer{
+  background-color: #F5E8C7;
+  margin-top: 10px;
+  border: 5px solid #76ABAE;
+}

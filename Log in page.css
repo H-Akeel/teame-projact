@@ -1,0 +1,10 @@
+body{
+    background-image: url(photo/Log\ in\ page\ BG.jpg);
+    background-size:cover;
+}
+
+.FOCO{
+    font-size: xx-large;
+    margin-top: 200px;
+    text-align:center;
+}
