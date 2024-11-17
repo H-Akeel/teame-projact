@@ -1,55 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Wlcom pige</title>
-		<link rel="stylesheet" type="text/css" href="home page css.css">
-		<style type="text/css">
-			 .menu-checkbox:checked + .menu-btn + .menu-list {
-      display: block;
-    }
-		</style>
-
-		
+	<title>Welcome to TeaTime</title>
+	<link rel="stylesheet" href="home page css.css">
 </head>
 
-<body >
-	<header class="header" >
-		
-					
-		<a href="https://www.w3schools.com/">
-			<img class="mig-logo" src="F:\HTML\TEATIME\photo\TeaTimeLogo.png"  >
-		</a>
+<body>
+	<header class="header">
+		<nav class="nav-container">
+			<a href="/" class="logo-link">
+				<img class="mig-logo" src="photo/TeaTimeLogo.png" alt="TeaTime Logo">
+			</a>
 
-		<p><h1 class="hh1">TEATIME FOR all INTERTET</h1></p>
-		<nav  style="word-spacing: 7px;">
-		<a  class="hh1" href="Home" >Home</a>
-		<a class="hh1" href="printer">printer</a> 
-		<a class="hh1" href="WiFi">WiFi</a>
-	</nav>
-		
-
+			<h1 class="main-title">TEATIME FOR INTERNET</h1>
+			
+			<div class="nav-links">
+				<a class="nav-link" href="Home.html">Home</a>
+				<a class="nav-link" href="printer.html">Printer</a>
+				<a class="nav-link" href="WiFi.html">WiFi</a>
+			</div>
+		</nav>
 	</header>
 
-	<div class="divbody">
-		<h1>Hello!</h1>
-		<h2> Everything you need to know about the Internet and printing..</h2>
-		<h5>We hope you find what you are looking for..!</h5>
-		<p>GO to sing in....</p>
-	
-		<form action="F:\HTML\TEATIME\Log in page.html">
-			<input type="submit" value="List GO!" >
+	<main class="main-content">
+		<div class="welcome-section">
+			<h1 class="welcome-title">Welcome to TeaTime</h1>
+			<h2 class="welcome-subtitle">Everything you need to know about Internet and printing</h2>
+			<p class="welcome-text">We hope you find what you are looking for!</p>
 			
-		</form>
-	</div>
+			<div class="cta-container">
+				<a href="Log in page.html" class="cta-button">Sign In</a>
+			</div>
+		</div>
+	</main>
 
-	<footer>
-		
-		<div class="mig-logo2">All About Internet and printer</div>
-	
-
+	<footer class="footer">
+		<div class="footer-content">
+			<p class="footer-text">All About Internet and Printer</p>
+		</div>
 	</footer>
-
 </body>
 </html>
