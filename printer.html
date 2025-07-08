@@ -1,305 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-    <style>
-/* ===== الهيدر ===== */
-.header {
-  background-color: #312222;
-  padding: 1rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.log_heder {
-  height: 60px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-}
-
-.nav-link {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 25px;
-  transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-  color: #76ABAE;
-}
-
-/* ===== الفوتر ===== */
-.footer {
-  background-color: #312222;
-  color: white;
-  padding: 1rem;
-  text-align: center;
-  margin-top: auto;
-}
-
-.footer-text {
-  margin: 0;
-}
-
-/* ===== قسم رفع الملفات ===== */
-.summary-sections {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 3rem;
-  padding: 3rem 2rem;
-  max-width: 200px;
-  max-height: 200px;
-  margin: 15px auto 30px;
-  border: 5px solid #000;
-  border-radius: 30px;
-  text-align: center;
-}
-
-.img-upload-file {
-  height: 200px;
-  width: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-/* ===== قسم خدمات الطباعة ===== */
-
-.print-banner {
-  background-image: url('https://images.unsplash.com/photo-1581090700227-1e37b190418e?auto=format&fit=crop&w=1470&q=80'); /* ← صورة خلفية للطباعة */
-  background-size: cover;
-  background-position: center;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  text-align: center;
-  color: white;
-}
-
-.print-overlay {
-  background-color: rgba(0, 0, 0, 0.65);
-  padding: 30px;
-  border-radius: 15px;
-  max-width: 500px;
-  margin: 20px;
-}
-
-.print-overlay h1 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
-}
-
-.print-overlay p {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-}
-
-.print-btn {
-  background-color: #ff4081;
-  color: white;
-  padding: 12px 25px;
-  font-size: 1em;
-  border: none;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  display: inline-block;
-}
-
-.print-btn:hover {
-  background-color: #e91e63;
-}
-
-@media (max-width: 600px) {
-  .print-overlay h1 {
-    font-size: 1.8em;
-  }
-  .print-overlay p {
-    font-size: 1em;
-  }
-}
-/* ===== انتهاء قسم  خدمات الطباعة ===== */
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  padding: 2rem;
-  text-align: center;
-}
-
-.service-item {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
-}
-
-.service-item:hover {
-  transform: translateY(-5px);
-}
-
-.service-item img {
-  height: 80px;
-  margin-bottom: 1rem;
-}
-
-.service-item h3 {
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
-  color: #000;
-}
-
-.service-item p {
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.6;
-}
-
-
-.service-note {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background-color: #e9f5ff;
-  border-right: 5px solid #007bff;
-  border-radius: 10px;
-  padding: 1.2rem 1.5rem;
-  margin-top: 2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  direction: rtl;
-  transition: background-color 0.3s;
-}
-
-.service-note:hover {
-  background-color: #d6efff;
-}
-
-.service-note-icon {
-  font-size: 2rem;
-}
-
-.service-note-content {
-  font-size: 1.1rem;
-  color: #333;
-  line-height: 1.6;
-}
-
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TeaTime | خدمات الطباعة</title>
+  <link rel="stylesheet" href="printer.css">
 </head>
 <body>
-    <header class="header">
-        <nav class="nav-container">
-            <div>
-                <a href="index.html"><img class="log_heder" src="Photo/t ~ TIME.png" alt=""></a>
-            </div>
-            <div class="nav-links">
-                <a class="nav-link" href="index.html">الصفحة الرئيسية</a>
 
-                <a class="nav-link" href="WiFi.html">صفحة الشبكات</a>
-            </div>
-        </nav>
-    </header>
 
-    <section id="printing">
-       
-    <section class="print-banner">
-      <div class="print-overlay">
-        <h1>🖨️ خدمات الطباعة</h1>
-        <p>نقوم بطباعة كل شيء بجودة عالية وسرعة فائقة. <br> اطبع مستنداتك، مشاريعك، تصاميمك وأكثر!</p>
-        <a href="https://forms.gle/Eurc64DTVKUfqYNp9" target="_blank" class="print-btn">📤 أرسل ملفك الآن</a>
-      </div>
-    </section>
-        <div>
-            <div class="services-grid">
-                <div class="service-item">
-                  <img src="Photo/documant.png" alt="">
-                  <h3>خدمات الطباعة</h3>
-                  <p>طباعة المستندات بالألوان أو الأبيض والأسود</p>
-                </div>
-              
-                <div class="service-item">
-                  <img src="Photo/printing-machine.png" alt="">
-                  <h3>خدمات الطباعة</h3>
-                  <p>طباعة الصور والملصقات بجميع الأحجام</p>
-                </div>
-              
-                <div class="service-item">
-                  <img src="Photo/gift-wrap.png" alt="">
-                  <h3>خدمات الطباعة</h3>
-                  <p>تغليف حراري وتجليد احترافي</p>
-                </div>
-              
-                <div class="service-item">
-                  <img src="Photo/university research.png" alt="">
-                  <h3>خدمات الطباعة</h3>
-                  <p>طباعة البحوث الجامعية والتقارير</p>
-                </div>
-              
-                <div class="service-item">
-                  <img src="Photo/Competitive prices.png" alt="">
-                  <h3>خدمات الطباعة</h3>
-                  <p>أسعار منافسة وجودة مضمونة</p>
-                </div>
-              </div>
-              
-
-          </div>
-          
-          <div class="service-note">
-            <div class="service-note-icon">📢</div>
-            <div class="service-note-content">
-              <strong>نحن في خدمتك دائماً</strong><br>
-              لا تتردد في زيارة مكتبتنا أو التواصل معنا لأي استفسار.
-            </div>
-          </div>
-          
-        </div>
-      </section>
-      
-    
-
-    <h1 style="text-align: center;">ارسل صورك و ملفاتك لنتمكن من طباعتها و ارسالها لك في اقرب وقت   </h1>
-   
-      
-      
-      <div class="summary-sections">
-        <section>
-            <a href="https://forms.gle/Eurc64DTVKUfqYNp9" target="_blank">
-                <img class="img-upload-file" src="Photo/upload file.png" alt="رفع ملف"> </a>
-                <button style="height: 30px; width: auto; background-color: #76ABAE; color: #000;" >
-                    <a href="https://forms.gle/Eurc64DTVKUfqYNp9" target="_blank">
-                         ارسل الصوره </a>
-                </button>
-            
-        </section>
+  <header class="header">
+  <nav class="nav-container">
+    <div>
+      <a href="index.html"><img class="log_heder" src="Photo/t ~ TIME.png" alt="شعار الموقع"></a>
     </div>
-    
-<footer class="footer">
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">الرئيسية</a>
+      <a class="nav-link" href="printer.html">الطباعات</a>
+      <a class="nav-link" href="WiFi.html">الشبكات</a>
+    </div>
+  </nav>
+</header>
+
+<section class="print-banner">
+  <div class="print-overlay">
+    <h1>🖨️ خدمات الطباعة</h1>
+    <p>نقوم بطباعة كل شيء بجودة عالية وسرعة فائقة.<br> اطبع مستنداتك، مشاريعك، تصاميمك وأكثر!</p>
+    <a href="https://forms.gle/Eurc64DTVKUfqYNp9" target="_blank" class="print-btn">📤 أرسل ملفك الآن</a>
+  </div>
+</section>
+
+<section>
+  <div class="services-grid">
+    <div class="service-item">
+      <img src="Photo/documant.png" alt="">
+      <h3>طباعة المستندات</h3>
+      <p>طباعة بالألوان أو الأبيض والأسود بجودة عالية</p>
+    </div>
+    <div class="service-item">
+      <img src="Photo/printing-machine.png" alt="">
+      <h3>طباعة الصور والملصقات</h3>
+      <p>لكل الأحجام والمقاسات المختلفة</p>
+    </div>
+    <div class="service-item">
+      <img src="Photo/gift-wrap.png" alt="">
+      <h3>تغليف وتجليد</h3>
+      <p>تغليف حراري وتجليد احترافي</p>
+    </div>
+    <div class="service-item">
+      <img src="Photo/university research.png" alt="">
+      <h3>البحوث الجامعية</h3>
+      <p>تنسيق وطباعة التقارير والمشاريع الطلابية</p>
+    </div>
+    <div class="service-item">
+      <img src="Photo/Competitive prices.png" alt="">
+      <h3>أسعار منافسة</h3>
+      <p>جودة عالية بأسعار مناسبة</p>
+    </div>
+  </div>
+
+  <div class="service-note">
+    <div class="service-note-icon">📢</div>
+    <div class="service-note-content">
+      <strong>نحن في خدمتك دائماً</strong><br>
+      لا تتردد في زيارة مكتبتنا أو التواصل معنا لأي استفسار.
+    </div>
+  </div>
+</section>
+
+<h1 style="text-align: center;">ارسل صورك وملفاتك لنتمكن من طباعتها وإرسالها لك في أقرب وقت</h1>
+
+<div class="summary-sections">
+  <section>
+    <a href="https://forms.gle/Eurc64DTVKUfqYNp9" target="_blank">
+      <img class="img-upload-file" src="Photo/upload file.png" alt="رفع ملف">
+    </a>
+    <a href="https://forms.gle/Eurc64DTVKUfqYNp9" target="_blank" class="print-btn">📤 ارسل الصورة</a>
+  </section>
+</div>
+
+  <footer class="footer">
     <div class="footer-content">
-        <p class="footer-text">كل ما تحتاجة عن الانترنت و الطباعة</p>
+      <p class="footer-text">كل ما تحتاجه عن الإنترنت والطباعة</p>
+      <p> 📞 255 2616 0770 </p>
+      <p> ✉️ teatime.net1@gmail.com</p>
+      <p>📍 العراق - بغداد - السعدون</p>
     </div>
-</footer>
+  </footer>
 </body>
 </html>
