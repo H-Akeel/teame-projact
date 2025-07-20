@@ -1,0 +1,148 @@
+
+  #pdf_container {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #f3f2f2;
+    border: 2px solid #000;
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .logo-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+}
+
+.logo-img {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid #aaa;
+  border-radius: 12px;
+  background: white;
+  padding: 6px;
+}
+
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(-45deg, #f0f0f0, #e0e0e0, white, #a0a0a0);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    direction: rtl;
+  }
+
+  .header {
+    background-color: #f0f0f0;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #ccc;
+  }
+
+  .img {
+    width: 180px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 16px;
+    border: 1px solid #aaa;
+    background: white;
+    padding: 5px;
+    margin-bottom: 20px;
+  }
+
+  input, button {
+    margin: 5px;
+    padding: 5px;
+  }
+
+  table, tr, td, th {
+    page-break-inside: avoid !important;
+    break-inside: avoid;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 20px auto;
+    width: 90%;
+    page-break-inside: avoid;
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 6px 10px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #d8d8d8;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+  }
+
+  td {
+    font-size: 16px;
+  }
+
+  .acsubt_done h1, .acsubt_done h2 {
+    margin: 5px 0;
+  }
+
+  .header-line {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+
+  .done {
+    flex: 1;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .date {
+    text-align: right;
+    font-size: 18px;
+    color: #333;
+    padding-right: 1cm;
+  }
+
+  .time {
+    text-align: left;
+    font-size: 18px;
+    color: gray;
+  }
+
+  .pdf {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .pdf:hover {
+    background-color: #45a049;
+  }
+
+  @media print {
+    .pdf {
+      display: none;
+    }
+  }
+
