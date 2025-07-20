@@ -1,41 +1,8 @@
-
-  /* إعداد حجم الطباعة A4 */
-  @media print {
-    body, html, #pdf_container {
-      width: 21cm;
-      height: 29.7cm;
-      margin: 0;
-      padding: 0;
-    }
-
-    .pdf {
-      display: none;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12pt;
-    }
-
-    th, td {
-      border: 1px solid black;
-      padding: 4px;
-      text-align: center;
-    }
-  }
-
-  /* الحاوية القابلة للطباعة */
   #pdf_container {
     margin: 0 !important;
     padding: 0 !important;
     background-color: #f3f2f2;
     border: 2px solid #000;
-    width: 21cm;
-    min-height: 29.7cm;
-    padding: 1cm;
-    box-sizing: border-box;
-    background: white;
   }
 
   @keyframes gradient {
@@ -43,6 +10,24 @@
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
+
+  .logo-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+}
+
+.logo-img {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid #aaa;
+  border-radius: 12px;
+  background: white;
+  padding: 6px;
+}
+
 
   body {
     margin: 0;
@@ -53,23 +38,6 @@
     font-family: Arial, sans-serif;
     text-align: center;
     direction: rtl;
-  }
-
-  .logo-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px auto;
-  }
-
-  .logo-img {
-    width: 160px;
-    height: auto;
-    object-fit: contain;
-    border: 1px solid #aaa;
-    border-radius: 12px;
-    background: white;
-    padding: 6px;
   }
 
   .header {
@@ -105,7 +73,6 @@
     margin: 20px auto;
     width: 90%;
     page-break-inside: avoid;
-    background-color: white;
   }
 
   th, td {
@@ -130,10 +97,11 @@
 
   .header-line {
     margin: 0 !important;
-    padding: 10px 20px;
+    padding: 0 !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 20px;
   }
 
   .done {
@@ -171,25 +139,8 @@
     background-color: #45a049;
   }
 
-  /* دعم عرض مناسب للهواتف المحمولة */
-  @media screen and (max-width: 768px) {
-    #pdf_container {
-      width: 100vw;
-      min-height: auto;
-      padding: 10px;
-    }
-
-    table {
-      width: 100%;
-    }
-
-    th, td {
-      font-size: 14px;
-      padding: 4px;
-    }
-
-    .done, .date, .time {
-      font-size: 16px;
+  @media print {
+    .pdf {
+      display: none;
     }
   }
-
