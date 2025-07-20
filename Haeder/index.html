@@ -2,13 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  
   <title>توليد جدول</title>
-  <link rel="icon" type="image/png" href="Photo/t ~.png">
   <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <link rel="stylesheet" href="index.css">
+    <link rel="icon" type="image/png" href="..//Photo/t ~.png">
+
 
 </head>
 <body>
@@ -95,17 +95,24 @@ male_names = ${JSON.stringify([
 ])}
 
 
-def gen_name(names, parts=3):
+def gen_male_name():
     nbsp = "\u00A0"
-    return (nbsp * 1).join(random.sample(names, parts))
+    return nbsp.join(random.sample(male_names, 3))
+
+def gen_female_name():
+    nbsp = "\u00A0"
+    first = random.choice(female_names)
+    last_two = random.sample(male_names, 2)
+    return nbsp.join([first] + last_two)
+
 
 table = []
 for i in range(30):
     table.append([
         "${tawn}",
         "${city}",
-        gen_name(male_names),
-        gen_name(female_names),
+        gen_male_name(),
+        gen_female_name(),
         "${dateInsideTable}"
     ])
 
