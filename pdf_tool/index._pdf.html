@@ -202,7 +202,6 @@
     async function imagesToPDF() {
       const files = document.getElementById('image-files').files;
       if (files.length === 0) return alert('يرجى اختيار صورة واحدة على الأقل');
-      if (files.length > 25) return alert('❗ الحد الأقصى للصور هو 25 صورة. الرجاء تقليل العدد.');
 
       const pdfDoc = await PDFLib.PDFDocument.create();
 
