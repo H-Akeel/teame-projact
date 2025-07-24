@@ -105,6 +105,20 @@
   </header>
 
   <main>
+
+    
+     <!-- أداة تحويل الصور إلى PDF -->
+    <div class="tool">
+      <h2> تحويل صور إلى PDF</h2>
+      <input type="file" id="image-files" multiple accept="image/*">
+      <br>
+      <button onclick="imagesToPDF()">تحويل</button>
+      <a id="image-download" class="download-link" style="display:none"></a>
+    </div>
+
+
+
+    
     <!-- أداة الدمج -->
     <div class="tool">
       <h2> دمج ملفات PDF</h2>
@@ -125,14 +139,7 @@
       <a id="split-download" class="download-link" style="display:none"></a>
     </div>
 
-    <!-- أداة تحويل الصور إلى PDF -->
-    <div class="tool">
-      <h2> تحويل صور إلى PDF</h2>
-      <input type="file" id="image-files" multiple accept="image/*">
-      <br>
-      <button onclick="imagesToPDF()">تحويل</button>
-      <a id="image-download" class="download-link" style="display:none"></a>
-    </div>
+ 
   </main>
 
   <footer>
