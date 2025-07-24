@@ -1,251 +1,339 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <meta charset="UTF-8">
-  <title>أدوات PDF</title>
-  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(to right, #e3f2fd, #ffffff);
-      margin: 0;
-      padding: 0;
-    }
-
-    header, footer {
-      background: linear-gradient(to left, #0d47a1, #1976d2);
-      color: white;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2.2em;
-      letter-spacing: 1px;
-    }
-
-    main {
-      padding: 40px 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    h2 {
-      color: #0d47a1;
-      font-size: 1.6em;
-      margin-bottom: 20px;
-    }
-
-    .tool {
-      margin: 30px auto;
-      padding: 30px;
-      background: #ffffff;
-      border-radius: 18px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .tool:hover {
-      transform: scale(1.015);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    input[type="file"], input[type="number"] {
-      margin: 10px;
-      padding: 10px 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
-      width: auto;
-    }
-
-    button {
-      padding: 12px 26px;
-      background: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: #0d47a1;
-    }
-
-    a.download-link {
-      display: block;
-      margin-top: 15px;
-      font-size: 18px;
-      color: #1a237e;
-      text-decoration: underline;
-      text-align: center;
-    }
-
-    footer p {
-      margin: 0;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <img src="..//Photo\t ~ TIME.png" alt="logo" style="height: 100px;">
-    <h1>🛠️ أدوات PDF المتقدمة</h1>
-  </header>
-
-  <main>
-
-    
-     <!-- أداة تحويل الصور إلى PDF -->
-    <div class="tool">
-      <h2> تحويل صور إلى PDF</h2>
-      <input type="file" id="image-files" multiple accept="image/*">
-      <br>
-      <button onclick="imagesToPDF()">تحويل</button>
-      <a id="image-download" class="download-link" style="display:none"></a>
-    </div>
-
-
-
-    
-    <!-- أداة الدمج -->
-    <div class="tool">
-      <h2> دمج ملفات PDF</h2>
-      <input type="file" id="merge-files" multiple accept="application/pdf">
-      <br>
-      <button onclick="mergePDFs()">دمج</button>
-      <a id="merge-download" class="download-link" style="display:none"></a>
-    </div>
-
-    <!-- أداة التقسيم حسب صفحات محددة -->
-    <div class="tool">
-      <h2> تقسيم ملف PDF </h2>
-      <input type="file" id="split-file" accept="application/pdf"><br>
-      من الصفحة: <input type="number" id="start-page" min="1" style="width: 60px;">
-      إلى الصفحة: <input type="number" id="end-page" min="1" style="width: 60px;">
-      <br>
-      <button onclick="splitPDFRange()">تقسيم</button>
-      <a id="split-download" class="download-link" style="display:none"></a>
-    </div>
-
- 
-  </main>
-
-  <footer>
-  <p>تم التطوير من قبل :- حسين عقيل صبري 👨‍💻</p>
-  <p>
-    <a href="https://instagram.com/_h47k" target="_blank" style="text-decoration:none; margin-right: 15px; color: #E1306C; font-size: 24px;">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="#E1306C" viewBox="0 0 24 24" width="24" height="24">
-        <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.25-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z"/>
-      </svg>
-    </a>
-    <a href="https://t.me/h47ak" target="_blank" style="text-decoration:none; color: #0088cc; font-size: 24px;">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="#0088cc" viewBox="0 0 24 24" width="24" height="24">
-        <path d="M21.5 3.5L2.4 10.5c-.6.2-.6.7-.1.9l5 1.9 2.3 6.9c.3.7.9.8 1.3.5l2.8-2.1 4.8 3.5c.9.5 1.6.2 1.9-.8l3.4-16c.3-1-.3-1.6-1.3-1.3zM9 15.2l-.6-3.7 10.3-5.8-9.7 9.5z"/>
-      </svg>
-    </a>
-  </p>
-</footer>
-
-  <script>
-    async function mergePDFs() {
-      const files = document.getElementById('merge-files').files;
-      if (files.length < 2) return alert('اختر ملفين أو أكثر للدمج');
-      const merged = await PDFLib.PDFDocument.create();
-
-      for (let f of files) {
-        const bytes = await f.arrayBuffer();
-        const pdf = await PDFLib.PDFDocument.load(bytes);
-        const pages = await merged.copyPages(pdf, pdf.getPageIndices());
-        pages.forEach(p => merged.addPage(p));
-      }
-
-      const mergedBytes = await merged.save();
-      const blob = new Blob([mergedBytes], {type: 'application/pdf'});
-      const url = URL.createObjectURL(blob);
-      const link = document.getElementById('merge-download');
-      link.href = url;
-      link.download = 'merged.pdf';
-      link.textContent = '📥 تحميل ملف PDF المدموج';
-      link.style.display = 'block';
-    }
-
-    async function splitPDFRange() {
-      const file = document.getElementById('split-file').files[0];
-      const startPage = parseInt(document.getElementById('start-page').value) - 1;
-      const endPage = parseInt(document.getElementById('end-page').value) - 1;
-      if (!file || isNaN(startPage) || isNaN(endPage) || startPage > endPage) {
-        return alert('يرجى إدخال بيانات صحيحة للصفحات والملف');
-      }
-
-      const bytes = await file.arrayBuffer();
-      const pdfDoc = await PDFLib.PDFDocument.load(bytes);
-      const totalPages = pdfDoc.getPageCount();
-
-      if (startPage < 0 || endPage >= totalPages) {
-        return alert('النطاق خارج عدد الصفحات في الملف');
-      }
-
-      const newDoc = await PDFLib.PDFDocument.create();
-      const pages = await newDoc.copyPages(pdfDoc, [...Array(endPage - startPage + 1).keys()].map(i => i + startPage));
-      pages.forEach(p => newDoc.addPage(p));
-
-      const newBytes = await newDoc.save();
-      const blob = new Blob([newBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.getElementById('split-download');
-      link.href = url;
-      link.download = `split-${startPage+1}-to-${endPage+1}.pdf`;
-      link.textContent = '📥 تحميل الملف المقسم';
-      link.style.display = 'block';
-    }
-
-    async function imagesToPDF() {
-      const files = document.getElementById('image-files').files;
-      if (files.length === 0) return alert('يرجى اختيار صورة واحدة على الأقل');
-
-      const pdfDoc = await PDFLib.PDFDocument.create();
-
-      for (let file of files) {
-        const imgBytes = await file.arrayBuffer();
-        let imgEmbed, dims;
-
-        if (file.type === 'image/png') {
-          imgEmbed = await pdfDoc.embedPng(imgBytes);
-        } else {
-          imgEmbed = await pdfDoc.embedJpg(imgBytes);
+    <meta charset="UTF-8" />
+    <title>أدوات PDF</title>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script> <!-- مكتبة pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> <!-- مكتبة JSZip -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
         }
 
-        dims = imgEmbed.scale(1);
-        const page = pdfDoc.addPage([dims.width, dims.height]);
-        page.drawImage(imgEmbed, {
-          x: 0,
-          y: 0,
-          width: dims.width,
-          height: dims.height
-        });
-      }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #ffffff);
+            margin: 0;
+            padding: 0;
+        }
 
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.getElementById('image-download');
-      link.href = url;
-      link.download = 'images.pdf';
-      link.textContent = '📥 تحميل ملف PDF';
-      link.style.display = 'block';
-    }
-  </script>
+        header,
+        footer {
+            background: linear-gradient(to left, #0d47a1, #1976d2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
+
+        main {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #0d47a1;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .tool {
+            margin: 30px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tool:hover {
+            transform: scale(1.015);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        input[type="file"],
+        input[type="number"] {
+            margin: 10px;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            width: auto;
+        }
+
+        button {
+            padding: 12px 26px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0d47a1;
+        }
+
+        a.download-link {
+            display: block;
+            margin-top: 15px;
+            font-size: 18px;
+            color: #1a237e;
+            text-decoration: underline;
+            text-align: center;
+        }
+
+        #images-output img {
+            max-width: 100%;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        #images-output a {
+            display: inline-block;
+            margin-bottom: 30px;
+            font-size: 18px;
+            color: #1976d2;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="..//Photo\t ~ TIME.png" alt="logo" style="height: 100px;" />
+        <h1>🛠️ أدوات PDF المتقدمة</h1>
+    </header>
+
+    <main>
+
+        <!-- أداة تحويل الصور إلى PDF -->
+        <div class="tool">
+            <h2> تحويل صور إلى PDF</h2>
+            <input type="file" id="image-files" multiple accept="image/*" />
+            <br />
+            <button onclick="imagesToPDF()">تحويل</button>
+            <a id="image-download" class="download-link" style="display:none"></a>
+        </div>
+
+        <!-- أداة تحويل PDF إلى صور -->
+        <div class="tool">
+            <h2>📄 تحويل PDF إلى صور PNG</h2>
+            <input type="file" id="pdf-to-images-file" accept="application/pdf" /><br />
+            <button onclick="pdfToImages()">تحويل</button>
+            <div id="images-output" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- أداة الدمج -->
+        <div class="tool">
+            <h2> دمج ملفات PDF</h2>
+            <input type="file" id="merge-files" multiple accept="application/pdf" /><br />
+            <button onclick="mergePDFs()">دمج</button>
+            <a id="merge-download" class="download-link" style="display:none"></a>
+        </div>
+
+        <!-- أداة التقسيم حسب صفحات محددة -->
+        <div class="tool">
+            <h2> تقسيم ملف PDF </h2>
+            <input type="file" id="split-file" accept="application/pdf" /><br />
+            من الصفحة:
+            <input type="number" id="start-page" min="1" style="width: 60px" />
+            إلى الصفحة:
+            <input type="number" id="end-page" min="1" style="width: 60px" /><br />
+            <button onclick="splitPDFRange()">تقسيم</button>
+            <a id="split-download" class="download-link" style="display:none"></a>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>تم التطوير من قبل :- حسين عقيل صبري 👨‍💻</p>
+        <p>
+            <a href="https://instagram.com/_h47k" target="_blank"
+                style="text-decoration:none; margin-right: 15px; color: #E1306C; font-size: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#E1306C" viewBox="0 0 24 24" width="24" height="24">
+                    <path
+                        d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm5.25-.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z" />
+                </svg>
+            </a>
+            <a href="https://t.me/h47ak" target="_blank" style="text-decoration:none; color: #0088cc; font-size: 24px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#0088cc" viewBox="0 0 24 24" width="24" height="24">
+                    <path
+                        d="M21.5 3.5L2.4 10.5c-.6.2-.6.7-.1.9l5 1.9 2.3 6.9c.3.7.9.8 1.3.5l2.8-2.1 4.8 3.5c.9.5 1.6.2 1.9-.8l3.4-16c.3-1-.3-1.6-1.3-1.3zM9 15.2l-.6-3.7 10.3-5.8-9.7 9.5z" />
+                </svg>
+            </a>
+        </p>
+    </footer>
+
+    <script>
+        async function mergePDFs() {
+            const files = document.getElementById('merge-files').files;
+            if (files.length < 2) return alert('اختر ملفين أو أكثر للدمج');
+            const merged = await PDFLib.PDFDocument.create();
+
+            for (let f of files) {
+                const bytes = await f.arrayBuffer();
+                const pdf = await PDFLib.PDFDocument.load(bytes);
+                const pages = await merged.copyPages(pdf, pdf.getPageIndices());
+                pages.forEach((p) => merged.addPage(p));
+            }
+
+            const mergedBytes = await merged.save();
+            const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const link = document.getElementById('merge-download');
+            link.href = url;
+            link.download = 'merged.pdf';
+            link.textContent = '📥 تحميل ملف PDF المدموج';
+            link.style.display = 'block';
+        }
+
+        async function splitPDFRange() {
+            const file = document.getElementById('split-file').files[0];
+            const startPage = parseInt(document.getElementById('start-page').value) - 1;
+            const endPage = parseInt(document.getElementById('end-page').value) - 1;
+            if (!file || isNaN(startPage) || isNaN(endPage) || startPage > endPage) {
+                return alert('يرجى إدخال بيانات صحيحة للصفحات والملف');
+            }
+
+            const bytes = await file.arrayBuffer();
+            const pdfDoc = await PDFLib.PDFDocument.load(bytes);
+            const totalPages = pdfDoc.getPageCount();
+
+            if (startPage < 0 || endPage >= totalPages) {
+                return alert('النطاق خارج عدد الصفحات في الملف');
+            }
+
+            const newDoc = await PDFLib.PDFDocument.create();
+            const pages = await newDoc.copyPages(
+                pdfDoc,
+                [...Array(endPage - startPage + 1).keys()].map((i) => i + startPage)
+            );
+            pages.forEach((p) => newDoc.addPage(p));
+
+            const newBytes = await newDoc.save();
+            const blob = new Blob([newBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const link = document.getElementById('split-download');
+            link.href = url;
+            link.download = `split-${startPage + 1}-to-${endPage + 1}.pdf`;
+            link.textContent = '📥 تحميل الملف المقسم';
+            link.style.display = 'block';
+        }
+
+        async function imagesToPDF() {
+            const files = document.getElementById('image-files').files;
+            if (files.length === 0) return alert('يرجى اختيار صورة واحدة على الأقل');
+
+            const pdfDoc = await PDFLib.PDFDocument.create();
+
+            for (let file of files) {
+                const imgBytes = await file.arrayBuffer();
+                let imgEmbed, dims;
+
+                if (file.type === 'image/png') {
+                    imgEmbed = await pdfDoc.embedPng(imgBytes);
+                } else {
+                    imgEmbed = await pdfDoc.embedJpg(imgBytes);
+                }
+
+                dims = imgEmbed.scale(1);
+                const page = pdfDoc.addPage([dims.width, dims.height]);
+                page.drawImage(imgEmbed, {
+                    x: 0,
+                    y: 0,
+                    width: dims.width,
+                    height: dims.height,
+                });
+            }
+
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const link = document.getElementById('image-download');
+            link.href = url;
+            link.download = 'images.pdf';
+            link.textContent = '📥 تحميل ملف PDF';
+            link.style.display = 'block';
+        }
+
+        async function pdfToImages() {
+            const fileInput = document.getElementById('pdf-to-images-file');
+            const outputDiv = document.getElementById('images-output');
+            outputDiv.innerHTML = ''; // تنظيف المحتوى السابق
+
+            if (fileInput.files.length === 0) {
+                alert('يرجى اختيار ملف PDF');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const arrayBuffer = await file.arrayBuffer();
+
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+            const pdf = await loadingTask.promise;
+            const numPages = pdf.numPages;
+
+            const zip = new JSZip();
+
+            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+
+                const viewport = page.getViewport({ scale: 1.5 });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport,
+                };
+
+                await page.render(renderContext).promise;
+
+                // تحويل canvas إلى blob صورة PNG
+                const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+
+                // إضافة الصورة إلى ملف ZIP
+                zip.file(`page-${pageNum}.png`, blob);
+            }
+
+            // إنشاء ملف ZIP للتحميل
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+
+            const zipUrl = URL.createObjectURL(zipBlob);
+
+            // إنشاء رابط تحميل واحد لملف ZIP
+            const downloadLink = document.createElement('a');
+            downloadLink.href = zipUrl;
+            downloadLink.download = `${file.name.replace(/\.pdf$/i, '')}_images.zip`;
+            downloadLink.textContent = `⬇️ تحميل جميع صفحات PDF كملف ZIP`;
+            downloadLink.className = 'download-link';
+
+            outputDiv.appendChild(downloadLink);
+        }
+    </script>
 </body>
+
 </html>
