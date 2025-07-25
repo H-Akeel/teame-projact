@@ -5,8 +5,9 @@
     <meta charset="UTF-8" />
     <title>أدوات PDF</title>
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script> <!-- مكتبة pdf.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> <!-- مكتبة JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
     <style>
         * {
@@ -125,8 +126,20 @@
         <h1>🛠️ أدوات PDF المتقدمة</h1>
     </header>
 
-    <main>
+    <main><!-- أداة استخراج نص من صورة -->
+        <div class="tool">
+            <h2>📷 استخراج النص من صورة</h2>
+            <input type="file" id="ocr-image" accept="image/*" /><br />
+            <button onclick="extractTextFromImage()">📄 استخراج النص</button>
+            <p id="ocr-status"></p>
+            <div id="ocr-output"
+                style="background:#f8f9fa; padding:10px; border-radius:8px; margin-top:10px; white-space: pre-wrap;">
+            </div>
+            <a id="ocr-download" class="download-link" style="display:none">📥 تحميل النص كملف TXT</a>
+        </div>
 
+
+        <!-- الأدوات الأخرى -->
         <!-- أداة تحويل الصور إلى PDF -->
         <div class="tool">
             <h2> تحويل صور إلى PDF</h2>
@@ -185,7 +198,50 @@
         </p>
     </footer>
 
+    <script>async function extractTextFromImage() {
+  const image = document.getElementById('ocr-image').files[0];
+  const output = document.getElementById('ocr-output');
+  const status = document.getElementById('ocr-status');
+  const downloadLink = document.getElementById('ocr-download');
+
+  if (!image) {
+    alert('يرجى اختيار صورة تحتوي على نص.');
+    return;
+  }
+
+  output.textContent = '';
+  downloadLink.style.display = 'none';
+  status.textContent = "⏳ جارٍ استخراج النص...";
+
+  Tesseract.recognize(
+    image,
+    'ara+eng',  // يمكن استخدام 'ara' فقط لو النص عربي 100%
+    {
+      logger: m => {
+        status.textContent = `🔄 ${m.status} (${Math.round(m.progress * 100)}%)`;
+      }
+    }
+  ).then(({ data: { text } }) => {
+    const cleanedText = text.trim();
+    status.textContent = "✅ تم الاستخراج بنجاح";
+    output.textContent = cleanedText;
+
+    // إنشاء ملف نصي للتحميل
+    const blob = new Blob([cleanedText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = 'extracted-text.txt';
+    downloadLink.style.display = 'block';
+  }).catch(err => {
+    status.textContent = "❌ حدث خطأ أثناء المعالجة";
+    output.textContent = err.message;
+  });
+}
+
+    </script>
     <script>
+
+
         async function mergePDFs() {
             const files = document.getElementById('merge-files').files;
             if (files.length < 2) return alert('اختر ملفين أو أكثر للدمج');
@@ -333,6 +389,8 @@
 
             outputDiv.appendChild(downloadLink);
         }
+
+        // بقية الأكواد السابقة كما هي بدون تغيير (imagesToPDF، pdfToImages، mergePDFs، splitPDFRang)
     </script>
 </body>
 
