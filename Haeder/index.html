@@ -1,167 +1,228 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>توليد جدول</title>
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <link rel="stylesheet" href="index.css">
-    <link rel="icon" type="..//photo/png" href="..//Photo/t ~.png">
-
+<meta charset="UTF-8">
+<title>مولد التقارير المخصصة</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link rel="stylesheet" href="index.css">
 
 </head>
 <body>
 
-  <div class="logo-center">
-  <img src="..//Photo/t ~ TIME.png" alt="الشعار" class="logo-img">
+<!-- ======================================================================================= -->
+<!--                                     القسم الأول (الجدول القديم)                               -->
+<!-- ======================================================================================= -->
+<div class="container">
+    <div class="logo-center"><img src="https://i.imgur.com/your-logo.png" alt="الشعار" class="logo-img"></div>
+    <h2>الجدول الأول: تقرير الأسماء الكامل</h2>
+    <div class="form-grid">
+        <div class="form-group"><label for="g1_tawn">قسم الحماية</label><input type="text" id="g1_tawn"></div>
+        <div class="form-group"><label for="g1_city">المحافظة</label><input type="text" id="g1_city"></div>
+        <div class="form-group"><label for="g1_table_date_input">تاريخ فوق الجدول</label><input type="date" id="g1_table_date_input"></div>
+        <div class="form-group"><label for="g1_receive_date_table">تاريخ الاستلام</label><input type="date" id="g1_receive_date_table"></div>
+        <div class="form-group"><label for="g1_cost_name">اسم المستلم</label><input type="text" id="g1_cost_name"></div>
+        <div class="form-group"><label for="g1_cost_mother_name">اسم الأم</label><input type="text" id="g1_cost_mother_name"></div>
+        <div class="form-group"><label for="g1_random_names_count">عدد الأسماء العشوائية</label><input type="number" id="g1_random_names_count" value="30" min="1" max="100"></div>
+    </div>
+    <div class="button-group">
+        <button class="generate-btn" onclick="generateTable1( )">🔄 توليد الجدول الأول</button>
+        <button id="g1_jpg-button" class="jpg-btn" onclick="downloadImage('g1_printable-area', 'g1_table_date_input', 'jpg')" disabled>📄 تحميل JPG</button>
+        <button id="g1_pdf-button" class="pdf-btn" onclick="downloadImage('g1_printable-area', 'g1_table_date_input', 'pdf')" disabled>📄 تحميل PDF</button>
+    </div>
+    <div id="g1_printable-area" class="printable-area">
+        <div class="report-header"><span id="g1_header-right"></span><span id="g1_header-center"></span><span id="g1_header-left">(7)</span></div>
+        <div id="g1_result_table" class="result-table"></div>
+        <div class="report-footer"><div class="signature-area"><div id="g1_footer-sequence">التسلسل 107</div></div></div>
+    </div>
+</div>
+
+<!-- ======================================================================================= -->
+<!--                                     القسم الثاني (الجدول الجديد)                               -->
+<!-- ======================================================================================= -->
+<div class="container">
+    <h2>الجدول الثاني: تقرير الأسماء المختصر</h2>
+    <div class="form-grid">
+        <div class="form-group"><label for="g2_tawn">قسم الحماية</label><input type="text" id="g2_tawn"></div>
+        <div class="form-group"><label for="g2_table_date_input">تاريخ فوق الجدول</label><input type="date" id="g2_table_date_input"></div>
+        <!-- === الحقول الجديدة للإدخال اليدوي === -->
+        <div class="form-group"><label for="g2_full_name">الاسم الرباعي (للإضافة)</label><input type="text" id="g2_full_name"></div>
+        <div class="form-group"><label for="g2_mother_name">اسم الأم الثلاثي (للإضافة)</label><input type="text" id="g2_mother_name"></div>
+    </div>
+    <div class="button-group">
+        <button class="generate-btn" onclick="generateTable2()">🔄 توليد الجدول الثاني</button>
+        <button id="g2_jpg-button" class="jpg-btn" onclick="downloadImage('g2_printable-area', 'g2_table_date_input', 'jpg')" disabled>📄 تحميل JPG</button>
+        <button id="g2_pdf-button" class="pdf-btn" onclick="downloadImage('g2_printable-area', 'g2_table_date_input', 'pdf')" disabled>📄 تحميل PDF</button>
+    </div>
+    <div id="g2_printable-area" class="printable-area">
+        <div class="report-header"><span id="g2_header-right"></span><span id="g2_header-center"></span><span id="g2_header-left">(7)</span></div>
+        <div id="g2_result_table" class="result-table"></div>
+        <div class="report-footer"><div class="signature-area"><div id="g2_footer-sequence">التسلسل 107</div></div></div>
+    </div>
 </div>
 
 
-  <h2>إدخال البيانات</h2>
-  <label for="">قسم الحماية</label>
-  <input type="text" id="tawn" placeholder="قسم الحماية"><br>
+<script>
+let pyodideReady = false;
+let pyodide;
 
-  <label for="">المحافظة</label>
-  <input type="text" id="city" placeholder="المحافظة"><br>
+async function loadPyodideAndPackages() {
+    console.log("بدء تحميل Pyodide...");
+    pyodide = await loadPyodide();
+    pyodideReady = true;
+    console.log("Pyodide جاهز.");
+}
+loadPyodideAndPackages();
 
-  <label for="">تاريخ فوق الجدول</label>
-  <input type="date" id="table_date_input" placeholder="📅 التاريخ فوق الجدول"><br>
+// ===================================================================
+//                          وظائف الجدول الأول
+// ===================================================================
+async function generateTable1() {
+    if (!pyodideReady) { alert("Pyodide لا يزال قيد التحميل."); return; }
 
-  <label for="">تاريخ الاستلام داخل الجدول</label>
-  <input type="date" id="receive_date_table" placeholder="📅 تاريخ الاستلام داخل الجدول"><br>
+    const tawn = document.getElementById("g1_tawn").value;
+    const city = document.getElementById("g1_city").value;
+    const dateAboveTable = document.getElementById("g1_table_date_input").value;
+    const dateInsideTable = document.getElementById("g1_receive_date_table").value;
+    const cname = document.getElementById("g1_cost_name").value;
+    const cmother = document.getElementById("g1_cost_mother_name").value;
+    const namesCount = document.getElementById("g1_random_names_count").value;
 
-  <label for="">اسم المستلم</label>
-  <input type="text" id="cost_name" placeholder="اسم المستلم"><br>
-
-  <label for="">اسم الأم</label>
-  <input type="text" id="cost_mother_name" placeholder="اسم الأم"><br>
-
-  <button onclick="generateTable()">🔄 توليد الجدول</button><br>
-  <button onclick="downloadPDF()">📄 تحميل PDF</button><br>
-
-
-  <!-- ✅ محتوى الطباعة -->
-  <div id="pdf_container">
-    <div class="acsubt_done">
-      <div class="header-line">
-        <h2 class="date" id="date_display">---</h2>
-        <h1 class="done">تمت&nbsp;الموافقة</h1>
-        <h2 class="time">(7)</h2>
-      </div>
-    </div>
-    <div id="result_table"></div>
-  </div>
-
-  <script>
-    let pyodideReady = false;
-    let pyodide;
-
-    async function loadPy() {
-      pyodide = await loadPyodide();
-      pyodideReady = true;
+    if (!tawn || !city || !dateAboveTable || !dateInsideTable || !cname || !cmother || !namesCount) {
+        alert("الجدول الأول: يرجى ملء جميع الحقول."); return;
     }
-    loadPy();
 
-    async function generateTable() {
-      if (!pyodideReady) return alert("جارٍ تحميل بايثون...");
+    document.getElementById("g1_header-right").innerText = dateAboveTable;
+    document.getElementById("g1_header-center").innerText = "تمت الموافقة";
 
-      const tawn = document.getElementById("tawn").value;
-      const city = document.getElementById("city").value;
-      const dateAboveTable = document.getElementById("table_date_input").value;
-      const dateInsideTable = document.getElementById("receive_date_table").value;
-      const cname = document.getElementById("cost_name").value;
-      const cmother = document.getElementById("cost_mother_name").value;
-
-      document.getElementById("date_display").innerText = dateAboveTable || "---";
-
-      const pyCode = `
-import random
-import locale
-locale.setlocale(locale.LC_COLLATE, 'ar_SA.UTF-8')
-
-female_names = ${JSON.stringify([
-  "آية", "أسيل", "أمينة", "سمية", "إسراء", "إيمان", "إيناس", "زينب", "مريم", "ليلى", "نجلاء", "هند", "هيفاء", "ياسمين",
-  "شهد", "رحمة", "نور", "جنى", "سارة", "رانيا", "رغد", "جميلة", "بسمة", "لينا", "رُبى", "فرح", "خلود", "دعاء", "هبة",
-  "عبير", "نهى", "تسنيم", "بتول", "حلا", "سندس", "شذى", "غادة", "نورا", "رند", "ديما", "أريج", "نسرين", "سلمى", "ضحى", "لارا",
-  "نهاد", "أمل", "سلوى", "ريم", "وفاء", "مي", "علا", "روان", "عفراء", "لمى", "رُقيّة"
-])}
-
-male_names = ${JSON.stringify([
-  "أحمد", "محمد", "علي", "حسن", "حسين", "عمر", "بلال", "فيصل", "فهد", "مصطفى", "مروان", "هاشم", "هشام", "نعمان",
-  "طارق", "سامي", "زياد", "أنس", "معاذ", "فارس", "باسل", "نور", "رامي", "سيف", "مالك", "خالد", "جمال", "عدنان", "إبراهيم",
-  "إياد", "نادر", "وائل", "عبدالله", "أيمن", "مازن", "سليمان", "يحيى", "عبدالرحمن", "عبدالكريم", "أوس", "عمرو", "براء", "تيم",
-  "نزار", "حذيفة", "وليد", "قيس", "شادي", "يزن", "مهند", "سامر"
-])}
-
-
-def gen_male_name():
-    nbsp = "\u00A0"
-    return nbsp.join(random.sample(male_names, 3))
-
-def gen_female_name():
-    nbsp = "\u00A0"
-    first = random.choice(female_names)
-    last_two = random.sample(male_names, 2)
-    return nbsp.join([first] + last_two)
-
-
+    // === تم تعديل دالة اسم الأم لتكون ثنائية ===
+    const pyCode = `
+import random, json
+female_names = ["آية", "أسيل", "أمينة", "سمية", "إسراء", "إيمان", "زينب", "مريم", "ليلى", "نجلاء", "هند", "ياسمين"]
+male_names = ["أحمد", "محمد", "علي", "حسن", "حسين", "عمر", "بلال", "فيصل", "فهد", "مصطفى", "مروان", "خالد"]
+def gen_male_name(): return " ".join(random.sample(male_names, 3))
+def gen_female_name_binary(): return random.choice(female_names) + " " + random.choice(male_names)
 table = []
-for i in range(30):
-    table.append([
-        "${tawn}",
-        "${city}",
-        gen_male_name(),
-        gen_female_name(),
-        "${dateInsideTable}"
-    ])
+for _ in range(int(${namesCount})):
+    table.append(["${tawn}", "${city}", gen_male_name(), gen_female_name_binary(), "${dateInsideTable}"])
+table.append(["${tawn}", "${city}", "${cname}", "${cmother}", "${dateInsideTable}"])
+table.sort(key=lambda row: row[2])
+json.dumps(table, ensure_ascii=False)
+    `;
 
-nbsp = "\u00A0"
-cname_fixed = "${cname}".replace(" ", nbsp)
-cmother_fixed = "${cmother}".replace(" ", nbsp)
-table.append(["${tawn}".replace(" ", nbsp), "${city}".replace(" ", nbsp), cname_fixed, cmother_fixed, "${dateInsideTable}"])
-table.sort(key=lambda row: locale.strxfrm(row[2]))
+    const result = await pyodide.runPythonAsync(pyCode);
+    const tableData = JSON.parse(result);
 
-header = ["قسم&nbsp;الحماية", "المحافظة", "الاسم", "اسم&nbsp;الأم", "تاريخ&nbsp;الاستلام"]
-
-html = "<table><tr>" + "".join(f"<th>{h}</th>" for h in header) + "</tr>"
-for row in table:
-    html += "<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>"
-html += "</table>"
-html
-      `;
-
-      const result = await pyodide.runPythonAsync(pyCode);
-      document.getElementById("result_table").innerHTML = result;
-    }
-
-    function downloadPDF() {
-      const element = document.getElementById("pdf_container");
-      const opt = {
-        margin: [0, 0, 0, 0],  // ← بدون هوامش نهائياً
-        filename: 'جدول_الأسماء.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
-    }
-    function downloadAsJPG() {
-  const element = document.getElementById("pdf_container");
-
-  html2canvas(element, {
-    scale: 3, // جودة أعلى
-    useCORS: true
-  }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = 'الجدول.jpg';
-    link.href = canvas.toDataURL('image/jpeg', 1.0); // جودة 100%
-    link.click();
-  });
+    let html = '<table><thead><tr><th>قسم الحماية</th><th>المحافظة</th><th>الاسم</th><th>اسم الأم</th><th>تاريخ الاستلام</th></tr></thead><tbody>';
+    tableData.forEach(row => {
+        html += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById("g1_result_table").innerHTML = html;
+    
+    document.getElementById('g1_pdf-button').disabled = false;
+    document.getElementById('g1_jpg-button').disabled = false;
 }
 
-  </script>
-  
+// ===================================================================
+//                          وظائف الجدول الثاني
+// ===================================================================
+async function generateTable2() {
+    if (!pyodideReady) { alert("Pyodide لا يزال قيد التحميل."); return; }
 
+    const tawn = document.getElementById("g2_tawn").value;
+    const dateAboveTable = document.getElementById("g2_table_date_input").value;
+    // === قراءة الأسماء المدخلة يدويًا ===
+    const fullName = document.getElementById("g2_full_name").value;
+    const motherName = document.getElementById("g2_mother_name").value;
+
+    if (!tawn || !dateAboveTable || !fullName || !motherName) {
+        alert("الجدول الثاني: يرجى ملء جميع الحقول، بما في ذلك الأسماء المراد إضافتها."); return;
+    }
+
+    document.getElementById("g2_header-right").innerText = dateAboveTable;
+    document.getElementById("g2_header-center").innerText = "تمت الموافقة";
+
+    // === تم تعديل كود بايثون ليضيف الاسم المدخل يدويًا ===
+    const pyCode = `
+import random, json
+female_names = ["آية", "أسيل", "أمينة", "سمية", "إسراء", "إيمان", "زينب", "مريم", "ليلى", "نجلاء", "هند", "ياسمين"]
+male_names = ["أحمد", "محمد", "علي", "حسن", "حسين", "عمر", "بلال", "فيصل", "فهد", "مصطفى", "مروان", "خالد", "سعد", "جاسم"]
+def gen_full_name(): return " ".join(random.sample(male_names, 4))
+def gen_mother_name(): return random.choice(female_names) + " " + " ".join(random.sample(male_names, 2))
+table = []
+# إنشاء 33 اسمًا عشوائيًا
+for _ in range(33):
+    table.append(["${tawn}", gen_full_name(), gen_mother_name()])
+# إضافة الاسم المدخل يدويًا
+table.append(["${tawn}", "${fullName}", "${motherName}"])
+table.sort(key=lambda row: row[1])
+json.dumps(table, ensure_ascii=False)
+    `;
+
+    const result = await pyodide.runPythonAsync(pyCode);
+    const tableData = JSON.parse(result);
+
+    let html = '<table><tbody>';
+    tableData.forEach(row => {
+        html += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById("g2_result_table").innerHTML = html;
+    
+    document.getElementById('g2_pdf-button').disabled = false;
+    document.getElementById('g2_jpg-button').disabled = false;
+}
+
+
+// ===================================================================
+//                      وظيفة التحميل (مشتركة للجدولين)
+// ===================================================================
+function downloadImage(printableAreaId, dateInputId, format) {
+    const printableArea = document.getElementById(printableAreaId);
+    const dateValue = document.getElementById(dateInputId).value;
+    
+    const jpgButton = document.getElementById(printableAreaId.replace('printable-area', 'jpg-button'));
+    const pdfButton = document.getElementById(printableAreaId.replace('printable-area', 'pdf-button'));
+    jpgButton.disabled = true;
+    pdfButton.disabled = true;
+    
+    html2canvas(printableArea, { scale: 2, useCORS: true }).then(canvas => {
+        const filename = `تقرير-${dateValue || 'بدون-تاريخ'}`;
+        if (format === 'jpg') {
+            const image = canvas.toDataURL('image/jpeg', 0.9);
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = `${filename}.jpg`;
+            link.click();
+        } else {
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const imgWidth = 210;
+            const pageHeight = 297;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            let position = 0;
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                doc.addPage();
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+            doc.save(`${filename}.pdf`);
+        }
+    }).catch(err => {
+        console.error("فشل تحويل HTML إلى صورة:", err);
+        alert("عذراً، حدث خطأ أثناء إنشاء الملف.");
+    }).finally(() => {
+        jpgButton.disabled = false;
+        pdfButton.disabled = false;
+    });
+}
+</script>
 </body>
 </html>
