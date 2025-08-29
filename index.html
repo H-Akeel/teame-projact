@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaTime - خدمات الإنترنت والطباعة</title>
+    <meta name="description" content="مكتب TeaTime لخدمات الإنترنت والطباعة في بغداد - السعدون. نقدم خدمات الطباعة، تركيب الشبكات، بيع أجهزة الراوترات، والخدمات الإلكترونية.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="img/Ttime loco.png" alt="شعار " style="width:100px; height: auto;">
+
+            </div>
+            <nav class="nav" id="nav">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link">الرئيسية</a></li>
+                    <li><a href="#services" class="nav-link">خدماتنا</a></li>
+                    <li><a href="networks.html" class="nav-link">خدمات الشبكات</a></li>
+                    <li><a href="printing.html" class="nav-link">خدمات الطباعة</a></li>
+                    <li><a href="websites.html" class="nav-link">إنشاء المواقع</a></li>
+                    <li><a href="#about" class="nav-link">من نحن</a></li>
+                    <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">مرحباً بكم في TeaTime</h1>
+                <p class="hero-subtitle">مكتبكم المتخصص في خدمات الإنترنت والطباعة في بغداد - السعدون</p>
+                <p class="hero-description">نقدم لكم أفضل الخدمات التقنية من طباعة المستندات والصور، تركيب وصيانة الشبكات، بيع أجهزة الراوترات، وإنشاء المواقع الإلكترونية</p>
+                <div class="hero-buttons">
+                    <a href="#services" class="btn btn-primary">استكشف خدماتنا</a>
+                    <a href="#contact" class="btn btn-secondary">تواصل معنا</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Services Overview Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">خدماتنا المتميزة</h2>
+                <p class="section-subtitle">نقدم مجموعة شاملة من الخدمات التقنية عالية الجودة</p>
+            </div>
+            <div class="services-grid">
+                <!-- Network Services -->
+                <div class="service-card" data-service="networks">
+                    <div class="service-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="service-title">خدمات الشبكات</h3>
+                    <p class="service-description">تركيب وصيانة شبكات الإنترنت، حلول الشبكات المتقدمة والاستشارات التقنية</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> تركيب شبكات الإنترنت</li>
+                        <li><i class="fas fa-check"></i> صيانة وإصلاح الشبكات</li>
+                        <li><i class="fas fa-check"></i> حلول الشبكات المتقدمة</li>
+                        <li><i class="fas fa-check"></i> استشارات تقنية متخصصة</li>
+                    </ul>
+                    <a href="networks.html" class="btn btn-outline">تفاصيل أكثر</a>
+                </div>
+
+                <!-- Printing Services -->
+                <div class="service-card" data-service="printing">
+                    <div class="service-icon">
+                        <i class="fas fa-print"></i>
+                    </div>
+                    <h3 class="service-title">خدمات الطباعة</h3>
+                    <p class="service-description">طباعة المستندات والصور بجودة عالية، تصوير ونسخ، تجليد وتغليف احترافي</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> طباعة ملونة وأبيض وأسود</li>
+                        <li><i class="fas fa-check"></i> طباعة الصور بجودة فوتوغرافية</li>
+                        <li><i class="fas fa-check"></i> تصوير ونسخ المستندات</li>
+                        <li><i class="fas fa-check"></i> تجليد وتغليف احترافي</li>
+                    </ul>
+                    <a href="printing.html" class="btn btn-outline">تفاصيل أكثر</a>
+                </div>
+
+                <!-- Website Development -->
+                <div class="service-card" data-service="websites">
+                    <div class="service-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="service-title">إنشاء المواقع الإلكترونية</h3>
+                    <p class="service-description">تصميم وتطوير مواقع الويب الاحترافية والمتاجر الإلكترونية بأحدث التقنيات</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> تصميم مواقع احترافية</li>
+                        <li><i class="fas fa-check"></i> متاجر إلكترونية</li>
+                        <li><i class="fas fa-check"></i> تطبيقات الويب</li>
+                        <li><i class="fas fa-check"></i> صيانة ودعم فني</li>
+                    </ul>
+                    <a href="websites.html" class="btn btn-outline">تفاصيل أكثر</a>
+                </div>
+
+                <!-- Router Sales -->
+                <div class="service-card" data-service="routers">
+                    <div class="service-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3 class="service-title">بيع أجهزة الراوترات</h3>
+                    <p class="service-description">أحدث أجهزة الراوترات والشبكات بأسعار منافسة مع ضمان وصيانة</p>
+                    <ul class="service-features">
+                        <li><i class="fas fa-check"></i> راوترات عالية السرعة</li>
+                        <li><i class="fas fa-check"></i> أجهزة تقوية الإشارة</li>
+                        <li><i class="fas fa-check"></i> معدات الشبكات المتقدمة</li>
+                        <li><i class="fas fa-check"></i> ضمان وصيانة شاملة</li>
+                    </ul>
+                    <button class="btn btn-outline">تصفح المنتجات</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Network Services Detailed Section -->
+    <section class="detailed-section networks-section" id="networks">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">خدمات الشبكات</h2>
+                <p class="section-subtitle">حلول شبكات متكاملة لجميع احتياجاتكم التقنية</p>
+            </div>
+            <div class="detailed-content">
+                <div class="content-grid">
+                    <div class="content-text">
+                        <div class="service-category">
+                            <h3><i class="fas fa-network-wired"></i> تركيب الشبكات</h3>
+                            <ul class="detailed-list">
+                                <li>تركيب شبكات الإنترنت السلكية واللاسلكية</li>
+                                <li>إعداد شبكات المكاتب والشركات</li>
+                                <li>تركيب كاميرات المراقبة المتصلة بالشبكة</li>
+                                <li>إعداد أنظمة الأمان والحماية</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-category">
+                            <h3><i class="fas fa-tools"></i> صيانة وإصلاح</h3>
+                            <ul class="detailed-list">
+                                <li>تشخيص وإصلاح مشاكل الشبكات</li>
+                                <li>تحديث وترقية أنظمة الشبكات</li>
+                                <li>صيانة دورية للمعدات</li>
+                                <li>دعم فني على مدار الساعة</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-category">
+                            <h3><i class="fas fa-shield-alt"></i> الأمان والحماية</h3>
+                            <ul class="detailed-list">
+                                <li>إعداد جدران الحماية (Firewall)</li>
+                                <li>حماية من الفيروسات والبرمجيات الخبيثة</li>
+                                <li>تشفير البيانات وحماية الخصوصية</li>
+                                <li>مراقبة الشبكة والتحكم في الوصول</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="content-visual">
+                        <div class="visual-card">
+                            <i class="fas fa-server visual-icon"></i>
+                            <h4>خوادم متقدمة</h4>
+                            <p>إعداد وإدارة الخوادم المحلية والسحابية</p>
+                        </div>
+                        <div class="visual-card">
+                            <i class="fas fa-chart-line visual-icon"></i>
+                            <h4>مراقبة الأداء</h4>
+                            <p>مراقبة مستمرة لأداء الشبكة وسرعة الإنترنت</p>
+                        </div>
+                        <div class="visual-card">
+                            <i class="fas fa-headset visual-icon"></i>
+                            <h4>دعم فني 24/7</h4>
+                            <p>فريق دعم فني متاح على مدار الساعة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Printing Services Detailed Section -->
+    <section class="detailed-section printing-section" id="printing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">خدمات الطباعة</h2>
+                <p class="section-subtitle">طباعة احترافية بجودة عالية لجميع احتياجاتكم</p>
+            </div>
+            <div class="detailed-content">
+                <div class="content-grid">
+                    <div class="content-visual">
+                        <div class="visual-card">
+                            <i class="fas fa-palette visual-icon"></i>
+                            <h4>طباعة ملونة</h4>
+                            <p>طباعة عالية الجودة بألوان زاهية ودقة عالية</p>
+                        </div>
+                        <div class="visual-card">
+                            <i class="fas fa-camera visual-icon"></i>
+                            <h4>طباعة الصور</h4>
+                            <p>طباعة الصور الفوتوغرافية بجودة احترافية</p>
+                        </div>
+                        <div class="visual-card">
+                            <i class="fas fa-book visual-icon"></i>
+                            <h4>تجليد احترافي</h4>
+                            <p>خدمات تجليد وتغليف بخامات عالية الجودة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="content-text">
+                        <div class="service-category">
+                            <h3><i class="fas fa-print"></i> خدمات الطباعة</h3>
+                            <ul class="detailed-list">
+                                <li>طباعة المستندات بالألوان والأبيض والأسود</li>
+                                <li>طباعة البوسترات والإعلانات</li>
+                                <li>طباعة البطاقات الشخصية والدعوات</li>
+                                <li>طباعة الشهادات والوثائق الرسمية</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-category">
+                            <h3><i class="fas fa-copy"></i> التصوير والنسخ</h3>
+                            <ul class="detailed-list">
+                                <li>تصوير المستندات والكتب</li>
+                                <li>نسخ ملونة وأبيض وأسود</li>
+                                <li>تكبير وتصغير الوثائق</li>
+                                <li>مسح ضوئي عالي الدقة</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-category">
+                            <h3><i class="fas fa-cut"></i> التجليد والتغليف</h3>
+                            <ul class="detailed-list">
+                                <li>تجليد حلزوني وحراري</li>
+                                <li>تغليف بالبلاستيك الحراري</li>
+                                <li>تجليد الكتب والمجلات</li>
+                                <li>تجليد الأطروحات والبحوث</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Website Development Detailed Section -->
+    <section class="detailed-section websites-section" id="websites">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">إنشاء المواقع الإلكترونية</h2>
+                <p class="section-subtitle">تصميم وتطوير مواقع ويب احترافية تلبي جميع احتياجاتكم</p>
+            </div>
+            <div class="detailed-content">
+                <div class="content-grid">
+                    <div class="content-text">
+                        <div class="service-category">
+                            <h3><i class="fas fa-desktop"></i> تصميم المواقع</h3>
+                            <ul class="detailed-list">
+                                <li>مواقع الشركات والمؤسسات</li>
+                                <li>المواقع الشخصية والمدونات</li>
+                                <li>مواقع العرض والمعارض</li>
+                                <li>مواقع الخدمات والاستشارات</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-category">
+                            <h3><i class="fas fa-shopping-cart"></i> المتاجر الإلكترونية</h3>
+                            <ul class="detailed-list">
+                                <li>متاجر إلكترونية متكاملة</li>
+                                <li>أنظمة الدفع الآمنة</li>
+                                <li>إدارة المخزون والطلبات</li>
+                                <li>تطبيقات الهاتف المحمول</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-category">
+                            <h3><i class="fas fa-cogs"></i> الصيانة والدعم</h3>
+                            <ul class="detailed-list">
+                                <li>صيانة دورية للمواقع</li>
+                                <li>تحديثات الأمان والحماية</li>
+                                <li>نسخ احتياطية منتظمة</li>
+                                <li>دعم فني مستمر</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="content-visual">
+                        <div class="visual-card">
+                            <i class="fas fa-mobile-alt visual-icon"></i>
+                            <h4>تصميم متجاوب</h4>
+                            <p>مواقع تعمل بشكل مثالي على جميع الأجهزة</p>
+                        </div>
+                        <div class="visual-card">
+                            <i class="fas fa-search visual-icon"></i>
+                            <h4>تحسين محركات البحث</h4>
+                            <p>تحسين الموقع لظهور أفضل في نتائج البحث</p>
+                        </div>
+                        <div class="visual-card">
+                            <i class="fas fa-rocket visual-icon"></i>
+                            <h4>سرعة عالية</h4>
+                            <p>مواقع سريعة التحميل وأداء ممتاز</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">من نحن</h2>
+                    <p class="about-description">
+                        مكتب TeaTime هو وجهتكم الموثوقة لجميع الخدمات التقنية في بغداد - السعدون. 
+                        نحن نفخر بتقديم خدمات عالية الجودة في مجال الطباعة والشبكات وتطوير المواقع منذ سنوات عديدة.
+                    </p>
+                    <p class="about-description">
+                        فريقنا المتخصص يعمل بجد لضمان حصولكم على أفضل الحلول التقنية التي تلبي احتياجاتكم 
+                        بأسعار منافسة وجودة لا تضاهى. نحن نؤمن بأن التقنية يجب أن تكون في خدمة الجميع.
+                    </p>
+                    <div class="about-features">
+                        <div class="feature">
+                            <i class="fas fa-award"></i>
+                            <div>
+                                <h4>خبرة واسعة</h4>
+                                <p>سنوات من الخبرة في مجال الخدمات التقنية</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h4>فريق متخصص</h4>
+                                <p>فريق من المتخصصين المدربين على أحدث التقنيات</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>خدمة سريعة</h4>
+                                <p>نلتزم بتقديم خدماتنا في أسرع وقت ممكن</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-building"></i>
+                        <p>مكتب TeaTime</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">تواصل معنا</h2>
+                <p class="section-subtitle">نحن هنا لخدمتكم في أي وقت</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <a href="https://maps.app.goo.gl/GFDuhYsmmY9zTJCs7"><h4>العنوان</h4></a>
+                            <p>بغداد - السعدون</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>الهاتف</h4>
+                            <p >255 2616 770 964+</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>البريد الإلكتروني</h4>
+                            <p>teatime.net1@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>ساعات العمل</h4>
+                            <p>السبت - الخميس: 9:00 ص - 6:00 م</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">البريد الإلكتروني</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">رقم الهاتف</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">نوع الخدمة</label>
+                            <select id="service" name="service">
+                                <option value="">اختر نوع الخدمة</option>
+                                <option value="networks">خدمات الشبكات</option>
+                                <option value="printing">خدمات الطباعة</option>
+                                <option value="websites">إنشاء المواقع الإلكترونية</option>
+                                <option value="routers">بيع أجهزة الراوترات</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">الرسالة</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <img src="img/Ttime loco.png" alt="شعار " style="width:100px; height: auto;">
+                    </div>
+                    <p>مكتبكم المتخصص في خدمات الإنترنت والطباعة وتطوير المواقع في بغداد - السعدون</p>
+                    <div class="social-links">
+                       <!--  <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>  -->
+                        <!-- <a href="#" class="social-link"><i class="fab fa-instagram"></i></a> -->
+                        <a href="https://t.me/teatime20" class="social-link"> <i class="fab fa-telegram"></i></a>
+                        <a href="https://wa.me/+9647702616255" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>خدماتنا الرئيسية</h4>
+                    <ul class="footer-links">
+                        <li><a href="#networks">خدمات الشبكات</a></li>
+                        <li><a href="#printing">خدمات الطباعة</a></li>
+                        <li><a href="#websites">إنشاء المواقع الإلكترونية</a></li>
+                        <li><a href="#services">بيع أجهزة الراوترات</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#about">من نحن</a></li>
+                        <li><a href="#contact">اتصل بنا</a></li>
+                        <li><a href="#services">خدماتنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>معلومات التواصل</h4>
+                    <div class="contact-info-footer">
+                        <p><i class="fas fa-map-marker-alt"></i> بغداد - السعدون</p>
+                        <p><i class="fas fa-phone"></i> 255 2616 770 964+</p>
+                        <p><i class="fas fa-envelope"></i> teatime.net1@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TeaTime. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
