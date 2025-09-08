@@ -7,7 +7,45 @@
 <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<style>
+<style>body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        direction: rtl;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1 );
+        margin-bottom: 30px;
+    }
+    .logo-center { margin-bottom: 20px; }
+    .logo-img { width: 150px; border: 2px solid #ddd; border-radius: 10px; padding: 5px; background: #fff; }
+    h2 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-bottom: 20px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .form-group { display: flex; flex-direction: column; text-align: right; }
+    label { margin-bottom: 5px; font-weight: bold; color: #555; }
+    input[type="text"], input[type="date"], input[type="number"] { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+    .button-group { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+    button { padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+    .generate-btn { background-color: #007bff; color: white; }
+    .pdf-btn, .jpg-btn { background-color: #28a745; color: white; }
+    .pdf-btn:disabled, .jpg-btn:disabled { background-color: #aaa; cursor: not-allowed; }
+    
+    .printable-area { border: 1px solid #ddd; padding: 20px; background: #fff; }
+    .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 16px; font-weight: bold; }
+    .result-table table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 30px; }
+    .result-table th, .result-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    .result-table th { background-color: #f2f2f2; }
+    .report-footer { display: flex; justify-content: flex-end; text-align: right; }
+    .signature-area { font-size: 16px; font-weight: bold; }
+
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         text-align: center;
@@ -100,7 +138,33 @@
         <div class="report-footer"><div class="signature-area"><div id="g2_footer-sequence">التسلسل 107</div></div></div>
     </div>
 </div>
-
+<div class="container">
+    <h2>الجدول الثالث: تقرير الأسماء مع رقم ثابت</h2>
+    <div class="form-grid">
+        <div class="form-group"><label for="g3_tawn">القسم</label><input type="text" id="g3_tawn"></div>
+        <div class="form-group"><label for="g3_table_date_header">التاريخ فوق الجدول</label><input type="date" id="g3_table_date_header"></div>
+        <div class="form-group"><label for="g3_table_date_inside">التاريخ داخل الجدول</label><input type="date" id="g3_table_date_inside"></div>
+        <div class="form-group"><label for="g3_fixed_number">الرقم الثابت (4 مراتب)</label><input type="number" id="g3_fixed_number" min="1000" max="9999"></div>
+        <div class="form-group"><label for="g3_full_name">الاسم الرباعي للإضافة</label><input type="text" id="g3_full_name"></div>
+        <div class="form-group"><label for="g3_random_count">عدد الأسماء العشوائية</label><input type="number" id="g3_random_count" value="30" min="1" max="100"></div>
+    </div>
+    <div class="button-group">
+        <button class="generate-btn" onclick="generateTable3()">🔄 توليد الجدول الثالث</button>
+        <button id="g3_jpg-button" class="jpg-btn" onclick="downloadImage('g3_printable-area','g3_table_date_header','jpg')" disabled>📄 تحميل JPG</button>
+        <button id="g3_pdf-button" class="pdf-btn" onclick="downloadImage('g3_printable-area','g3_table_date_header','pdf')" disabled>📄 تحميل PDF</button>
+    </div>
+    <div id="g3_printable-area" class="printable-area">
+        <div class="report-header">
+            <span id="g3_header-right"></span>
+            <span id="g3_header-center"></span>
+            <span id="g3_header-left">(7)</span>
+        </div>
+        <div id="g3_result_table" class="result-table"></div>
+        <div class="report-footer">
+            <div class="signature-area"><div id="g3_footer-sequence">التسلسل 107</div></div>
+        </div>
+    </div>
+</div>
 
 <script>
 let pyodideReady = false;
@@ -262,6 +326,56 @@ function downloadImage(printableAreaId, dateInputId, format) {
         pdfButton.disabled = false;
     });
 }
+
+async function generateTable3() {
+    if (!pyodideReady) { alert("Pyodide لا يزال قيد التحميل."); return; }
+
+    const tawn = document.getElementById("g3_tawn").value;
+    const dateHeader = document.getElementById("g3_table_date_header").value;
+    const dateInside = document.getElementById("g3_table_date_inside").value;
+    const fixedNumber = document.getElementById("g3_fixed_number").value;
+    const fullName = document.getElementById("g3_full_name").value;
+    const randomCount = parseInt(document.getElementById("g3_random_count").value);
+
+    if (!tawn || !dateHeader || !dateInside || !fixedNumber || !fullName || !randomCount) {
+        alert("يرجى ملء جميع الحقول."); return;
+    }
+
+    document.getElementById("g3_header-right").innerText = dateHeader;
+    document.getElementById("g3_header-center").innerText = "تمت الموافقة";
+
+    // توليد الأسماء عبر Pyodide
+    const pyCode = `
+import random, json
+female_names = ["آية","أسيل","أمينة","سمية","إسراء","إيمان","زينب","مريم","ليلى","نجلاء","هند","ياسمين"]
+male_names = ["أحمد","محمد","علي","حسن","حسين","عمر","بلال","فيصل","فهد","مصطفى","مروان","خالد","سعد","جاسم"]
+def gen_full_name(): return " ".join(random.sample(male_names, 4))
+def gen_mother_name(): return random.choice(female_names) + " " + " ".join(random.sample(male_names,2))
+table=[]
+for _ in range(${randomCount}):
+    table.append(["${tawn}", gen_full_name(), "${fixedNumber}", "${dateInside}"])
+# إضافة الاسم اليدوي
+table.append(["${tawn}", "${fullName}", "${fixedNumber}", "${dateInside}"])
+# ترتيب أبجدي حسب الاسم الرباعي
+table.sort(key=lambda x: x[1])
+json.dumps(table, ensure_ascii=False)
+    `;
+
+    const result = await pyodide.runPythonAsync(pyCode);
+    const tableData = JSON.parse(result);
+
+    let html = '<table><tbody>';
+    tableData.forEach((row, idx) => {
+        html += `<tr><td>${idx+1}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[0]}</td></tr>`;
+    });
+    html += '</tbody></table>';
+
+    document.getElementById("g3_result_table").innerHTML = html;
+
+    document.getElementById('g3_pdf-button').disabled = false;
+    document.getElementById('g3_jpg-button').disabled = false;
+}
+
 </script>
 </body>
 </html>
