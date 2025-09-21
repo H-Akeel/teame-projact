@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محرر السيرة الذاتية - ResumeBuilder Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- شريط العلوي -->
+    <header class="editor-header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة للرئيسية
+                </a>
+                <div class="editor-title">
+                    <i class="fas fa-file-alt"></i>
+                    <span>محرر السيرة الذاتية</span>
+                </div>
+                <div class="template-badge">قالب حديث</div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-outline" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    حفظ
+                </button>
+                <button class="btn btn-outline" id="previewBtn">
+                    <i class="fas fa-eye"></i>
+                    معاينة
+                </button>
+                <button class="btn btn-primary" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    تصدير PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="editor-main">
+        <div class="editor-container">
+            <!-- الشريط الجانبي -->
+            <aside class="editor-sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-cogs"></i>
+                    <h3>إعدادات السيرة الذاتية</h3>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-section="personal">
+                        <i class="fas fa-user"></i>
+                        <span>المعلومات الشخصية</span>
+                    </button>
+                    <button class="nav-item" data-section="experience">
+                        <i class="fas fa-briefcase"></i>
+                        <span>الخبرات العملية</span>
+                    </button>
+                    <button class="nav-item" data-section="education">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>التعليم</span>
+                    </button>
+                    <button class="nav-item" data-section="skills">
+                        <i class="fas fa-star"></i>
+                        <span>المهارات</span>
+                    </button>
+                    <button class="nav-item" data-section="languages">
+                        <i class="fas fa-language"></i>
+                        <span>اللغات</span>
+                    </button>
+                    <button class="nav-item" data-section="template">
+                        <i class="fas fa-palette"></i>
+                        <span>القالب والألوان</span>
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- منطقة التحرير -->
+            <section class="editor-content">
+                <div class="content-header">
+                    <h2 id="sectionTitle">المعلومات الشخصية</h2>
+                </div>
+                <div class="content-body">
+                    <!-- قسم المعلومات الشخصية -->
+                    <div id="personalSection" class="section-content active">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fullName">الاسم الكامل</label>
+                                <input type="text" id="fullName" placeholder="أدخل اسمك الكامل">
+                            </div>
+                            <div class="form-group">
+                                <label for="jobTitle">المسمى الوظيفي</label>
+                                <input type="text" id="jobTitle" placeholder="مثل: مطور واجهات أمامية">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">البريد الإلكتروني</label>
+                                <input type="email" id="email" placeholder="example@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">رقم الهاتف</label>
+                                <input type="tel" id="phone" placeholder="+966 50 123 4567">
+                            </div>
+                            <div class="form-group">
+                                <label for="location">الموقع</label>
+                                <input type="text" id="location" placeholder="المدينة، البلد">
+                            </div>
+                            <div class="form-group">
+                                <label for="website">الموقع الشخصي</label>
+                                <input type="url" id="website" placeholder="www.example.com">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="summary">نبذة شخصية</label>
+                            <textarea id="summary" rows="4" placeholder="اكتب نبذة مختصرة عن خبرتك ومهاراتك..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- قسم الخبرات العملية -->
+                    <div id="experienceSection" class="section-content">
+                        <div class="section-header">
+                            <h3>الخبرات العملية</h3>
+                            <button class="btn btn-primary" id="addExperience">
+                                <i class="fas fa-plus"></i>
+                                إضافة خبرة
+                            </button>
+                        </div>
+                        <div id="experienceList" class="experience-list">
+                            <!-- سيتم إضافة الخبرات هنا ديناميكياً -->
+                        </div>
+                    </div>
+
+                    <!-- قسم التعليم -->
+                    <div id="educationSection" class="section-content">
+                        <div class="section-header">
+                            <h3>التعليم</h3>
+                            <button class="btn btn-primary" id="addEducation">
+                                <i class="fas fa-plus"></i>
+                                إضافة تعليم
+                            </button>
+                        </div>
+                        <div id="educationList" class="education-list">
+                            <!-- سيتم إضافة التعليم هنا ديناميكياً -->
+                        </div>
+                    </div>
+
+                    <!-- قسم المهارات -->
+                    <div id="skillsSection" class="section-content">
+                        <div class="section-header">
+                            <h3>المهارات</h3>
+                            <button class="btn btn-primary" id="addSkill">
+                                <i class="fas fa-plus"></i>
+                                إضافة مهارة
+                            </button>
+                        </div>
+                        <div id="skillsList" class="skills-list">
+                            <!-- سيتم إضافة المهارات هنا ديناميكياً -->
+                        </div>
+                    </div>
+
+                    <!-- قسم اللغات -->
+                    <div id="languagesSection" class="section-content">
+                        <div class="section-header">
+                            <h3>اللغات</h3>
+                            <button class="btn btn-primary" id="addLanguage">
+                                <i class="fas fa-plus"></i>
+                                إضافة لغة
+                            </button>
+                        </div>
+                        <div id="languagesList" class="languages-list">
+                            <!-- سيتم إضافة اللغات هنا ديناميكياً -->
+                        </div>
+                    </div>
+
+                    <!-- قسم القالب -->
+                    <div id="templateSection" class="section-content">
+                        <div class="template-options">
+                            <h3>اختر القالب</h3>
+                            <div class="template-grid">
+                                <div class="template-card active" data-template="modern">
+                                    <div class="template-preview">
+                                        <div class="template-header"></div>
+                                        <div class="template-content">
+                                            <div class="template-line"></div>
+                                            <div class="template-line short"></div>
+                                        </div>
+                                    </div>
+                                    <h4>حديث</h4>
+                                </div>
+                                <div class="template-card" data-template="classic">
+                                    <div class="template-preview classic">
+                                        <div class="template-header"></div>
+                                        <div class="template-content">
+                                            <div class="template-line"></div>
+                                            <div class="template-line short"></div>
+                                        </div>
+                                    </div>
+                                    <h4>كلاسيكي</h4>
+                                </div>
+                                <div class="template-card" data-template="creative">
+                                    <div class="template-preview creative">
+                                        <div class="template-header"></div>
+                                        <div class="template-content">
+                                            <div class="template-line"></div>
+                                            <div class="template-line short"></div>
+                                        </div>
+                                    </div>
+                                    <h4>إبداعي</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- منطقة المعاينة -->
+            <section class="editor-preview">
+                <div class="preview-header">
+                    <h3>
+                        <i class="fas fa-eye"></i>
+                        معاينة السيرة الذاتية
+                    </h3>
+                </div>
+                <div class="preview-content">
+                    <div id="resumePreview" class="resume-preview">
+                        <!-- سيتم عرض معاينة السيرة الذاتية هنا -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- نافذة المعاينة المنبثقة -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>معاينة السيرة الذاتية</h3>
+                <button class="modal-close" id="closePreview">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="fullPreview" class="full-preview">
+                    <!-- معاينة كاملة للسيرة الذاتية -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="closePreviewBtn">إغلاق</button>
+                <button class="btn btn-primary" id="exportFromPreview">
+                    <i class="fas fa-download"></i>
+                    تصدير PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة التحميل -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>جاري تصدير السيرة الذاتية...</p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/editor.js"></script>
+</body>
+</html>
+
