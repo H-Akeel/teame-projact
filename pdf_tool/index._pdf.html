@@ -18,45 +18,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
   <style>
-    /* 🎨 نفس التنسيقات الأصلية دون أي تغيير */
-    :root {
-      --bg-color: #eef2f9;
-      --card-color: #f5f8fc;
-      --primary-color: #4a55ff;
-      --primary-light: #6a72ff;
-      --secondary-color: #a45eff;
-      --text-color: #2c3e50;
-      --muted-color: #8d99ae;
-      --border-color: rgba(255, 255, 255, 0.5);
-      --shadow-light: rgba(136, 165, 191, 0.48);
-      --shadow-dark: rgba(255, 255, 255, 0.8);
-      --radius: 16px;
-      --transition: all 0.3s ease;
-    }
-    [data-theme="dark"] {
-      --bg-color: #1b1f28;
-      --card-color: #242936;
-      --primary-color: #5a64ff;
-      --primary-light: #7a82ff;
-      --secondary-color: #b46eff;
-      --text-color: #edf2f4;
-      --muted-color: #a0aec0;
-      --border-color: rgba(0, 0, 0, 0.2);
-      --shadow-light: rgba(0, 0, 0, 0.3);
-      --shadow-dark: rgba(255, 255, 255, 0.05);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'IBM Plex Sans Arabic', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      line-height: 1.7;
-      display: flex;
-      transition: var(--transition);
-      overflow: hidden;
-    }
-    
     :root {
       --bg-color: #eef2f9;
       --card-color: #f5f8fc;
@@ -398,16 +359,21 @@
       .main-content { height: auto; }
       .thumbs { justify-content: center; }
     }
-  
   </style>
 </head>
 <body>
 
   <aside class="sidebar">
+    <!-- إضافة صورة لكوكو فوق الشعار -->
     <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
-      <img src="..//Photo/timepdf.png" style="width: 90px; height: 90px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; box-shadow: 0 2px 12px rgba(0,0,0,0.10);" />
+      <img src="..//Photo/timepdf.png" 
+           alt="g,;," 
+           style="width: 90px; height: 90px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; box-shadow: 0 2px 12px rgba(0,0,0,0.10);" />
     </div>
-    <div class="logo" style="margin-bottom: 40px; text-align: center;">PDF Suite</div>
+    <!-- الشعار بدون الأيقونة -->
+    <div class="logo" style="margin-bottom: 40px; text-align: center;">
+      PDF Suite
+    </div>
     <ul class="nav-menu">
       <li class="nav-item"><a data-page="merge" class="nav-link active"><i class="fas fa-link fa-fw"></i> دمج الملفات</a></li>
       <li class="nav-item"><a data-page="img2pdf" class="nav-link"><i class="fas fa-image fa-fw"></i> صور إلى PDF</a></li>
@@ -415,21 +381,444 @@
       <li class="nav-item"><a data-page="split" class="nav-link"><i class="fas fa-cut fa-fw"></i> تقسيم ملف</a></li>
       <li class="nav-item"><a data-page="extract" class="nav-link"><i class="fas fa-file-alt fa-fw"></i> استخراج النصوص</a></li>
     </ul>
-    <button class="theme-switcher" id="theme-switcher"><i class="fas fa-moon"></i></button>
+    <button class="theme-switcher" id="theme-switcher" aria-label="تبديل الوضع"><i class="fas fa-moon"></i></button>
   </aside>
 
   <main class="main-content">
-    <!-- 📌 نفس الصفحات (merge, img2pdf, pdf2img, split, extract) -->
-    <!-- لم ألمسها أبداً، بقيت كما عندك -->
-  </main>
+    <!-- Page 1: Merge -->
+    <section id="merge" class="tool-page active">
+      <div class="page-header">
+        <h1>دمج ملفات PDF</h1>
+        <p>اجمع عدة ملفات PDF في ملف واحد، مع إمكانية إعادة ترتيبها بالسحب والإفلات.</p>
+      </div>
+      <div class="tool-card">
+        <div class="input-area" id="merge-dropzone">
+          <i class="fas fa-cloud-upload-alt fa-3x" style="color:var(--muted-color); margin-bottom:15px;"></i>
+          <p>اسحب وأفلت الملفات هنا، أو <label for="merge-input">اختر من جهازك</label></p>
+          <input type="file" id="merge-input" accept="application/pdf" multiple>
+        </div>
+        <div class="preview-area">
+          <div class="sort-instructions" id="merge-sort-instructions">
+            <i class="fas fa-arrows-alt"></i>
+            اسحب الملفات لإعادة ترتيبها حسب الترتيب المطلوب في الملف النهائي
+          </div>
+          <div class="thumbs" id="merge-thumbs"></div>
+        </div>
+        <div class="status-area" id="merge-status-area">
+          <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+          <span class="status-text"></span>
+        </div>
+        <div style="margin-top: 20px; display: flex; gap: 15px;">
+          <button class="btn" id="merge-run" disabled><i class="fas fa-play"></i> بدء الدمج</button>
+          <button class="btn outline" id="merge-clear">مسح الكل</button>
+        </div>
+      </div>
+    </section>
 
+    <!-- Page 2: Images to PDF -->
+    <section id="img2pdf" class="tool-page">
+      <div class="page-header">
+        <h1>تحويل صور إلى PDF</h1>
+        <p>اجمع صورك في ملف PDF واحد أنيق وسهل المشاركة.</p>
+      </div>
+      <div class="tool-card">
+        <div class="input-area" id="img2pdf-dropzone">
+          <i class="fas fa-images fa-3x" style="color:var(--muted-color); margin-bottom:15px;"></i>
+          <p>اسحب وأفلت الصور هنا، أو <label for="img2pdf-input">اختر من جهازك</label></p>
+          <input type="file" id="img2pdf-input" accept="image/*" multiple>
+        </div>
+        <div class="preview-area">
+          <div class="sort-instructions" id="img2pdf-sort-instructions">
+            <i class="fas fa-arrows-alt"></i>
+            اسحب الصور لإعادة ترتيبها حسب الترتيب المطلوب في ملف PDF
+          </div>
+          <div class="thumbs" id="img2pdf-thumbs"></div>
+        </div>
+        <div class="status-area" id="img2pdf-status-area">
+          <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+          <span class="status-text"></span>
+        </div>
+        <div style="margin-top: 20px; display: flex; gap: 15px;">
+          <button class="btn" id="img2pdf-run" disabled><i class="fas fa-play"></i> بدء التحويل</button>
+          <button class="btn outline" id="img2pdf-clear">مسح الكل</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Page 3: PDF to Images -->
+    <section id="pdf2img" class="tool-page">
+      <div class="page-header">
+        <h1>PDF إلى صور</h1>
+        <p>استخرج صفحات ملف PDF كصور منفصلة بجودة عالية.</p>
+      </div>
+      <div class="tool-card">
+        <div class="input-area" id="pdf2img-dropzone">
+          <i class="fas fa-file-image fa-3x" style="color:var(--muted-color); margin-bottom:15px;"></i>
+          <p><label for="pdf2img-input">اختر ملف PDF</label></p>
+          <input type="file" id="pdf2img-input" accept="application/pdf">
+        </div>
+        <div class="options-grid">
+          <div class="option-group">
+            <label for="pdf2img-from">من صفحة</label>
+            <input type="number" id="pdf2img-from" min="1" placeholder="البداية">
+          </div>
+          <div class="option-group">
+            <label for="pdf2img-to">إلى صفحة</label>
+            <input type="number" id="pdf2img-to" min="1" placeholder="النهاية">
+          </div>
+        </div>
+        <div class="status-area" id="pdf2img-status-area">
+          <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+          <span class="status-text"></span>
+        </div>
+        <div style="margin-top: 20px;">
+          <button class="btn" id="pdf2img-run" disabled><i class="fas fa-play"></i> بدء التحويل</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page 4: Split PDF -->
+    <section id="split" class="tool-page">
+      <div class="page-header">
+        <h1>تقسيم ملف PDF</h1>
+        <p>استخرج نطاقًا محددًا من الصفحات كملف PDF جديد.</p>
+      </div>
+      <div class="tool-card">
+        <div class="input-area" id="split-dropzone">
+          <i class="fas fa-cut fa-3x" style="color:var(--muted-color); margin-bottom:15px;"></i>
+          <p><label for="split-input">اختر ملف PDF</label></p>
+          <input type="file" id="split-input" accept="application/pdf">
+        </div>
+        <div class="options-grid">
+          <div class="option-group">
+            <label for="split-from">من صفحة</label>
+            <input type="number" id="split-from" min="1" placeholder="البداية">
+          </div>
+          <div class="option-group">
+            <label for="split-to">إلى صفحة</label>
+            <input type="number" id="split-to" min="1" placeholder="النهاية">
+          </div>
+        </div>
+        <div class="status-area" id="split-status-area">
+          <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+          <span class="status-text"></span>
+        </div>
+        <div style="margin-top: 20px;">
+          <button class="btn" id="split-run" disabled><i class="fas fa-play"></i> بدء التقسيم</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page 5: Extract Text -->
+    <section id="extract" class="tool-page">
+      <div class="page-header">
+        <h1>استخراج النصوص (OCR)</h1>
+        <p>تعرف على النصوص في ملفات PDF والصور بدعم للغة العربية.</p>
+      </div>
+      <div class="tool-card">
+        <div class="input-area" id="extract-dropzone">
+          <i class="fas fa-file-alt fa-3x" style="color:var(--muted-color); margin-bottom:15px;"></i>
+          <p><label for="extract-input">اختر ملفات PDF أو صور</label></p>
+          <input type="file" id="extract-input" accept="application/pdf,image/*" multiple>
+        </div>
+        <div class="status-area" id="extract-status-area">
+          <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+          <span class="status-text"></span>
+        </div>
+        <div style="margin-top: 20px;">
+          <button class="btn" id="extract-run" disabled><i class="fas fa-play"></i> بدء الاستخراج</button>
+        </div>
+        <textarea id="extract-output" readonly placeholder="سيظهر النص المستخرج هنا..." style="width: 100%; height: 200px; margin-top: 20px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; color: var(--text-color); resize: vertical;"></textarea>
+        <div style="margin-top: 10px;">
+          <button class="btn outline" id="extract-save"><i class="fas fa-save"></i> حفظ النص</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  
   <div id="toast-container" class="toast-container"></div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // ... نفس الأكواد العامة ...
+      console.log('PDF Suite مع خاصية الترتيب تم تحميلها بنجاح');
+      
+      // --- App State ---
+      const appState = {
+        merge: { files: [], sortable: null },
+        img2pdf: { files: [], sortable: null },
+        pdf2img: { file: null },
+        split: { file: null },
+        extract: { files: [] }
+      };
 
-      // 📌 وحدة صور إلى PDF (التعديل هنا فقط)
+      // --- Elements ---
+      const navLinks = document.querySelectorAll('.nav-link');
+      const pages = document.querySelectorAll('.tool-page');
+      const themeSwitcher = document.getElementById('theme-switcher');
+      const toastContainer = document.getElementById('toast-container');
+
+      // --- Utility Functions ---
+      const showToast = (message, type = 'info') => {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+      };
+
+      const clampRange = (from, to, max) => {
+        let s = Math.max(1, from || 1);
+        let e = Math.min(max, to || max);
+        if (s > e) [s, e] = [e, s];
+        return [s, e];
+      };
+
+      const downloadBlob = (blob, filename) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; 
+        a.download = filename; 
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      };
+
+      const updateStatus = (tool, text, progress = -1) => {
+        const statusText = document.querySelector(`#${tool}-status-area .status-text`);
+        const progressBar = document.querySelector(`#${tool}-status-area .progress-bar`);
+        const progressBarInner = document.querySelector(`#${tool}-status-area .progress-bar-inner`);
+        
+        if (statusText) statusText.textContent = text;
+        if (progressBar && progressBarInner) {
+          if (progress >= 0) {
+            progressBar.style.display = 'block';
+            progressBarInner.style.width = `${progress}%`;
+          } else {
+            progressBar.style.display = 'none';
+          }
+        }
+      };
+
+      // Update file order indicators
+      const updateFileOrder = (thumbsContainer) => {
+        const thumbs = thumbsContainer.querySelectorAll('.thumb');
+        thumbs.forEach((thumb, index) => {
+          thumb.setAttribute('data-order', index + 1);
+        });
+      };
+
+      // --- Navigation Logic ---
+      const showPage = (pageId) => {
+        console.log('Switching to page:', pageId);
+        
+        // Hide all pages
+        pages.forEach(page => {
+          page.classList.remove('active');
+        });
+        
+        // Remove active class from all nav links
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        // Show target page
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+          targetPage.classList.add('active');
+        }
+        
+        // Add active class to clicked nav link
+        const activeLink = document.querySelector(`[data-page="${pageId}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+      };
+
+      // Add click event listeners to navigation links
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const pageId = e.currentTarget.getAttribute('data-page');
+          if (pageId) {
+            showPage(pageId);
+          }
+        });
+      });
+
+      // --- Theme Switcher Logic ---
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      themeSwitcher.querySelector('i').className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      
+      themeSwitcher.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        themeSwitcher.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        showToast(`تم التبديل إلى الوضع ${newTheme === 'dark' ? 'الليلي' : 'النهاري'}`, 'success');
+      });
+
+      // --- Drag and Drop Logic ---
+      document.querySelectorAll('.input-area').forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          zone.classList.add('drag-over');
+        });
+        
+        zone.addEventListener('dragleave', () => {
+          zone.classList.remove('drag-over');
+        });
+        
+        zone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          zone.classList.remove('drag-over');
+          const inputId = zone.querySelector('label').getAttribute('for');
+          const input = document.getElementById(inputId);
+          if (input) {
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+          }
+        });
+        
+        // Click to open file dialog
+        zone.addEventListener('click', (e) => {
+          if (e.target.tagName !== 'LABEL') {
+            const inputId = zone.querySelector('label').getAttribute('for');
+            const input = document.getElementById(inputId);
+            if (input) input.click();
+          }
+        });
+      });
+
+      // --- Tool Modules ---
+
+      // 1. Merge Module with Sorting
+      (() => {
+        const tool = 'merge';
+        const state = appState.merge;
+        const input = document.getElementById(`${tool}-input`);
+        const thumbs = document.getElementById(`${tool}-thumbs`);
+        const runBtn = document.getElementById(`${tool}-run`);
+        const clearBtn = document.getElementById(`${tool}-clear`);
+        const sortInstructions = document.getElementById(`${tool}-sort-instructions`);
+
+        const initSortable = () => {
+          if (state.sortable) {
+            state.sortable.destroy();
+          }
+          
+          state.sortable = Sortable.create(thumbs, {
+            animation: 200,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onStart: () => {
+              thumbs.classList.add('sortable-active');
+            },
+            onEnd: (evt) => {
+              thumbs.classList.remove('sortable-active');
+              // Update the files array to match new order
+              const movedFile = state.files.splice(evt.oldIndex, 1)[0];
+              state.files.splice(evt.newIndex, 0, movedFile);
+              updateFileOrder(thumbs);
+              showToast('تم تغيير ترتيب الملفات', 'success');
+            }
+          });
+        };
+
+        const renderThumbs = async () => {
+          if (!thumbs) return;
+          thumbs.innerHTML = '';
+          updateStatus(tool, `⏳ جاري تحميل ${state.files.length} ملفات...`, 0);
+          
+          for (let i = 0; i < state.files.length; i++) {
+            const file = state.files[i];
+            try {
+              const buf = await file.arrayBuffer();
+              const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+              const page = await pdf.getPage(1);
+              const viewport = page.getViewport({ scale: 0.3 });
+              const canvas = document.createElement('canvas');
+              canvas.width = viewport.width; 
+              canvas.height = viewport.height;
+              await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+              
+              const wrap = document.createElement('div'); 
+              wrap.className = 'thumb'; 
+              wrap.setAttribute('data-order', i + 1);
+              wrap.appendChild(canvas);
+              thumbs.appendChild(wrap);
+              
+              updateStatus(tool, `⏳ تم تحميل ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
+            } catch (err) { 
+              showToast(`فشل تحميل الملف: ${file.name}`, 'error'); 
+            }
+          }
+          
+          updateStatus(tool, `تم تحميل ${state.files.length} ملفات. يمكنك إعادة ترتيبها بالسحب والإفلات.`);
+          
+          // Show sort instructions and initialize sortable
+          if (state.files.length > 1) {
+            sortInstructions.classList.add('show');
+            initSortable();
+          } else {
+            sortInstructions.classList.remove('show');
+          }
+        };
+
+        if (input) {
+          input.addEventListener('change', async (e) => {
+            state.files = Array.from(e.target.files);
+            if (runBtn) runBtn.disabled = state.files.length < 2;
+            await renderThumbs();
+          });
+        }
+
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            state.files = []; 
+            if (thumbs) thumbs.innerHTML = ''; 
+            if (input) input.value = ''; 
+            if (runBtn) runBtn.disabled = true;
+            if (sortInstructions) sortInstructions.classList.remove('show');
+            if (state.sortable) {
+              state.sortable.destroy();
+              state.sortable = null;
+            }
+            updateStatus(tool, '');
+          });
+        }
+
+        if (runBtn) {
+          runBtn.addEventListener('click', async () => {
+            if (state.files.length < 2) return showToast('اختر ملفين على الأقل', 'error');
+            runBtn.disabled = true;
+            updateStatus(tool, '🚀 بدء عملية الدمج بالترتيب المحدد...', 0);
+            
+            try {
+              const mergedPdf = await PDFLib.PDFDocument.create();
+              for (let i = 0; i < state.files.length; i++) {
+                const file = state.files[i];
+                const pdfBytes = await file.arrayBuffer();
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                copiedPages.forEach(page => mergedPdf.addPage(page));
+                updateStatus(tool, `🔄 دمج الملف ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
+              }
+              const mergedPdfBytes = await mergedPdf.save();
+              downloadBlob(new Blob([mergedPdfBytes], { type: 'application/pdf' }), 'merged.pdf');
+              updateStatus(tool, '✅ اكتمل الدمج بنجاح بالترتيب المطلوب!');
+              showToast('تم تحميل الملف المدموج بالترتيب المطلوب!', 'success');
+            } catch (err) { 
+              updateStatus(tool, `❌ خطأ: ${err.message}`); 
+              showToast('فشلت عملية الدمج.', 'error'); 
+            }
+            runBtn.disabled = false;
+          });
+        }
+      })();
+
+      // 2. Images to PDF Module with Sorting
       (() => {
         const tool = 'img2pdf';
         const state = appState.img2pdf;
@@ -439,60 +828,99 @@
         const clearBtn = document.getElementById(`${tool}-clear`);
         const sortInstructions = document.getElementById(`${tool}-sort-instructions`);
 
-        // ... نفس كود thumbs و clear ...
+        const initSortable = () => {
+          if (state.sortable) {
+            state.sortable.destroy();
+          }
+          
+          state.sortable = Sortable.create(thumbs, {
+            animation: 200,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onStart: () => {
+              thumbs.classList.add('sortable-active');
+            },
+            onEnd: (evt) => {
+              thumbs.classList.remove('sortable-active');
+              // Update the files array to match new order
+              const movedFile = state.files.splice(evt.oldIndex, 1)[0];
+              state.files.splice(evt.newIndex, 0, movedFile);
+              updateFileOrder(thumbs);
+              showToast('تم تغيير ترتيب الصور', 'success');
+            }
+          });
+        };
+
+        const renderThumbs = () => {
+          if (!thumbs) return;
+          thumbs.innerHTML = '';
+          state.files.forEach((file, index) => {
+            const url = URL.createObjectURL(file);
+            const img = document.createElement('img'); 
+            img.src = url;
+            const wrap = document.createElement('div'); 
+            wrap.className = 'thumb';
+            wrap.setAttribute('data-order', index + 1);
+            wrap.appendChild(img);
+            thumbs.appendChild(wrap);
+          });
+          updateStatus(tool, `تم تحميل ${state.files.length} صور. يمكنك إعادة ترتيبها بالسحب والإفلات.`);
+          
+          // Show sort instructions and initialize sortable
+          if (state.files.length > 1) {
+            sortInstructions.classList.add('show');
+            initSortable();
+          } else {
+            sortInstructions.classList.remove('show');
+          }
+        };
+
+        if (input) {
+          input.addEventListener('change', (e) => {
+            state.files = Array.from(e.target.files);
+            if (runBtn) runBtn.disabled = state.files.length === 0;
+            renderThumbs();
+          });
+        }
+
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            state.files = []; 
+            if (thumbs) thumbs.innerHTML = ''; 
+            if (input) input.value = ''; 
+            if (runBtn) runBtn.disabled = true;
+            if (sortInstructions) sortInstructions.classList.remove('show');
+            if (state.sortable) {
+              state.sortable.destroy();
+              state.sortable = null;
+            }
+            updateStatus(tool, '');
+          });
+        }
 
         if (runBtn) {
           runBtn.addEventListener('click', async () => {
             if (state.files.length === 0) return showToast('اختر صورة واحدة على الأقل', 'error');
             runBtn.disabled = true;
-            updateStatus(tool, '🚀 بدء إنشاء PDF...', 0);
-
+            updateStatus(tool, '🚀 بدء إنشاء PDF بالترتيب المحدد...', 0);
+            
             try {
               const pdfDoc = await PDFLib.PDFDocument.create();
-
               for (let i = 0; i < state.files.length; i++) {
                 const file = state.files[i];
                 const bytes = await file.arrayBuffer();
                 let img;
                 if (file.type === 'image/png') img = await pdfDoc.embedPng(bytes);
                 else img = await pdfDoc.embedJpg(bytes);
-
-                // ✅ تحديد حجم الصفحة (A4 أو Letter أو Auto)
-                const sizeChoice = document.getElementById("img2pdf-size")?.value || "auto";
-                const fitChoice = document.getElementById("img2pdf-fit")?.value || "fit";
-
-                let pageWidth, pageHeight;
-                if (sizeChoice === "A4") {
-                  pageWidth = 595.28; 
-                  pageHeight = 841.89;
-                } else if (sizeChoice === "Letter") {
-                  pageWidth = 612;  
-                  pageHeight = 792;  
-                } else {
-                  pageWidth = img.width;
-                  pageHeight = img.height;
-                }
-
-                const page = pdfDoc.addPage([pageWidth, pageHeight]);
-
-                if (fitChoice === "fit" && sizeChoice !== "auto") {
-                  const scale = Math.min(pageWidth / img.width, pageHeight / img.height);
-                  const imgW = img.width * scale;
-                  const imgH = img.height * scale;
-                  const x = (pageWidth - imgW) / 2;
-                  const y = (pageHeight - imgH) / 2;
-                  page.drawImage(img, { x, y, width: imgW, height: imgH });
-                } else {
-                  page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-                }
-
-                updateStatus(tool, `إضافة الصورة ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
+                const page = pdfDoc.addPage([img.width, img.height]);
+                page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+                updateStatus(tool, `🔄 إضافة الصورة ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
               }
-
               const pdfBytes = await pdfDoc.save();
               downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'images.pdf');
-              updateStatus(tool, '✅ اكتمل إنشاء PDF!');
-              showToast('تم تحميل ملف PDF!', 'success');
+              updateStatus(tool, '✅ اكتمل إنشاء PDF بالترتيب المطلوب!');
+              showToast('تم تحميل ملف PDF بالترتيب المطلوب!', 'success');
             } catch (err) { 
               updateStatus(tool, `❌ خطأ: ${err.message}`); 
               showToast('فشل إنشاء PDF.', 'error'); 
@@ -502,8 +930,190 @@
         }
       })();
 
-      // ... باقي الوحدات (merge, pdf2img, split, extract) بدون أي تغيير ...
+      // 3. PDF to Images Module (unchanged)
+      (() => {
+        const tool = 'pdf2img';
+        const state = appState.pdf2img;
+        const input = document.getElementById(`${tool}-input`);
+        const runBtn = document.getElementById(`${tool}-run`);
+        const fromEl = document.getElementById(`${tool}-from`);
+        const toEl = document.getElementById(`${tool}-to`);
+
+        if (input) {
+          input.addEventListener('change', (e) => {
+            state.file = e.target.files[0];
+            if (runBtn) runBtn.disabled = !state.file;
+            if (state.file) updateStatus(tool, `تم اختيار الملف: ${state.file.name}`);
+          });
+        }
+
+        if (runBtn) {
+          runBtn.addEventListener('click', async () => {
+            if (!state.file) return showToast('اختر ملف PDF أولاً', 'error');
+            runBtn.disabled = true;
+            updateStatus(tool, '🚀 بدء التحويل إلى صور...', 0);
+            
+            try {
+              const buf = await state.file.arrayBuffer();
+              const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+              const total = pdf.numPages;
+              const [from, to] = clampRange(parseInt(fromEl?.value), parseInt(toEl?.value), total);
+              const zip = new JSZip();
+
+              for (let p = from; p <= to; p++) {
+                const page = await pdf.getPage(p);
+                const viewport = page.getViewport({ scale: 1.5 });
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width; 
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+                const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                zip.file(`page-${p}.png`, blob);
+                updateStatus(tool, `🔄 تجهيز الصفحة ${p} من ${to}`, ((p - from + 1) / (to - from + 1)) * 100);
+              }
+              
+              const zipBlob = await zip.generateAsync({ type: 'blob' });
+              downloadBlob(zipBlob, `${state.file.name.replace(/\.pdf$/i, '')}_images.zip`);
+              updateStatus(tool, '✅ اكتمل التحويل!');
+              showToast('تم تحميل ملف الصور!', 'success');
+            } catch (err) { 
+              updateStatus(tool, `❌ خطأ: ${err.message}`); 
+              showToast('فشل التحويل.', 'error'); 
+            }
+            runBtn.disabled = false;
+          });
+        }
+      })();
+
+      // 4. Split PDF Module (unchanged)
+      (() => {
+        const tool = 'split';
+        const state = appState.split;
+        const input = document.getElementById(`${tool}-input`);
+        const runBtn = document.getElementById(`${tool}-run`);
+        const fromEl = document.getElementById(`${tool}-from`);
+        const toEl = document.getElementById(`${tool}-to`);
+
+        if (input) {
+          input.addEventListener('change', (e) => {
+            state.file = e.target.files[0];
+            if (runBtn) runBtn.disabled = !state.file;
+            if (state.file) updateStatus(tool, `تم اختيار الملف: ${state.file.name}`);
+          });
+        }
+
+        if (runBtn) {
+          runBtn.addEventListener('click', async () => {
+            if (!state.file) return showToast('اختر ملف PDF أولاً', 'error');
+            runBtn.disabled = true;
+            updateStatus(tool, '🚀 بدء التقسيم...', 0);
+            
+            try {
+              const buf = await state.file.arrayBuffer();
+              const srcDoc = await PDFLib.PDFDocument.load(buf);
+              const total = srcDoc.getPageCount();
+              const [from, to] = clampRange(parseInt(fromEl?.value), parseInt(toEl?.value), total);
+              
+              const newDoc = await PDFLib.PDFDocument.create();
+              const pages = await newDoc.copyPages(srcDoc, Array.from({length: (to - from + 1)}, (_, i) => i + from - 1));
+              pages.forEach(page => newDoc.addPage(page));
+              
+              const pdfBytes = await newDoc.save();
+              downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), `split_p${from}-p${to}_${state.file.name}`);
+              updateStatus(tool, '✅ اكتمل التقسيم!');
+              showToast('تم تحميل الملف المقسّم!', 'success');
+            } catch (err) { 
+              updateStatus(tool, `❌ خطأ: ${err.message}`); 
+              showToast('فشل التقسيم.', 'error'); 
+            }
+            runBtn.disabled = false;
+          });
+        }
+      })();
+
+      // 5. Extract Text Module (unchanged)
+      (() => {
+        const tool = 'extract';
+        const state = appState.extract;
+        const input = document.getElementById(`${tool}-input`);
+        const runBtn = document.getElementById(`${tool}-run`);
+        const output = document.getElementById(`${tool}-output`);
+        const saveBtn = document.getElementById(`${tool}-save`);
+
+        if (input) {
+          input.addEventListener('change', (e) => {
+            state.files = Array.from(e.target.files);
+            if (runBtn) runBtn.disabled = state.files.length === 0;
+            if (state.files.length > 0) updateStatus(tool, `تم اختيار ${state.files.length} ملف(ات)`);
+          });
+        }
+
+        if (runBtn) {
+          runBtn.addEventListener('click', async () => {
+            if (state.files.length === 0) return showToast('اختر ملفات أولاً', 'error');
+            runBtn.disabled = true;
+            updateStatus(tool, '🚀 بدء الاستخراج...', 0);
+            
+            try {
+              let combinedText = '';
+              for (let i = 0; i < state.files.length; i++) {
+                const file = state.files[i];
+                combinedText += `--- [ ${file.name} ] ---\n`;
+                
+                if (file.type === 'application/pdf') {
+                  updateStatus(tool, `⏳ استخراج نص من PDF (${i+1}/${state.files.length})...`, (i / state.files.length) * 100);
+                  const buf = await file.arrayBuffer();
+                  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+                  for(let p = 1; p <= pdf.numPages; p++){
+                    const page = await pdf.getPage(p);
+                    const tc = await page.getTextContent();
+                    combinedText += tc.items.map(item => item.str).join(' ') + '\n';
+                  }
+                } else {
+                  updateStatus(tool, `⏳ التعرف على الصور (${i+1}/${state.files.length})...`, (i / state.files.length) * 100);
+                  const { data: { text } } = await Tesseract.recognize(file, 'ara+eng', {
+                    logger: m => { 
+                      updateStatus(tool, `🔄 ${m.status} ${Math.round((m.progress||0)*100)}%`); 
+                    }
+                  });
+                  combinedText += text;
+                }
+                combinedText += '\n\n';
+              }
+              
+              if (output) output.value = combinedText.trim();
+              updateStatus(tool, '✅ تم استخراج النص بنجاح!');
+              showToast('تم استخراج النص بنجاح!', 'success');
+            } catch (err) { 
+              updateStatus(tool, `❌ خطأ: ${err.message}`); 
+              showToast('فشل استخراج النص.', 'error'); 
+            }
+            runBtn.disabled = false;
+          });
+        }
+
+        if (saveBtn && output) {
+          saveBtn.addEventListener('click', () => {
+            const text = output.value || '';
+            if (!text.trim()) return showToast('لا يوجد نص لحفظه.', 'error');
+            downloadBlob(new Blob([text], {type: 'text/plain;charset=utf-8'}), 'extracted-text.txt');
+            showToast('تم حفظ النص!', 'success');
+          });
+        }
+      })();
+
+      // Initialize with merge page
+      showPage('merge');
+      showToast('مرحباً بك في PDF Suite مع خاصية الترتيب المتقدمة!', 'success');
     });
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
