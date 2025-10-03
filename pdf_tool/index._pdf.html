@@ -439,6 +439,15 @@
           <span class="status-text"></span>
         </div>
         <div style="margin-top: 20px; display: flex; gap: 15px;">
+          <div class="option-group" style="margin: 20px 0;">
+  <label for="img2pdf-size">اختر حجم الورقة</label>
+  <select id="img2pdf-size">
+    <option value="auto" selected>الحجم الأصلي</option>
+    <option value="A4">A4</option>
+    <option value="Letter">Letter</option>
+  </select>
+</div>
+
           <button class="btn" id="img2pdf-run" disabled><i class="fas fa-play"></i> بدء التحويل</button>
           <button class="btn outline" id="img2pdf-clear">مسح الكل</button>
         </div>
@@ -913,8 +922,34 @@
                 let img;
                 if (file.type === 'image/png') img = await pdfDoc.embedPng(bytes);
                 else img = await pdfDoc.embedJpg(bytes);
-                const page = pdfDoc.addPage([img.width, img.height]);
-                page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+                const sizeSelect = document.getElementById('img2pdf-size');
+const chosenSize = sizeSelect ? sizeSelect.value : 'auto';
+
+let pageWidth, pageHeight;
+
+if (chosenSize === 'A4') {
+  pageWidth = 595.28;  // A4 in points (72 dpi) = 210mm × 297mm
+  pageHeight = 841.89;
+} else if (chosenSize === 'Letter') {
+  pageWidth = 612;     // Letter in points = 8.5in × 11in
+  pageHeight = 792;
+} else {
+  // Auto size (use image dimensions)
+  pageWidth = img.width;
+  pageHeight = img.height;
+}
+
+const page = pdfDoc.addPage([pageWidth, pageHeight]);
+
+// حساب القياس المناسب لملء الصفحة
+let scale = Math.min(pageWidth / img.width, pageHeight / img.height);
+let imgWidth = img.width * scale;
+let imgHeight = img.height * scale;
+let x = (pageWidth - imgWidth) / 2;
+let y = (pageHeight - imgHeight) / 2;
+
+page.drawImage(img, { x, y, width: imgWidth, height: imgHeight });
+
                 updateStatus(tool, `🔄 إضافة الصورة ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
               }
               const pdfBytes = await pdfDoc.save();
@@ -1109,6 +1144,7 @@
   </script>
 </body>
 </html>
+
 
 
 
