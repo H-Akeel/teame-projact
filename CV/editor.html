@@ -13,6 +13,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+
+    <!-- صورة في الزاوية -->
+    <div class="corner-image">
+        <img src="img/user-logo.png" alt="صورة المستخدم" onerror="this.style.display='none';">
+    </div>
+
     <!-- شريط العلوي -->
     <header class="editor-header">
         <div class="header-container">
@@ -121,7 +127,7 @@
                         </div>
                     </div>
 
-                    <!-- قسم الخبرات العملية -->
+                    <!-- باقي الأقسام بدون تغيير -->
                     <div id="experienceSection" class="section-content">
                         <div class="section-header">
                             <h3>الخبرات العملية</h3>
@@ -130,12 +136,9 @@
                                 إضافة خبرة
                             </button>
                         </div>
-                        <div id="experienceList" class="experience-list">
-                            <!-- سيتم إضافة الخبرات هنا ديناميكياً -->
-                        </div>
+                        <div id="experienceList" class="experience-list"></div>
                     </div>
 
-                    <!-- قسم التعليم -->
                     <div id="educationSection" class="section-content">
                         <div class="section-header">
                             <h3>التعليم</h3>
@@ -144,12 +147,9 @@
                                 إضافة تعليم
                             </button>
                         </div>
-                        <div id="educationList" class="education-list">
-                            <!-- سيتم إضافة التعليم هنا ديناميكياً -->
-                        </div>
+                        <div id="educationList" class="education-list"></div>
                     </div>
 
-                    <!-- قسم المهارات -->
                     <div id="skillsSection" class="section-content">
                         <div class="section-header">
                             <h3>المهارات</h3>
@@ -158,12 +158,9 @@
                                 إضافة مهارة
                             </button>
                         </div>
-                        <div id="skillsList" class="skills-list">
-                            <!-- سيتم إضافة المهارات هنا ديناميكياً -->
-                        </div>
+                        <div id="skillsList" class="skills-list"></div>
                     </div>
 
-                    <!-- قسم اللغات -->
                     <div id="languagesSection" class="section-content">
                         <div class="section-header">
                             <h3>اللغات</h3>
@@ -172,12 +169,9 @@
                                 إضافة لغة
                             </button>
                         </div>
-                        <div id="languagesList" class="languages-list">
-                            <!-- سيتم إضافة اللغات هنا ديناميكياً -->
-                        </div>
+                        <div id="languagesList" class="languages-list"></div>
                     </div>
 
-                    <!-- قسم القالب -->
                     <div id="templateSection" class="section-content">
                         <div class="template-options">
                             <h3>اختر القالب</h3>
@@ -218,7 +212,7 @@
                 </div>
             </section>
 
-            <!-- منطقة المعاينة -->
+            <!-- المعاينة -->
             <section class="editor-preview">
                 <div class="preview-header">
                     <h3>
@@ -227,15 +221,13 @@
                     </h3>
                 </div>
                 <div class="preview-content">
-                    <div id="resumePreview" class="resume-preview">
-                        <!-- سيتم عرض معاينة السيرة الذاتية هنا -->
-                    </div>
+                    <div id="resumePreview" class="resume-preview"></div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- نافذة المعاينة المنبثقة -->
+    <!-- نافذة المعاينة -->
     <div id="previewModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -245,9 +237,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="fullPreview" class="full-preview">
-                    <!-- معاينة كاملة للسيرة الذاتية -->
-                </div>
+                <div id="fullPreview" class="full-preview"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" id="closePreviewBtn">إغلاق</button>
@@ -271,4 +261,3 @@
     <script src="js/editor.js"></script>
 </body>
 </html>
-
