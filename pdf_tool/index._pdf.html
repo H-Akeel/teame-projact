@@ -12,7 +12,6 @@
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <!-- Sortable.js for drag and drop sorting -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -58,7 +57,6 @@
       overflow: hidden;
     }
 
-    /* --- Sidebar --- */
     .sidebar {
       width: 260px;
       background-color: var(--card-color);
@@ -109,11 +107,8 @@
       font-size: 1.2rem;
       transition: var(--transition);
     }
-    .theme-switcher:hover {
-      color: var(--primary-color);
-    }
+    .theme-switcher:hover { color: var(--primary-color); }
 
-    /* --- Main Content --- */
     .main-content {
       flex-grow: 1;
       padding: 40px;
@@ -177,7 +172,7 @@
       margin-bottom: 20px;
     }
     .option-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--muted-color); }
-    input[type="number"], input[type="text"] {
+    input[type="number"], input[type="text"], select {
       width: 100%;
       padding: 12px;
       border: 1px solid var(--border-color);
@@ -187,7 +182,7 @@
       font-size: 1rem;
       transition: var(--transition);
     }
-    input[type="number"]:focus, input[type="text"]:focus {
+    input[type="number"]:focus, input[type="text"]:focus, select:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(74, 85, 255, 0.1);
@@ -242,12 +237,37 @@
       text-align: center;
       display: none;
     }
-    .sort-instructions.show {
-      display: block;
-    }
+    .sort-instructions.show { display: block; }
     .sort-instructions i {
       color: var(--primary-color);
       margin-inline-end: 8px;
+    }
+    
+    .sort-controls {
+      display: none;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .sort-controls.show { display: flex; }
+    .sort-btn {
+      background: var(--bg-color);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sort-btn:hover {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
     }
     
     .thumbs { 
@@ -273,6 +293,10 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       transition: var(--transition);
       border: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 160px;
     }
     .thumb:hover {
       transform: translateY(-2px);
@@ -296,7 +320,41 @@
       pointer-events: none;
     }
     
-    /* File order indicator */
+    .thumb-info {
+      font-size: 0.75rem;
+      color: var(--muted-color);
+      text-align: center;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+    
+    .thumb-controls {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    
+    .thumb-control-btn {
+      background: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--muted-color);
+      transition: var(--transition);
+    }
+    .thumb-control-btn:hover {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    .thumb-control-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
     .thumb::before {
       content: attr(data-order);
       position: absolute;
@@ -332,10 +390,7 @@
       transition: width 0.3s; 
     }
     .status-text { font-weight: 500; color: var(--muted-color); }
-    .ok { color: #2ecc71; }
-    .err { color: #e74c3c; }
 
-    /* Toast Notifications */
     .toast-container { position: fixed; bottom: 20px; inset-inline-start: 20px; z-index: 2000; }
     .toast {
       background: #34495e;
@@ -352,7 +407,6 @@
     .toast.success { background: #27ae60; }
     @keyframes toast-in { to { opacity: 1; transform: translateY(0); } }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
       body { flex-direction: column; overflow: visible; }
       .sidebar { width: 100%; height: auto; }
@@ -364,16 +418,12 @@
 <body>
 
   <aside class="sidebar">
-    <!-- إضافة صورة لكوكو فوق الشعار -->
     <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
       <img src="..//Photo/timepdf.png" 
-           alt="g,;," 
+           alt="Logo" 
            style="width: 90px; height: 90px; object-fit: contain; margin-bottom: 10px; border-radius: 50%; box-shadow: 0 2px 12px rgba(0,0,0,0.10);" />
     </div>
-    <!-- الشعار بدون الأيقونة -->
-    <div class="logo" style="margin-bottom: 40px; text-align: center;">
-      PDF Suite
-    </div>
+    <div class="logo">PDF Suite</div>
     <ul class="nav-menu">
       <li class="nav-item"><a data-page="merge" class="nav-link active"><i class="fas fa-link fa-fw"></i> دمج الملفات</a></li>
       <li class="nav-item"><a data-page="img2pdf" class="nav-link"><i class="fas fa-image fa-fw"></i> صور إلى PDF</a></li>
@@ -381,15 +431,15 @@
       <li class="nav-item"><a data-page="split" class="nav-link"><i class="fas fa-cut fa-fw"></i> تقسيم ملف</a></li>
       <li class="nav-item"><a data-page="extract" class="nav-link"><i class="fas fa-file-alt fa-fw"></i> استخراج النصوص</a></li>
     </ul>
-    <button class="theme-switcher" id="theme-switcher" aria-label="تبديل الوضع"><i class="fas fa-moon"></i></button>
+    <button class="theme-switcher" id="theme-switcher"><i class="fas fa-moon"></i></button>
   </aside>
 
   <main class="main-content">
-    <!-- Page 1: Merge -->
+    <!-- Merge PDFs -->
     <section id="merge" class="tool-page active">
       <div class="page-header">
         <h1>دمج ملفات PDF</h1>
-        <p>اجمع عدة ملفات PDF في ملف واحد، مع إمكانية إعادة ترتيبها بالسحب والإفلات.</p>
+        <p>اجمع عدة ملفات PDF في ملف واحد مع إمكانية إعادة ترتيبها بسهولة</p>
       </div>
       <div class="tool-card">
         <div class="input-area" id="merge-dropzone">
@@ -400,7 +450,12 @@
         <div class="preview-area">
           <div class="sort-instructions" id="merge-sort-instructions">
             <i class="fas fa-arrows-alt"></i>
-            اسحب الملفات لإعادة ترتيبها حسب الترتيب المطلوب في الملف النهائي
+            اسحب الملفات لإعادة ترتيبها أو استخدم الأزرار أدناه
+          </div>
+          <div class="sort-controls" id="merge-sort-controls">
+            <button class="sort-btn" data-sort="alpha"><i class="fas fa-sort-alpha-down"></i> ترتيب أبجدي</button>
+            <button class="sort-btn" data-sort="numeric"><i class="fas fa-sort-numeric-down"></i> ترتيب رقمي</button>
+            <button class="sort-btn" data-sort="reverse"><i class="fas fa-exchange-alt"></i> عكس الترتيب</button>
           </div>
           <div class="thumbs" id="merge-thumbs"></div>
         </div>
@@ -415,11 +470,11 @@
       </div>
     </section>
 
-    <!-- Page 2: Images to PDF -->
+    <!-- Images to PDF -->
     <section id="img2pdf" class="tool-page">
       <div class="page-header">
         <h1>تحويل صور إلى PDF</h1>
-        <p>اجمع صورك في ملف PDF واحد أنيق وسهل المشاركة.</p>
+        <p>اجمع صورك في ملف PDF واحد أنيق وسهل المشاركة</p>
       </div>
       <div class="tool-card">
         <div class="input-area" id="img2pdf-dropzone">
@@ -430,7 +485,12 @@
         <div class="preview-area">
           <div class="sort-instructions" id="img2pdf-sort-instructions">
             <i class="fas fa-arrows-alt"></i>
-            اسحب الصور لإعادة ترتيبها حسب الترتيب المطلوب في ملف PDF
+            اسحب الصور لإعادة ترتيبها أو استخدم الأزرار أدناه
+          </div>
+          <div class="sort-controls" id="img2pdf-sort-controls">
+            <button class="sort-btn" data-sort="alpha"><i class="fas fa-sort-alpha-down"></i> ترتيب أبجدي</button>
+            <button class="sort-btn" data-sort="numeric"><i class="fas fa-sort-numeric-down"></i> ترتيب رقمي</button>
+            <button class="sort-btn" data-sort="reverse"><i class="fas fa-exchange-alt"></i> عكس الترتيب</button>
           </div>
           <div class="thumbs" id="img2pdf-thumbs"></div>
         </div>
@@ -438,27 +498,26 @@
           <div class="progress-bar"><div class="progress-bar-inner"></div></div>
           <span class="status-text"></span>
         </div>
-        <div style="margin-top: 20px; display: flex; gap: 15px;">
-          <div class="option-group" style="margin: 20px 0;">
-  <label for="img2pdf-size">اختر حجم الورقة</label>
-  <select id="img2pdf-size">
-    <option value="auto" selected>الحجم الأصلي</option>
-    <option value="A4">A4</option>
-    <option value="Letter">Letter</option>
-  </select>
-</div>
-
+        <div style="margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+          <div class="option-group" style="margin: 0; min-width: 200px;">
+            <label for="img2pdf-size">اختر حجم الورقة</label>
+            <select id="img2pdf-size">
+              <option value="auto" selected>الحجم الأصلي</option>
+              <option value="A4">A4</option>
+              <option value="Letter">Letter</option>
+            </select>
+          </div>
           <button class="btn" id="img2pdf-run" disabled><i class="fas fa-play"></i> بدء التحويل</button>
           <button class="btn outline" id="img2pdf-clear">مسح الكل</button>
         </div>
       </div>
     </section>
     
-    <!-- Page 3: PDF to Images -->
+    <!-- PDF to Images -->
     <section id="pdf2img" class="tool-page">
       <div class="page-header">
         <h1>PDF إلى صور</h1>
-        <p>استخرج صفحات ملف PDF كصور منفصلة بجودة عالية.</p>
+        <p>استخرج صفحات ملف PDF كصور منفصلة بجودة عالية</p>
       </div>
       <div class="tool-card">
         <div class="input-area" id="pdf2img-dropzone">
@@ -486,11 +545,11 @@
       </div>
     </section>
 
-    <!-- Page 4: Split PDF -->
+    <!-- Split PDF -->
     <section id="split" class="tool-page">
       <div class="page-header">
         <h1>تقسيم ملف PDF</h1>
-        <p>استخرج نطاقًا محددًا من الصفحات كملف PDF جديد.</p>
+        <p>استخرج نطاقًا محددًا من الصفحات كملف PDF جديد</p>
       </div>
       <div class="tool-card">
         <div class="input-area" id="split-dropzone">
@@ -518,11 +577,11 @@
       </div>
     </section>
 
-    <!-- Page 5: Extract Text -->
+    <!-- Extract Text -->
     <section id="extract" class="tool-page">
       <div class="page-header">
         <h1>استخراج النصوص (OCR)</h1>
-        <p>تعرف على النصوص في ملفات PDF والصور بدعم للغة العربية.</p>
+        <p>تعرف على النصوص في ملفات PDF والصور بدعم للغة العربية</p>
       </div>
       <div class="tool-card">
         <div class="input-area" id="extract-dropzone">
@@ -549,9 +608,8 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('PDF Suite مع خاصية الترتيب تم تحميلها بنجاح');
+      console.log('PDF Suite - نظام الترتيب المحسّن جاهز ✓');
       
-      // --- App State ---
       const appState = {
         merge: { files: [], sortable: null },
         img2pdf: { files: [], sortable: null },
@@ -560,13 +618,12 @@
         extract: { files: [] }
       };
 
-      // --- Elements ---
       const navLinks = document.querySelectorAll('.nav-link');
       const pages = document.querySelectorAll('.tool-page');
       const themeSwitcher = document.getElementById('theme-switcher');
       const toastContainer = document.getElementById('toast-container');
 
-      // --- Utility Functions ---
+      // Utility Functions
       const showToast = (message, type = 'info') => {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
@@ -607,67 +664,83 @@
         }
       };
 
-      // Update file order indicators
-      const updateFileOrder = (thumbsContainer) => {
-        const thumbs = thumbsContainer.querySelectorAll('.thumb');
-        thumbs.forEach((thumb, index) => {
-          thumb.setAttribute('data-order', index + 1);
-        });
+      const naturalSort = (a, b) => {
+        return a.localeCompare(b, 'ar', { numeric: true, sensitivity: 'base' });
       };
 
-      // --- Navigation Logic ---
+      let renderMergeThumbs, renderImg2PdfThumbs;
+
+      const sortFiles = (tool, sortType) => {
+        const state = appState[tool];
+        
+        if (sortType === 'alpha') {
+          state.files.sort((a, b) => naturalSort(a.name, b.name));
+        } else if (sortType === 'numeric') {
+          state.files.sort((a, b) => {
+            const numA = parseInt(a.name.match(/\d+/)?.[0] || '0');
+            const numB = parseInt(b.name.match(/\d+/)?.[0] || '0');
+            return numA - numB || naturalSort(a.name, b.name);
+          });
+        } else if (sortType === 'reverse') {
+          state.files.reverse();
+        }
+        
+        if (tool === 'merge') {
+          renderMergeThumbs();
+        } else if (tool === 'img2pdf') {
+          renderImg2PdfThumbs();
+        }
+        
+        showToast('تم إعادة ترتيب الملفات', 'success');
+      };
+
+      const moveFile = (tool, fromIndex, toIndex) => {
+        const state = appState[tool];
+        const [movedFile] = state.files.splice(fromIndex, 1);
+        state.files.splice(toIndex, 0, movedFile);
+        
+        if (tool === 'merge') {
+          renderMergeThumbs();
+        } else if (tool === 'img2pdf') {
+          renderImg2PdfThumbs();
+        }
+      };
+
+      // Navigation
       const showPage = (pageId) => {
-        console.log('Switching to page:', pageId);
+        pages.forEach(page => page.classList.remove('active'));
+        navLinks.forEach(link => link.classList.remove('active'));
         
-        // Hide all pages
-        pages.forEach(page => {
-          page.classList.remove('active');
-        });
-        
-        // Remove active class from all nav links
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-        });
-        
-        // Show target page
         const targetPage = document.getElementById(pageId);
-        if (targetPage) {
-          targetPage.classList.add('active');
-        }
+        if (targetPage) targetPage.classList.add('active');
         
-        // Add active class to clicked nav link
         const activeLink = document.querySelector(`[data-page="${pageId}"]`);
-        if (activeLink) {
-          activeLink.classList.add('active');
-        }
+        if (activeLink) activeLink.classList.add('active');
       };
 
-      // Add click event listeners to navigation links
       navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
           const pageId = e.currentTarget.getAttribute('data-page');
-          if (pageId) {
-            showPage(pageId);
-          }
+          if (pageId) showPage(pageId);
         });
       });
 
-      // --- Theme Switcher Logic ---
+      // Theme Switcher
       const currentTheme = localStorage.getItem('theme') || 'light';
       document.documentElement.setAttribute('data-theme', currentTheme);
       themeSwitcher.querySelector('i').className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
       
       themeSwitcher.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const current = document.documentElement.getAttribute('data-theme');
+        const newTheme = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         themeSwitcher.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         showToast(`تم التبديل إلى الوضع ${newTheme === 'dark' ? 'الليلي' : 'النهاري'}`, 'success');
       });
 
-      // --- Drag and Drop Logic ---
+      // Drag and Drop
       document.querySelectorAll('.input-area').forEach(zone => {
         zone.addEventListener('dragover', (e) => {
           e.preventDefault();
@@ -689,7 +762,6 @@
           }
         });
         
-        // Click to open file dialog
         zone.addEventListener('click', (e) => {
           if (e.target.tagName !== 'LABEL') {
             const inputId = zone.querySelector('label').getAttribute('for');
@@ -699,9 +771,7 @@
         });
       });
 
-      // --- Tool Modules ---
-
-      // 1. Merge Module with Sorting
+      // MODULE 1: Merge PDFs
       (() => {
         const tool = 'merge';
         const state = appState.merge;
@@ -710,32 +780,27 @@
         const runBtn = document.getElementById(`${tool}-run`);
         const clearBtn = document.getElementById(`${tool}-clear`);
         const sortInstructions = document.getElementById(`${tool}-sort-instructions`);
+        const sortControls = document.getElementById(`${tool}-sort-controls`);
 
         const initSortable = () => {
-          if (state.sortable) {
-            state.sortable.destroy();
-          }
+          if (state.sortable) state.sortable.destroy();
           
           state.sortable = Sortable.create(thumbs, {
             animation: 200,
             ghostClass: 'sortable-ghost',
             chosenClass: 'sortable-chosen',
-            dragClass: 'sortable-drag',
-            onStart: () => {
-              thumbs.classList.add('sortable-active');
-            },
+            onStart: () => thumbs.classList.add('sortable-active'),
             onEnd: (evt) => {
               thumbs.classList.remove('sortable-active');
-              // Update the files array to match new order
               const movedFile = state.files.splice(evt.oldIndex, 1)[0];
               state.files.splice(evt.newIndex, 0, movedFile);
-              updateFileOrder(thumbs);
+              renderMergeThumbs();
               showToast('تم تغيير ترتيب الملفات', 'success');
             }
           });
         };
 
-        const renderThumbs = async () => {
+        renderMergeThumbs = async () => {
           if (!thumbs) return;
           thumbs.innerHTML = '';
           updateStatus(tool, `⏳ جاري تحميل ${state.files.length} ملفات...`, 0);
@@ -756,6 +821,39 @@
               wrap.className = 'thumb'; 
               wrap.setAttribute('data-order', i + 1);
               wrap.appendChild(canvas);
+              
+              const info = document.createElement('div');
+              info.className = 'thumb-info';
+              info.textContent = file.name;
+              wrap.appendChild(info);
+              
+              const controls = document.createElement('div');
+              controls.className = 'thumb-controls';
+              
+              const upBtn = document.createElement('button');
+              upBtn.className = 'thumb-control-btn';
+              upBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+              upBtn.title = 'تحريك لأعلى';
+              upBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (i > 0) moveFile(tool, i, i - 1);
+              };
+              if (i === 0) upBtn.disabled = true;
+              
+              const downBtn = document.createElement('button');
+              downBtn.className = 'thumb-control-btn';
+              downBtn.innerHTML = '<i class="fas fa-arrow-down"></i>';
+              downBtn.title = 'تحريك لأسفل';
+              downBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (i < state.files.length - 1) moveFile(tool, i, i + 1);
+              };
+              if (i === state.files.length - 1) downBtn.disabled = true;
+              
+              controls.appendChild(upBtn);
+              controls.appendChild(downBtn);
+              wrap.appendChild(controls);
+              
               thumbs.appendChild(wrap);
               
               updateStatus(tool, `⏳ تم تحميل ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
@@ -764,22 +862,33 @@
             }
           }
           
-          updateStatus(tool, `تم تحميل ${state.files.length} ملفات. يمكنك إعادة ترتيبها بالسحب والإفلات.`);
+          updateStatus(tool, `تم تحميل ${state.files.length} ملفات. يمكنك إعادة ترتيبها بسهولة.`);
           
-          // Show sort instructions and initialize sortable
           if (state.files.length > 1) {
             sortInstructions.classList.add('show');
+            sortControls.classList.add('show');
             initSortable();
           } else {
             sortInstructions.classList.remove('show');
+            sortControls.classList.remove('show');
           }
         };
 
         if (input) {
           input.addEventListener('change', async (e) => {
             state.files = Array.from(e.target.files);
+            state.files.sort((a, b) => naturalSort(a.name, b.name));
             if (runBtn) runBtn.disabled = state.files.length < 2;
-            await renderThumbs();
+            await renderMergeThumbs();
+          });
+        }
+
+        if (sortControls) {
+          sortControls.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const sortType = btn.getAttribute('data-sort');
+              sortFiles(tool, sortType);
+            });
           });
         }
 
@@ -790,6 +899,7 @@
             if (input) input.value = ''; 
             if (runBtn) runBtn.disabled = true;
             if (sortInstructions) sortInstructions.classList.remove('show');
+            if (sortControls) sortControls.classList.remove('show');
             if (state.sortable) {
               state.sortable.destroy();
               state.sortable = null;
@@ -802,7 +912,7 @@
           runBtn.addEventListener('click', async () => {
             if (state.files.length < 2) return showToast('اختر ملفين على الأقل', 'error');
             runBtn.disabled = true;
-            updateStatus(tool, '🚀 بدء عملية الدمج بالترتيب المحدد...', 0);
+            updateStatus(tool, '🚀 بدء عملية الدمج...', 0);
             
             try {
               const mergedPdf = await PDFLib.PDFDocument.create();
@@ -816,8 +926,8 @@
               }
               const mergedPdfBytes = await mergedPdf.save();
               downloadBlob(new Blob([mergedPdfBytes], { type: 'application/pdf' }), 'merged.pdf');
-              updateStatus(tool, '✅ اكتمل الدمج بنجاح بالترتيب المطلوب!');
-              showToast('تم تحميل الملف المدموج بالترتيب المطلوب!', 'success');
+              updateStatus(tool, '✅ اكتمل الدمج بنجاح!');
+              showToast('تم تحميل الملف المدموج!', 'success');
             } catch (err) { 
               updateStatus(tool, `❌ خطأ: ${err.message}`); 
               showToast('فشلت عملية الدمج.', 'error'); 
@@ -827,145 +937,7 @@
         }
       })();
 
-      // 2. Images to PDF Module with Sorting
-      (() => {
-        const tool = 'img2pdf';
-        const state = appState.img2pdf;
-        const input = document.getElementById(`${tool}-input`);
-        const thumbs = document.getElementById(`${tool}-thumbs`);
-        const runBtn = document.getElementById(`${tool}-run`);
-        const clearBtn = document.getElementById(`${tool}-clear`);
-        const sortInstructions = document.getElementById(`${tool}-sort-instructions`);
-
-        const initSortable = () => {
-          if (state.sortable) {
-            state.sortable.destroy();
-          }
-          
-          state.sortable = Sortable.create(thumbs, {
-            animation: 200,
-            ghostClass: 'sortable-ghost',
-            chosenClass: 'sortable-chosen',
-            dragClass: 'sortable-drag',
-            onStart: () => {
-              thumbs.classList.add('sortable-active');
-            },
-            onEnd: (evt) => {
-              thumbs.classList.remove('sortable-active');
-              // Update the files array to match new order
-              const movedFile = state.files.splice(evt.oldIndex, 1)[0];
-              state.files.splice(evt.newIndex, 0, movedFile);
-              updateFileOrder(thumbs);
-              showToast('تم تغيير ترتيب الصور', 'success');
-            }
-          });
-        };
-
-        const renderThumbs = () => {
-          if (!thumbs) return;
-          thumbs.innerHTML = '';
-          state.files.forEach((file, index) => {
-            const url = URL.createObjectURL(file);
-            const img = document.createElement('img'); 
-            img.src = url;
-            const wrap = document.createElement('div'); 
-            wrap.className = 'thumb';
-            wrap.setAttribute('data-order', index + 1);
-            wrap.appendChild(img);
-            thumbs.appendChild(wrap);
-          });
-          updateStatus(tool, `تم تحميل ${state.files.length} صور. يمكنك إعادة ترتيبها بالسحب والإفلات.`);
-          
-          // Show sort instructions and initialize sortable
-          if (state.files.length > 1) {
-            sortInstructions.classList.add('show');
-            initSortable();
-          } else {
-            sortInstructions.classList.remove('show');
-          }
-        };
-
-        if (input) {
-          input.addEventListener('change', (e) => {
-            state.files = Array.from(e.target.files);
-            if (runBtn) runBtn.disabled = state.files.length === 0;
-            renderThumbs();
-          });
-        }
-
-        if (clearBtn) {
-          clearBtn.addEventListener('click', () => {
-            state.files = []; 
-            if (thumbs) thumbs.innerHTML = ''; 
-            if (input) input.value = ''; 
-            if (runBtn) runBtn.disabled = true;
-            if (sortInstructions) sortInstructions.classList.remove('show');
-            if (state.sortable) {
-              state.sortable.destroy();
-              state.sortable = null;
-            }
-            updateStatus(tool, '');
-          });
-        }
-
-        if (runBtn) {
-          runBtn.addEventListener('click', async () => {
-            if (state.files.length === 0) return showToast('اختر صورة واحدة على الأقل', 'error');
-            runBtn.disabled = true;
-            updateStatus(tool, '🚀 بدء إنشاء PDF بالترتيب المحدد...', 0);
-            
-            try {
-              const pdfDoc = await PDFLib.PDFDocument.create();
-              for (let i = 0; i < state.files.length; i++) {
-                const file = state.files[i];
-                const bytes = await file.arrayBuffer();
-                let img;
-                if (file.type === 'image/png') img = await pdfDoc.embedPng(bytes);
-                else img = await pdfDoc.embedJpg(bytes);
-                const sizeSelect = document.getElementById('img2pdf-size');
-const chosenSize = sizeSelect ? sizeSelect.value : 'auto';
-
-let pageWidth, pageHeight;
-
-if (chosenSize === 'A4') {
-  pageWidth = 595.28;  // A4 in points (72 dpi) = 210mm × 297mm
-  pageHeight = 841.89;
-} else if (chosenSize === 'Letter') {
-  pageWidth = 612;     // Letter in points = 8.5in × 11in
-  pageHeight = 792;
-} else {
-  // Auto size (use image dimensions)
-  pageWidth = img.width;
-  pageHeight = img.height;
-}
-
-const page = pdfDoc.addPage([pageWidth, pageHeight]);
-
-// حساب القياس المناسب لملء الصفحة
-let scale = Math.min(pageWidth / img.width, pageHeight / img.height);
-let imgWidth = img.width * scale;
-let imgHeight = img.height * scale;
-let x = (pageWidth - imgWidth) / 2;
-let y = (pageHeight - imgHeight) / 2;
-
-page.drawImage(img, { x, y, width: imgWidth, height: imgHeight });
-
-                updateStatus(tool, `🔄 إضافة الصورة ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
-              }
-              const pdfBytes = await pdfDoc.save();
-              downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'images.pdf');
-              updateStatus(tool, '✅ اكتمل إنشاء PDF بالترتيب المطلوب!');
-              showToast('تم تحميل ملف PDF بالترتيب المطلوب!', 'success');
-            } catch (err) { 
-              updateStatus(tool, `❌ خطأ: ${err.message}`); 
-              showToast('فشل إنشاء PDF.', 'error'); 
-            }
-            runBtn.disabled = false;
-          });
-        }
-      })();
-
-      // 3. PDF to Images Module (unchanged)
+      // MODULE 3: PDF to Images
       (() => {
         const tool = 'pdf2img';
         const state = appState.pdf2img;
@@ -1020,7 +992,7 @@ page.drawImage(img, { x, y, width: imgWidth, height: imgHeight });
         }
       })();
 
-      // 4. Split PDF Module (unchanged)
+      // MODULE 4: Split PDF
       (() => {
         const tool = 'split';
         const state = appState.split;
@@ -1066,7 +1038,7 @@ page.drawImage(img, { x, y, width: imgWidth, height: imgHeight });
         }
       })();
 
-      // 5. Extract Text Module (unchanged)
+      // MODULE 5: Extract Text
       (() => {
         const tool = 'extract';
         const state = appState.extract;
@@ -1136,20 +1108,174 @@ page.drawImage(img, { x, y, width: imgWidth, height: imgHeight });
           });
         }
       })();
+      // MODULE 2: Images to PDF
+(() => {
+  const tool = 'img2pdf';
+  const state = appState.img2pdf;
+  const input = document.getElementById(`${tool}-input`);
+  const thumbs = document.getElementById(`${tool}-thumbs`);
+  const runBtn = document.getElementById(`${tool}-run`);
+  const clearBtn = document.getElementById(`${tool}-clear`);
+  const sortInstructions = document.getElementById(`${tool}-sort-instructions`);
+  const sortControls = document.getElementById(`${tool}-sort-controls`);
 
-      // Initialize with merge page
+  const initSortable = () => {
+    if (state.sortable) state.sortable.destroy();
+    
+    state.sortable = Sortable.create(thumbs, {
+      animation: 200,
+      ghostClass: 'sortable-ghost',
+      chosenClass: 'sortable-chosen',
+      onStart: () => thumbs.classList.add('sortable-active'),
+      onEnd: (evt) => {
+        thumbs.classList.remove('sortable-active');
+        const movedFile = state.files.splice(evt.oldIndex, 1)[0];
+        state.files.splice(evt.newIndex, 0, movedFile);
+        renderImg2PdfThumbs();
+        showToast('تم تغيير ترتيب الصور', 'success');
+      }
+    });
+  };
+
+  renderImg2PdfThumbs = () => {
+    if (!thumbs) return;
+    thumbs.innerHTML = '';
+    state.files.forEach((file, index) => {
+      const url = URL.createObjectURL(file);
+      const img = document.createElement('img'); 
+      img.src = url;
+      
+      const wrap = document.createElement('div'); 
+      wrap.className = 'thumb';
+      wrap.setAttribute('data-order', index + 1);
+      wrap.appendChild(img);
+      
+      const info = document.createElement('div');
+      info.className = 'thumb-info';
+      info.textContent = file.name;
+      wrap.appendChild(info);
+      
+      const controls = document.createElement('div');
+      controls.className = 'thumb-controls';
+      
+      const upBtn = document.createElement('button');
+      upBtn.className = 'thumb-control-btn';
+      upBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+      upBtn.onclick = () => {
+        if (index > 0) moveFile(tool, index, index - 1);
+      };
+      if (index === 0) upBtn.disabled = true;
+      
+      const downBtn = document.createElement('button');
+      downBtn.className = 'thumb-control-btn';
+      downBtn.innerHTML = '<i class="fas fa-arrow-down"></i>';
+      downBtn.onclick = () => {
+        if (index < state.files.length - 1) moveFile(tool, index, index + 1);
+      };
+      if (index === state.files.length - 1) downBtn.disabled = true;
+      
+      controls.appendChild(upBtn);
+      controls.appendChild(downBtn);
+      wrap.appendChild(controls);
+      
+      thumbs.appendChild(wrap);
+    });
+    
+    updateStatus(tool, `تم تحميل ${state.files.length} صور. يمكنك إعادة ترتيبها بسهولة.`);
+    
+    if (state.files.length > 1) {
+      sortInstructions.classList.add('show');
+      sortControls.classList.add('show');
+      initSortable();
+    } else {
+      sortInstructions.classList.remove('show');
+      sortControls.classList.remove('show');
+    }
+  };
+
+  if (input) {
+    input.addEventListener('change', (e) => {
+      state.files = Array.from(e.target.files);
+      state.files.sort((a, b) => naturalSort(a.name, b.name));
+      if (runBtn) runBtn.disabled = state.files.length === 0;
+      renderImg2PdfThumbs();
+    });
+  }
+
+  if (sortControls) {
+    sortControls.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        sortFiles(tool, btn.getAttribute('data-sort'));
+      });
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      state.files = []; 
+      thumbs.innerHTML = ''; 
+      input.value = ''; 
+      runBtn.disabled = true;
+      sortInstructions.classList.remove('show');
+      sortControls.classList.remove('show');
+      if (state.sortable) state.sortable.destroy();
+      updateStatus(tool, '');
+    });
+  }
+
+  if (runBtn) {
+    runBtn.addEventListener('click', async () => {
+      if (state.files.length === 0) return showToast('اختر صورة واحدة على الأقل', 'error');
+      runBtn.disabled = true;
+      updateStatus(tool, '🚀 بدء إنشاء PDF...', 0);
+      
+      try {
+        const pdfDoc = await PDFLib.PDFDocument.create();
+        for (let i = 0; i < state.files.length; i++) {
+          const file = state.files[i];
+          const bytes = await file.arrayBuffer();
+          let img;
+          if (file.type === 'image/png') img = await pdfDoc.embedPng(bytes);
+          else img = await pdfDoc.embedJpg(bytes);
+
+          const sizeSelect = document.getElementById('img2pdf-size');
+          const chosenSize = sizeSelect.value;
+
+          let pageWidth, pageHeight;
+          if (chosenSize === 'A4') { pageWidth = 595.28; pageHeight = 841.89; }
+          else if (chosenSize === 'Letter') { pageWidth = 612; pageHeight = 792; }
+          else { pageWidth = img.width; pageHeight = img.height; }
+
+          const page = pdfDoc.addPage([pageWidth, pageHeight]);
+
+          let scale = Math.min(pageWidth / img.width, pageHeight / img.height);
+          let imgWidth = img.width * scale;
+          let imgHeight = img.height * scale;
+          let x = (pageWidth - imgWidth) / 2;
+          let y = (pageHeight - imgHeight) / 2;
+
+          page.drawImage(img, { x, y, width: imgWidth, height: imgHeight });
+
+          updateStatus(tool, `🔄 إضافة الصورة ${i + 1}/${state.files.length}`, ((i + 1) / state.files.length) * 100);
+        }
+        const pdfBytes = await pdfDoc.save();
+        downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'images.pdf');
+        updateStatus(tool, '✅ اكتمل إنشاء PDF!');
+        showToast('تم تحميل ملف PDF!', 'success');
+      } catch (err) { 
+        updateStatus(tool, `❌ خطأ: ${err.message}`); 
+        showToast('فشل إنشاء PDF.', 'error'); 
+      }
+      runBtn.disabled = false;
+    });
+  }
+})();
+
+
+      // Initialize
       showPage('merge');
-      showToast('مرحباً بك في PDF Suite مع خاصية الترتيب المتقدمة!', 'success');
+      showToast('مرحباً بك في PDF Suite مع نظام الترتيب المحسّن! 🎉', 'success');
     });
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
