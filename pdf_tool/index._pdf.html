@@ -789,6 +789,12 @@
 /* ===============================
    Module 2: Images to PDF (FIXED)
 ================================ */
+/* ===============================
+   Module 2: Images to PDF
+   - Auto alphabetical sort
+   - Manual drag & drop reorder
+================================ */
+
 (() => {
   const tool = 'img2pdf';
   const state = appState.img2pdf;
@@ -801,39 +807,73 @@
   const sortInst = document.getElementById('img2pdf-sort-instructions');
   const sortCtrl = document.getElementById('img2pdf-sort-controls');
 
+  let sortable = null;
+
+  /* Initialize drag & drop */
+  const initSortable = () => {
+    if (sortable) sortable.destroy();
+    sortable = Sortable.create(thumbs, {
+      animation: 200,
+      ghostClass: 'sortable-ghost',
+      chosenClass: 'sortable-chosen',
+      onEnd: (evt) => {
+        const moved = state.files.splice(evt.oldIndex, 1)[0];
+        state.files.splice(evt.newIndex, 0, moved);
+        renderThumbs();
+        showToast('تم تعديل ترتيب الصور', 'success');
+      }
+    });
+  };
+
   /* Render thumbnails */
-  renderImg2PdfThumbs = async () => {
+  const renderThumbs = async () => {
     thumbs.innerHTML = '';
-    for (let i = 0; i < state.files.length; i++) {
-      const file = state.files[i];
+
+    state.files.forEach((file, index) => {
       const img = document.createElement('img');
       img.src = URL.createObjectURL(file);
 
       const wrap = document.createElement('div');
       wrap.className = 'thumb';
-      wrap.setAttribute('data-order', i + 1);
-      wrap.appendChild(img);
+      wrap.setAttribute('data-order', index + 1);
 
       const info = document.createElement('div');
       info.className = 'thumb-info';
       info.textContent = file.name;
-      wrap.appendChild(info);
 
+      wrap.appendChild(img);
+      wrap.appendChild(info);
       thumbs.appendChild(wrap);
-    }
+    });
 
     if (state.files.length > 1) {
       sortInst.classList.add('show');
       sortCtrl.classList.add('show');
+      initSortable();
+    } else {
+      sortInst.classList.remove('show');
+      sortCtrl.classList.remove('show');
     }
   };
 
+  /* On image select */
   input.addEventListener('change', async (e) => {
     state.files = Array.from(e.target.files);
+
+    // 🔠 Auto alphabetical sort (Arabic + numbers)
+    state.files.sort((a, b) =>
+      a.name.localeCompare(b.name, 'ar', {
+        numeric: true,
+        sensitivity: 'base'
+      })
+    );
+
     runBtn.disabled = state.files.length === 0;
-    await renderImg2PdfThumbs();
+    await renderThumbs();
+    updateStatus(tool, `تم اختيار ${state.files.length} صورة`);
   });
 
+  /* Clear */
   clearBtn.addEventListener('click', () => {
     state.files = [];
     thumbs.innerHTML = '';
@@ -844,7 +884,7 @@
     updateStatus(tool, '');
   });
 
-  /* 🔥 التحويل الفعلي */
+  /* Convert to PDF */
   runBtn.addEventListener('click', async () => {
     if (state.files.length === 0) {
       showToast('اختر صورًا أولاً', 'error');
@@ -892,7 +932,7 @@
 
         updateStatus(
           tool,
-          `📄 إضافة الصورة ${i + 1}/${state.files.length}`,
+          `📄 معالجة الصورة ${i + 1}/${state.files.length}`,
           ((i + 1) / state.files.length) * 100
         );
       }
@@ -907,7 +947,7 @@
       a.click();
 
       URL.revokeObjectURL(url);
-      updateStatus(tool, '✅ تم إنشاء ملف PDF بنجاح!');
+      updateStatus(tool, '✅ تم إنشاء ملف PDF بنجاح');
       showToast('تم تحميل ملف PDF!', 'success');
 
     } catch (err) {
@@ -918,6 +958,7 @@
     runBtn.disabled = false;
   });
 })();
+
 
 
       // Module 4: Split PDF
@@ -1032,4 +1073,5 @@
   </script>
 </body>
 </html>
+
 
