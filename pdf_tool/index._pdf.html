@@ -785,60 +785,141 @@
           runBtn.disabled = false;
         });
       })();
-      // Module 3: PDF to Images
-      (() => {
-        const tool = 'pdf2img';
-        const state = appState.pdf2img;
-        const input = document.getElementById('pdf2img-input');
-        const runBtn = document.getElementById('pdf2img-run');
-        const fromEl = document.getElementById('pdf2img-from');
-        const toEl = document.getElementById('pdf2img-to');
-        input.addEventListener('change', (e) => {
-          state.file = e.target.files[0];
-          runBtn.disabled = !state.file;
-          if (state.file) updateStatus(tool, `تم اختيار الملف: ${state.file.name}`);
+
+/* ===============================
+   Module 2: Images to PDF (FIXED)
+================================ */
+(() => {
+  const tool = 'img2pdf';
+  const state = appState.img2pdf;
+
+  const input = document.getElementById('img2pdf-input');
+  const thumbs = document.getElementById('img2pdf-thumbs');
+  const runBtn = document.getElementById('img2pdf-run');
+  const clearBtn = document.getElementById('img2pdf-clear');
+  const sizeSelect = document.getElementById('img2pdf-size');
+  const sortInst = document.getElementById('img2pdf-sort-instructions');
+  const sortCtrl = document.getElementById('img2pdf-sort-controls');
+
+  /* Render thumbnails */
+  renderImg2PdfThumbs = async () => {
+    thumbs.innerHTML = '';
+    for (let i = 0; i < state.files.length; i++) {
+      const file = state.files[i];
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+
+      const wrap = document.createElement('div');
+      wrap.className = 'thumb';
+      wrap.setAttribute('data-order', i + 1);
+      wrap.appendChild(img);
+
+      const info = document.createElement('div');
+      info.className = 'thumb-info';
+      info.textContent = file.name;
+      wrap.appendChild(info);
+
+      thumbs.appendChild(wrap);
+    }
+
+    if (state.files.length > 1) {
+      sortInst.classList.add('show');
+      sortCtrl.classList.add('show');
+    }
+  };
+
+  input.addEventListener('change', async (e) => {
+    state.files = Array.from(e.target.files);
+    runBtn.disabled = state.files.length === 0;
+    await renderImg2PdfThumbs();
+  });
+
+  clearBtn.addEventListener('click', () => {
+    state.files = [];
+    thumbs.innerHTML = '';
+    input.value = '';
+    runBtn.disabled = true;
+    sortInst.classList.remove('show');
+    sortCtrl.classList.remove('show');
+    updateStatus(tool, '');
+  });
+
+  /* 🔥 التحويل الفعلي */
+  runBtn.addEventListener('click', async () => {
+    if (state.files.length === 0) {
+      showToast('اختر صورًا أولاً', 'error');
+      return;
+    }
+
+    runBtn.disabled = true;
+    updateStatus(tool, '🚀 جاري إنشاء ملف PDF...', 0);
+
+    try {
+      const pdfDoc = await PDFLib.PDFDocument.create();
+
+      for (let i = 0; i < state.files.length; i++) {
+        const file = state.files[i];
+        const bytes = await file.arrayBuffer();
+
+        let image;
+        if (file.type.includes('png')) {
+          image = await pdfDoc.embedPng(bytes);
+        } else {
+          image = await pdfDoc.embedJpg(bytes);
+        }
+
+        let page;
+        if (sizeSelect.value === 'A4') {
+          page = pdfDoc.addPage([595, 842]);
+        } else if (sizeSelect.value === 'Letter') {
+          page = pdfDoc.addPage([612, 792]);
+        } else {
+          page = pdfDoc.addPage([image.width, image.height]);
+        }
+
+        const { width, height } = page.getSize();
+        const scale = Math.min(
+          width / image.width,
+          height / image.height
+        );
+
+        page.drawImage(image, {
+          x: (width - image.width * scale) / 2,
+          y: (height - image.height * scale) / 2,
+          width: image.width * scale,
+          height: image.height * scale
         });
-        runBtn.addEventListener('click', async () => {
-          if (!state.file) return showToast('اختر ملف PDF أولاً', 'error');
-          runBtn.disabled = true;
-          updateStatus(tool, '🚀 بدء التحويل إلى صور...', 0);
-          try {
-            const buf = await state.file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
-            const total = pdf.numPages;
-            const clampRange = (from, to, max) => {
-              let s = Math.max(1, from || 1);
-              let e = Math.min(max, to || max);
-              if (s > e) [s, e] = [e, s];
-              return [s, e];
-            };
-            const [from, to] = clampRange(parseInt(fromEl.value), parseInt(toEl.value), total);
-            const zip = new JSZip();
-            for (let p = from; p <= to; p++) {
-              const page = await pdf.getPage(p);
-              const viewport = page.getViewport({ scale: 1.5 });
-              const canvas = document.createElement('canvas');
-              canvas.width = viewport.width; canvas.height = viewport.height;
-              await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-              const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-              zip.file(`page-${p}.png`, blob);
-              updateStatus(tool, `🔄 تجهيز الصفحة ${p} من ${to}`, ((p-from+1)/(to-from+1))*100);
-            }
-            const zipBlob = await zip.generateAsync({ type: 'blob' });
-            const url = URL.createObjectURL(zipBlob);
-            const a = document.createElement('a');
-            a.href = url; a.download = `${state.file.name.replace(/\.pdf$/i,'')}_images.zip`;
-            a.click();
-            setTimeout(() => URL.revokeObjectURL(url), 2000);
-            updateStatus(tool, '✅ اكتمل التحويل!');
-            showToast('تم تحميل ملف الصور!', 'success');
-          } catch (err) {
-            updateStatus(tool, `❌ خطأ: ${err.message}`);
-            showToast('فشل التحويل.', 'error');
-          }
-          runBtn.disabled = false;
-        });
-      })();
+
+        updateStatus(
+          tool,
+          `📄 إضافة الصورة ${i + 1}/${state.files.length}`,
+          ((i + 1) / state.files.length) * 100
+        );
+      }
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'images.pdf';
+      a.click();
+
+      URL.revokeObjectURL(url);
+      updateStatus(tool, '✅ تم إنشاء ملف PDF بنجاح!');
+      showToast('تم تحميل ملف PDF!', 'success');
+
+    } catch (err) {
+      updateStatus(tool, `❌ خطأ: ${err.message}`);
+      showToast('فشل تحويل الصور', 'error');
+    }
+
+    runBtn.disabled = false;
+  });
+})();
+
+
       // Module 4: Split PDF
       (() => {
         const tool = 'split';
@@ -951,3 +1032,4 @@
   </script>
 </body>
 </html>
+
