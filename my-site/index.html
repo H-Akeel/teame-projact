@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>مركز الملفات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root {
+  --bg:       #080b14;
+  --surface:  #0d1120;
+  --card:     rgba(255,255,255,0.042);
+  --border:   rgba(255,255,255,0.075);
+  --accent:   #e8c76a;
+  --accent2:  #b89430;
+  --blue:     #5b8dee;
+  --text:     #edf0f7;
+  --muted:    #64748b;
+  --success:  #34d399;
+  --font:     'Cairo', sans-serif;
+  --body:     'Tajawal', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--body); background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+/* BG */
+#cv { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.glow {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 55% at 75% 5%,  rgba(232,199,106,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 45% at 15% 90%, rgba(91,141,238,.06) 0%, transparent 60%);
+}
+
+/* LAYOUT */
+.w { position: relative; z-index: 2; max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 62px; padding: 0 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(8,11,20,.82); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.logo { font-family: var(--font); font-weight: 900; font-size: 1.2rem; color: var(--text); text-decoration: none; }
+.logo b { color: var(--accent); }
+.nav-r { display: flex; align-items: center; gap: 14px; }
+.nav-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 9px; padding: 7px 14px; width: 220px;
+}
+.nav-search input { background: none; border: none; outline: none; color: var(--text); font-family: var(--body); font-size: .83rem; width: 100%; }
+.nav-search input::placeholder { color: var(--muted); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding-top: 62px;
+}
+.hero-inner { max-width: 580px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(232,199,106,.09); border: 1px solid rgba(232,199,106,.22);
+  border-radius: 100px; padding: 5px 15px; font-size: .76rem;
+  color: var(--accent); margin-bottom: 26px;
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.25} }
+
+h1 { font-family: var(--font); font-size: clamp(2.1rem,4.8vw,3.5rem); font-weight: 900; line-height: 1.15; margin-bottom: 16px; }
+h1 em { font-style: normal; color: var(--accent); }
+.sub { color: var(--muted); font-size: .97rem; line-height: 1.8; margin-bottom: 34px; max-width: 440px; }
+
+.cta {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--accent); color: var(--bg);
+  padding: 13px 30px; border-radius: 10px;
+  font-family: var(--font); font-size: .93rem; font-weight: 800;
+  text-decoration: none; transition: all .25s;
+  box-shadow: 0 4px 28px rgba(232,199,106,.25);
+}
+.cta:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(232,199,106,.4); }
+
+/* stats strip */
+.nums { display: flex; gap: 40px; margin-top: 52px; padding-top: 36px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.num h3 { font-family: var(--font); font-size: 1.9rem; font-weight: 900; color: var(--accent); }
+.num p  { font-size: .78rem; color: var(--muted); margin-top: 3px; }
+
+/* ── FILES SECTION ── */
+#files { padding: 88px 0 100px; }
+.sec-hd { text-align: center; margin-bottom: 44px; }
+.sec-hd h2 { font-family: var(--font); font-size: clamp(1.55rem,3vw,2.1rem); font-weight: 900; margin-bottom: 8px; }
+.sec-hd p  { color: var(--muted); font-size: .9rem; }
+
+/* search bar (section) */
+.search-bar {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 11px; padding: 11px 18px;
+  max-width: 420px; margin: 0 auto 36px; backdrop-filter: blur(8px);
+}
+.search-bar input { background: none; border: none; outline: none; color: var(--text); font-family: var(--body); font-size: .9rem; width: 100%; }
+.search-bar input::placeholder { color: var(--muted); }
+.search-icon { color: var(--muted); font-size: 1rem; flex-shrink: 0; }
+
+/* GRID */
+#grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 20px; }
+
+/* CARD */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 22px 20px;
+  backdrop-filter: blur(10px);
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  position: relative; overflow: hidden;
+}
+.card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--blue));
+  transform: scaleX(0); transform-origin: right; transition: transform .35s ease;
+}
+.card:hover { transform: translateY(-5px); border-color: rgba(232,199,106,.22); box-shadow: 0 14px 44px rgba(0,0,0,.38); }
+.card:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.ci { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.45rem; margin-bottom: 14px; }
+.ci-pdf { background: rgba(248,113,113,.13); }
+.ci-doc { background: rgba(91,141,238,.13); }
+.ci-img { background: rgba(52,211,153,.13); }
+.ci-zip { background: rgba(251,191,36,.13); }
+.ci-vid { background: rgba(167,139,250,.13); }
+.ci-oth { background: rgba(148,163,184,.1); }
+
+.cn { font-family: var(--font); font-size: .88rem; font-weight: 700; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cm { display: flex; justify-content: space-between; font-size: .74rem; color: var(--muted); margin-bottom: 6px; }
+.cd { font-size: .72rem; color: var(--muted); margin-bottom: 16px; }
+
+.dl {
+  width: 100%; padding: 10px; border-radius: 9px; border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: var(--bg); font-family: var(--font); font-size: .82rem; font-weight: 800;
+  cursor: pointer; transition: all .25s; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.dl:hover { opacity: .86; transform: translateY(-1px); }
+
+/* empty */
+.empty { grid-column: 1/-1; text-align: center; padding: 80px 0; color: var(--muted); }
+.empty-ic { font-size: 3.2rem; opacity: .3; margin-bottom: 14px; }
+
+/* toast */
+#toasts { position: fixed; bottom: 24px; left: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+.toast {
+  background: rgba(13,17,32,.95); border: 1px solid rgba(52,211,153,.3);
+  border-radius: 10px; padding: 11px 18px; font-size: .84rem;
+  font-family: var(--font); font-weight: 600; color: var(--success);
+  min-width: 240px; backdrop-filter: blur(12px);
+  animation: tin .35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes tin { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+
+/* footer */
+footer { padding: 32px 0; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: .8rem; }
+footer a { color: var(--accent); text-decoration: none; }
+
+/* reveal */
+.rv { opacity: 0; transform: translateY(26px); }
+
+@media(max-width:640px) {
+  nav { padding: 0 18px; }
+  .nav-search { display: none; }
+  .nums { gap: 22px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="cv"></canvas>
+<div class="glow"></div>
+<div id="toasts"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="index.html">مركز <b>الملفات</b></a>
+  <div class="nav-r">
+    <div class="nav-search">
+      <span style="color:var(--muted)">🔍</span>
+      <input id="nav-q" type="text" placeholder="ابحث عن ملف..."/>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="w">
+    <div class="hero-inner">
+      <div class="tag"><span class="dot"></span>الملفات منشورة بواسطة الإدارة</div>
+      <h1>كل ما تحتاجه<br/><em>في مكان واحد</em></h1>
+      <p class="sub">تصفح جميع الملفات التي نشرتها الإدارة وحمّلها مجاناً بدون تسجيل أو أي خطوات معقدة.</p>
+      <a href="#files" class="cta">📂 تصفح الملفات الآن</a>
+      <div class="nums">
+        <div class="num"><h3 id="n1">0</h3><p>ملف متاح للتحميل</p></div>
+        <div class="num"><h3 id="n2">0</h3><p>إجمالي التحميلات</p></div>
+        <div class="num"><h3 id="n3">0</h3><p>حجم الملفات المتاحة</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILES -->
+<section id="files">
+  <div class="w">
+    <div class="sec-hd rv">
+      <h2>الملفات المتاحة</h2>
+      <p>جميع الملفات منشورة من قبل الإدارة — اضغط تحميل للحصول على أي ملف فوراً</p>
+    </div>
+
+    <div class="search-bar rv">
+      <span class="search-icon">🔍</span>
+      <input id="main-q" type="text" placeholder="ابحث باسم الملف..."/>
+    </div>
+
+    <div id="grid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="w">
+    مركز الملفات &mdash; جميع الحقوق محفوظة &nbsp;|&nbsp;
+    <a href="login.html">دخول الإدارة 🔐</a>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════
+   THREE.JS — PARTICLES + SHAPES
+═══════════════════════════════ */
+(() => {
+  const canvas = document.getElementById('cv');
+  const R = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  R.setPixelRatio(Math.min(devicePixelRatio, 2));
+  R.setSize(innerWidth, innerHeight);
+
+  const scene = new THREE.Scene();
+  const cam   = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, .1, 700);
+  cam.position.z = 26;
+
+  /* particles */
+  const N = 480, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+  const pal = [new THREE.Color('#e8c76a'), new THREE.Color('#5b8dee'), new THREE.Color('#34d399')];
+  for (let i = 0; i < N; i++) {
+    pos[i*3]   = (Math.random() - .5) * 68;
+    pos[i*3+1] = (Math.random() - .5) * 68;
+    pos[i*3+2] = (Math.random() - .5) * 55;
+    const c = pal[i % 3]; col[i*3] = c.r; col[i*3+1] = c.g; col[i*3+2] = c.b;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
+  const pts = new THREE.Points(geo, new THREE.PointsMaterial({ size: .11, vertexColors: true, transparent: true, opacity: .45 }));
+  scene.add(pts);
+
+  /* floating wireframe shapes */
+  [
+    [new THREE.IcosahedronGeometry(1.8, 0), -13,  5, 0xe8c76a],
+    [new THREE.OctahedronGeometry(1.3, 0),  12, -4, 0x5b8dee],
+    [new THREE.TetrahedronGeometry(1.1, 0),  0, -9, 0x34d399],
+  ].forEach(([g, x, y, col]) => {
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: col, wireframe: true, transparent: true, opacity: .1 }));
+    m.position.set(x, y, -4); scene.add(m);
+  });
+
+  /* mouse parallax */
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  addEventListener('mousemove', e => { mx = (e.clientX / innerWidth - .5) * 2; my = (e.clientY / innerHeight - .5) * 2; });
+
+  const clk = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    const t = clk.getElapsedTime();
+    tx += (mx - tx) * .016; ty += (my - ty) * .016;
+    pts.rotation.y = t * .022 + tx * .22;
+    pts.rotation.x = ty * .16;
+    scene.children.filter(o => o.isMesh).forEach((m, i) => {
+      m.rotation.x = t * .26 + i * 1.1;
+      m.rotation.y = t * .32 + i * .7;
+    });
+    R.render(scene, cam);
+  })();
+
+  addEventListener('resize', () => {
+    cam.aspect = innerWidth / innerHeight;
+    cam.updateProjectionMatrix();
+    R.setSize(innerWidth, innerHeight);
+  });
+})();
+
+/* ═══════════════════════════════
+   GSAP ANIMATIONS
+═══════════════════════════════ */
+gsap.registerPlugin(ScrollTrigger);
+gsap.from('.tag',  { opacity:0, y:14, duration:.7, delay:.3 });
+gsap.from('h1',    { opacity:0, y:22, duration:.9, delay:.5 });
+gsap.from('.sub',  { opacity:0, y:14, duration:.7, delay:.7 });
+gsap.from('.cta',  { opacity:0, y:12, duration:.6, delay:.9 });
+gsap.from('.num',  { opacity:0, y:18, duration:.5, delay:1.05, stagger:.13 });
+gsap.utils.toArray('.rv').forEach(el => {
+  gsap.fromTo(el, { opacity:0, y:28 }, {
+    opacity:1, y:0, duration:.7, ease:'power2.out',
+    scrollTrigger: { trigger: el, start: 'top 87%' }
+  });
+});
+
+/* ═══════════════════════════════
+   DATA  (shared with admin via localStorage)
+═══════════════════════════════ */
+const KEY = 'malaff_v3';
+let store = [];
+
+function load() {
+  try { store = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { store = []; }
+  if (!store.length) seedDemo();
+}
+function seedDemo() {
+  store = [
+    { id:'d1', name:'دليل المستخدم الشامل.pdf',      size:3145728,  date: Date.now()-864e5*2, dl:214, dataUrl:null },
+    { id:'d2', name:'نموذج طلب إجازة رسمي.docx',      size:98304,    date: Date.now()-864e5*5, dl:87,  dataUrl:null },
+    { id:'d3', name:'شعار المؤسسة بجودة عالية.png',   size:512000,   date: Date.now()-864e5*1, dl:341, dataUrl:null },
+    { id:'d4', name:'حزمة ملفات المشروع 2025.zip',    size:15728640, date: Date.now()-864e5*3, dl:59,  dataUrl:null },
+    { id:'d5', name:'تقرير الإنجازات السنوي.pdf',      size:2097152,  date: Date.now()-864e5*8, dl:128, dataUrl:null },
+    { id:'d6', name:'جدول العمل الأسبوعي.xlsx',        size:204800,   date: Date.now()-864e5*4, dl:73,  dataUrl:null },
+  ];
+  save();
+}
+function save() { localStorage.setItem(KEY, JSON.stringify(store)); }
+
+/* helpers */
+const iconMap = {
+  pdf: ['📄','ci-pdf'], doc: ['📝','ci-doc'], docx: ['📝','ci-doc'],
+  xls: ['📊','ci-doc'], xlsx: ['📊','ci-doc'],
+  png: ['🖼️','ci-img'], jpg: ['🖼️','ci-img'], jpeg: ['🖼️','ci-img'], webp: ['🖼️','ci-img'], gif: ['🖼️','ci-img'],
+  zip: ['🗜️','ci-zip'], rar: ['🗜️','ci-zip'],
+  mp4: ['🎬','ci-vid'], avi: ['🎬','ci-vid'],
+};
+function getIcon(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  return iconMap[ext] || ['📦','ci-oth'];
+}
+function fmtSz(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+  if (b < 1073741824) return (b/1048576).toFixed(1) + ' MB';
+  return (b/1073741824).toFixed(2) + ' GB';
+}
+function fmtDt(ts) { return new Date(ts).toLocaleDateString('ar-IQ'); }
+function totalMB() { return (store.reduce((a,f)=>a+f.size,0)/1048576).toFixed(1); }
+
+/* counters */
+function animCount(el, to, suf='') {
+  let v = 0; const step = to / 65;
+  const t = setInterval(() => {
+    v += step; if (v >= to) { el.textContent = to + suf; clearInterval(t); return; }
+    el.textContent = Math.floor(v) + suf;
+  }, 22);
+}
+
+/* ═══════════════════════════════
+   RENDER GRID
+═══════════════════════════════ */
+let q = '';
+
+function render() {
+  const grid = document.getElementById('grid');
+  const list = store.filter(f => f.name.includes(q));
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><div class="empty-ic">📭</div><p>لا توجد ملفات ${q ? 'تطابق بحثك' : 'متاحة حالياً'}</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(f => {
+    const [ic, cls] = getIcon(f.name);
+    return `
+    <div class="card">
+      <div class="ci ${cls}">${ic}</div>
+      <div class="cn" title="${f.name}">${f.name}</div>
+      <div class="cm"><span>${fmtSz(f.size)}</span><span>⬇️ ${f.dl}</span></div>
+      <div class="cd">${fmtDt(f.date)}</div>
+      <button class="dl" onclick="doDownload('${f.id}')">⬇️ تحميل الملف</button>
+    </div>`;
+  }).join('');
+
+  gsap.from('.card', { opacity:0, y:20, duration:.45, stagger:.06, ease:'power2.out' });
+}
+
+/* ═══════════════════════════════
+   DOWNLOAD
+═══════════════════════════════ */
+window.doDownload = function(id) {
+  const f = store.find(x => x.id === id);
+  if (!f) return;
+  f.dl++;
+  save();
+
+  if (f.dataUrl) {
+    const a = document.createElement('a');
+    a.href = f.dataUrl; a.download = f.name; a.click();
+  }
+
+  /* update counter in card */
+  render();
+  toast('✅ بدأ تحميل: ' + f.name);
+  // refresh stats
+  document.getElementById('n2').textContent = store.reduce((a,x)=>a+x.dl,0);
+};
+
+/* ═══════════════════════════════
+   SEARCH (nav + section synced)
+═══════════════════════════════ */
+function onSearch(val) {
+  q = val;
+  document.getElementById('nav-q').value  = val;
+  document.getElementById('main-q').value = val;
+  render();
+}
+document.getElementById('nav-q').addEventListener('input',  e => onSearch(e.target.value));
+document.getElementById('main-q').addEventListener('input', e => onSearch(e.target.value));
+
+/* ═══════════════════════════════
+   TOAST
+═══════════════════════════════ */
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => {
+    gsap.to(t, { opacity:0, x:-20, duration:.3, onComplete:()=>t.remove() });
+  }, 3200);
+}
+
+/* ═══════════════════════════════
+   INIT
+═══════════════════════════════ */
+load();
+render();
+animCount(document.getElementById('n1'), store.length);
+animCount(document.getElementById('n2'), store.reduce((a,f)=>a+f.dl,0));
+animCount(document.getElementById('n3'), parseFloat(totalMB()), ' MB');
+</script>
+</body>
+</html>
