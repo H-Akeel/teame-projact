@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة الشفاء المتقدم | أجهزة الأشعة الطبية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- المتغيرات والألوان --- */
+        :root {
+            --primary-blue: #0f4c81; 
+            --accent-blue: #3498db;
+            --bg-light: #f4f7f6;
+            --text-dark: #2c3e50;
+            --text-muted: #7f8c8d;
+            --white: #ffffff;
+            --transition: all 0.4s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth; /* تمرير سلس بين الأقسام */
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* --- الكلاسات الخاصة بالحركة (Animations) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        /* --- Header & Navbar --- */
+        header {
+            background: var(--white);
+            padding: 10px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-box i {
+            font-size: 2.2rem;
+            color: var(--primary-blue);
+        }
+
+        .logo-box h1 {
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .logo-box span {
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-blue);
+        }
+
+        .contact-btn {
+            background: var(--primary-blue);
+            color: var(--white) !important;
+            padding: 8px 20px;
+            border-radius: 50px;
+        }
+        
+        .contact-btn:hover {
+            background: var(--accent-blue);
+        }
+
+        /* --- 1. Hero Section --- */
+        .hero {
+            background: linear-gradient(rgba(15, 76, 129, 0.85), rgba(15, 76, 129, 0.85)), 
+                        url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1920&q=80') center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            margin-top: 60px; /* لتعويض مساحة الهيدر الثابت */
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 900;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- الأقسام العامة --- */
+        .section {
+            padding: 90px 0;
+        }
+
+        .bg-light {
+            background-color: var(--bg-light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        .section-title div {
+            width: 70px;
+            height: 4px;
+            background: var(--accent-blue);
+            margin: auto;
+            border-radius: 2px;
+        }
+
+        /* --- 2. About Section --- */
+        .about-grid {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .about-features {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feat-box {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            flex: 1;
+            border-bottom: 3px solid var(--accent-blue);
+        }
+
+        .feat-box i {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        /* --- 3. Brands Section --- */
+        .brands-flex {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .brand-item {
+            text-align: center;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            width: 200px;
+            transition: var(--transition);
+        }
+
+        .brand-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .brand-item h4 {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .brand-item p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* --- 4. Products/PDFs Section --- */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .catalog-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid #e1e8ed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .catalog-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--primary-blue);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .catalog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(15, 76, 129, 0.1);
+            border-color: transparent;
+        }
+
+        .catalog-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: var(--transition);
+        }
+
+        .catalog-card:hover .icon-wrapper {
+            background: var(--primary-blue);
+        }
+
+        .catalog-card i {
+            font-size: 2.5rem;
+            color: var(--accent-blue);
+            transition: var(--transition);
+        }
+
+        .catalog-card:hover i {
+            color: var(--white);
+        }
+
+        .catalog-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .btn-pdf {
+            display: inline-block;
+            padding: 10px 25px;
+            background: var(--bg-light);
+            color: var(--primary-blue);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .catalog-card:hover .btn-pdf {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        /* --- 5. Footer & Contact --- */
+        .info-footer {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 60px 0 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 40px;
+            margin-bottom: 20px;
+        }
+
+        .info-item h4 {
+            color: var(--accent-blue);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .info-item p {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #d1d8e0;
+        }
+
+        .info-item i {
+            font-size: 1.2rem;
+            color: var(--accent-blue);
+            width: 20px;
+            text-align: center;
+        }
+
+        .copyright {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #a4b0be;
+        }
+
+        /* زر واتساب العائم */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        /* --- التجاوب مع الشاشات (Mobile) --- */
+        @media (max-width: 768px) {
+            nav ul { display: none; } /* يمكن إضافة قائمة برگر لاحقاً */
+            .hero h2 { font-size: 2rem; }
+            .section { padding: 60px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container navbar">
+            <a href="#" class="logo-box">
+                <i class="fas fa-x-ray"></i>
+                <div>
+                    <h1>شركة الشفاء المتقدم</h1>
+                    <span>لتجارة أجهزة ومستلزمات الأشعة</span>
+                </div>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#about">من نحن</a></li>
+                    <li><a href="#products">الكتالوجات والأجهزة</a></li>
+                    <li><a href="#contact" class="contact-btn">اتصل بنا</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h2>دقة في التشخيص، ثقة في الأداء</h2>
+            <p>الوكيل الأبرز في العراق لتجهيز المستشفيات والعيادات بأحدث أنظمة الأشعة الرقمية (DR, CR, Mobile X-Ray) من أرقى المناشئ العالمية.</p>
+        </div>
+    </section>
+
+    <section id="about" class="section bg-light">
+        <div class="container about-grid">
+            <div class="about-text reveal">
+                <div class="section-title" style="text-align: right;">
+                    <h2>نبذة عن الشركة</h2>
+                    <div style="margin: 0;"></div>
+                </div>
+                <p>تأسست شركة الشفاء المتقدم لتلبية حاجة القطاع الصحي العراقي لتقنيات التصوير الطبي الحديثة. نحن لا نبيع الأجهزة فحسب، بل نقدم حلولاً متكاملة تشمل التجهيز، التركيب، والتدريب المستمر.</p>
+                <div class="about-features">
+                    <div class="feat-box">
+                        <i class="fas fa-tools"></i>
+                        <h4>صيانة معتمدة</h4>
+                    </div>
+                    <div class="feat-box">
+                        <i class="fas fa-certificate"></i>
+                        <h4>ضمان حقيقي</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="about-img reveal delay-1" style="flex: 1; text-align: center;">
+                <i class="fas fa-hospital-alt" style="font-size: 10rem; color: #d1d8e0;"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-title reveal">
+                <h2>الوكالات العالمية المعتمدة</h2>
+                <div></div>
+                <p style="margin-top: 10px; color: #7f8c8d;">نفخر بتمثيل كبرى الشركات المصنعة لضمان أعلى جودة لعملائنا</p>
+            </div>
+            <div class="brands-flex reveal delay-1">
+                <div class="brand-item">
+                    <h4>ECOMAX</h4>
+                    <p>تركيا (X-Ray Systems)</p>
+                </div>
+                <div class="brand-item">
+                    <h4>FUJIFILM</h4>
+                    <p>اليابان (CR & Imaging)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="section bg-light">
+        <div class="container">
+            <div class="section-title reveal">
+                <h2>الكتالوجات والمواصفات الفنية</h2>
+                <div></div>
+                <p style="margin-top: 10px; color: #7f8c8d;">اختر الجهاز المطلوب وقم بتحميل ملف الـ PDF الخاص به</p>
+            </div>
+
+            <div class="catalog-grid">
+                <div class="catalog-card reveal">
+                    <div class="icon-wrapper"><i class="fas fa-briefcase-medical"></i></div>
+                    <h3>أجهزة الأشعة المحمولة</h3>
+                    <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 15px;">Portable X-Ray Machines</p>
+                    <a href="pdfs/بورتبل.pdf" target="_blank" class="btn-pdf">تحميل الكتالوج <i class="fas fa-download"></i></a>
+                </div>
+
+                <div class="catalog-card reveal delay-1">
+                    <div class="icon-wrapper"><i class="fas fa-microscope"></i></div>
+                    <h3>أنظمة C-Arm للجراحة</h3>
+                    <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 15px;">Mobile Digital C-Arm</p>
+                    <a href="pdfs/سي ارم .pdf" target="_blank" class="btn-pdf">تحميل الكتالوج <i class="fas fa-download"></i></a>
+                </div>
+
+                <div class="catalog-card reveal delay-2">
+                    <div class="icon-wrapper"><i class="fas fa-vial"></i></div>
+                    <h3>أنظمة U-Arm الرقمية</h3>
+                    <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 15px;">U-Arm Digital Radiography</p>
+                    <a href="pdfs/يو ارم.pdf" target="_blank" class="btn-pdf">تحميل الكتالوج <i class="fas fa-download"></i></a>
+                </div>
+
+                <div class="catalog-card reveal">
+                    <div class="icon-wrapper"><i class="fas fa-desktop"></i></div>
+                    <h3>أنظمة Fujifilm CR</h3>
+                    <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 15px;">CR Prima T2 Systems</p>
+                    <a href="pdfs/Cr.pdf" target="_blank" class="btn-pdf">تحميل الكتالوج <i class="fas fa-download"></i></a>
+                </div>
+
+                <div class="catalog-card reveal delay-1">
+                    <div class="icon-wrapper"><i class="fas fa-print"></i></div>
+                    <h3>طابعات الأفلام الرقمية</h3>
+                    <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 15px;">Drymax Film Printers</p>
+                    <a href="pdfs/طابعة.pdf" target="_blank" class="btn-pdf">تحميل الكتالوج <i class="fas fa-download"></i></a>
+                </div>
+
+                <div class="catalog-card reveal delay-2">
+                    <div class="icon-wrapper"><i class="fas fa-truck-medical"></i></div>
+                    <h3>الأنظمة المتحركة والاقتصادية</h3>
+                    <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 15px;">Mobile & Economic X-Ray</p>
+                    <a href="pdfs/متحرك .pdf" target="_blank" class="btn-pdf">تحميل الكتالوج <i class="fas fa-download"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="info-footer">
+        <div class="container">
+            <div class="info-grid reveal">
+                <div class="info-item">
+                    <a href="#" class="logo-box" style="margin-bottom: 20px; display: inline-flex;">
+                        <i class="fas fa-x-ray" style="color: var(--white);"></i>
+                        <div>
+                            <h1 style="color: var(--white); font-size: 1.2rem;">الشفاء المتقدم</h1>
+                        </div>
+                    </a>
+                    <p>شريكك الموثوق لتجهيز أحدث تقنيات الأشعة في العراق، بمعايير جودة عالمية.</p>
+                </div>
+                
+                <div class="info-item">
+                    <h4>تواصل معنا</h4>
+                    <p><i class="fas fa-phone"></i> 07782281899</p>
+
+                </div>
+
+                <div class="info-item">
+                    <h4>موقعنا</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> العراق - بغداد</p>
+                    <p style="padding-right: 32px;">شارع المغرب - حي الأطباء</p>
+                </div>
+            </div>
+            
+            <div class="copyright reveal delay-1">
+                &copy; 2026 شركة الشفاء المتقدم لتجارة الأجهزة الطبية. جميع الحقوق محفوظة.
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/9647782281899" class="whatsapp-btn" target="_blank" title="تواصل معنا عبر واتساب">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100; // متى يبدأ العنصر بالظهور
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        // تشغيل الدالة عند النزول بالماوس
+        window.addEventListener("scroll", reveal);
+        // تشغيل الدالة مرة واحدة عند تحميل الصفحة لإظهار العناصر العلوية
+        reveal();
+    </script>
+
+</body>
+</html>

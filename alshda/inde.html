@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة الشفاء المتقدم | أجهزة الأشعة الطبية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --navy: #0a2d52;
+            --blue: #1156a0;
+            --sky: #2e8de0;
+            --cyan: #00bcd4;
+            --white: #ffffff;
+            --off-white: #f0f4f8;
+            --text: #1a2b3c;
+            --muted: #5f7a94;
+            --card-bg: #ffffff;
+            --glass: rgba(255,255,255,0.07);
+            --ease: cubic-bezier(0.4,0,0.2,1);
+            --shadow: 0 10px 40px rgba(10,45,82,0.12);
+            --shadow-lg: 0 20px 60px rgba(10,45,82,0.18);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.75;
+        }
+
+        .container { width: min(92%, 1200px); margin: auto; }
+
+        /* ─── HEADER ─── */
+        header {
+            position: fixed; inset: 0 0 auto 0; z-index: 9999;
+            background: rgba(10,45,82,0.97);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: box-shadow .4s;
+        }
+        header.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.25); }
+
+        .navbar {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            gap: 20px;
+        }
+
+        .logo-box {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none; flex-shrink: 0;
+        }
+        .logo-icon {
+            width: 46px; height: 46px;
+            background: linear-gradient(135deg, var(--sky), var(--cyan));
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: #fff;
+            box-shadow: 0 4px 14px rgba(46,141,224,.4);
+            flex-shrink: 0;
+        }
+        .logo-text h1 { font-size: 1.1rem; font-weight: 900; color: #fff; line-height: 1.1; }
+        .logo-text span { font-size: .72rem; color: var(--cyan); font-weight: 400; }
+
+        .nav-links {
+            display: flex; list-style: none; gap: 6px;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,.75);
+            font-size: .9rem; font-weight: 600;
+            padding: 7px 14px; border-radius: 8px;
+            transition: all .3s;
+        }
+        .nav-links a:hover { color: #fff; background: var(--glass); }
+        .nav-links .cta {
+            background: linear-gradient(135deg, var(--sky), var(--cyan));
+            color: #fff !important; padding: 8px 20px;
+            box-shadow: 0 4px 14px rgba(46,141,224,.35);
+        }
+        .nav-links .cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(46,141,224,.5); }
+
+        /* Hamburger */
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; padding: 8px;
+            background: none; border: none; z-index: 10001;
+        }
+        .hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: #fff; border-radius: 2px;
+            transition: all .35s var(--ease);
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Mobile Nav */
+        .mobile-nav {
+            display: none; position: fixed;
+            inset: 74px 0 0 0; z-index: 9998;
+            background: rgba(10,45,82,0.98);
+            backdrop-filter: blur(20px);
+            padding: 30px 24px;
+            flex-direction: column; gap: 8px;
+            transform: translateX(100%);
+            transition: transform .4s var(--ease);
+        }
+        .mobile-nav.open { transform: translateX(0); }
+        .mobile-nav a {
+            text-decoration: none; color: rgba(255,255,255,.8);
+            font-size: 1.1rem; font-weight: 700;
+            padding: 14px 18px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.07);
+            transition: all .3s;
+        }
+        .mobile-nav a:hover { color: #fff; background: rgba(46,141,224,.15); border-color: rgba(46,141,224,.3); }
+        .mobile-nav .cta-mob {
+            background: linear-gradient(135deg, var(--sky), var(--cyan));
+            color: #fff; text-align: center;
+            margin-top: 10px; border: none;
+            box-shadow: 0 4px 20px rgba(46,141,224,.4);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            .mobile-nav { display: flex; }
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            background:
+                linear-gradient(160deg, rgba(10,45,82,.94) 0%, rgba(17,86,160,.88) 60%, rgba(0,188,212,.15) 100%),
+                url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex; align-items: center;
+            padding: 120px 0 80px;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content:'';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(0,188,212,.12) 0%, transparent 60%);
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px; align-items: center;
+            position: relative;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0,188,212,.15);
+            border: 1px solid rgba(0,188,212,.3);
+            color: var(--cyan); font-size: .8rem; font-weight: 700;
+            padding: 6px 16px; border-radius: 50px;
+            margin-bottom: 22px;
+            animation: fadeUp .8s ease both;
+        }
+        .hero h2 {
+            font-size: clamp(1.9rem, 5vw, 3.2rem);
+            font-weight: 900; color: #fff;
+            line-height: 1.25; margin-bottom: 20px;
+            animation: fadeUp .8s .15s ease both;
+        }
+        .hero h2 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--sky), var(--cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: rgba(255,255,255,.78); max-width: 560px;
+            margin-bottom: 36px;
+            animation: fadeUp .8s .3s ease both;
+        }
+        .hero-actions {
+            display: flex; gap: 14px; flex-wrap: wrap;
+            animation: fadeUp .8s .45s ease both;
+        }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, var(--sky), var(--cyan));
+            color: #fff; text-decoration: none;
+            padding: 13px 28px; border-radius: 12px;
+            font-weight: 700; font-size: 1rem;
+            box-shadow: 0 6px 24px rgba(46,141,224,.4);
+            transition: all .3s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(46,141,224,.55); }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            border: 2px solid rgba(255,255,255,.3);
+            color: #fff; text-decoration: none;
+            padding: 11px 26px; border-radius: 12px;
+            font-weight: 700; font-size: 1rem;
+            transition: all .3s;
+        }
+        .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+        .hero-stats {
+            display: flex; flex-direction: column; gap: 16px;
+            animation: fadeLeft .8s .6s ease both;
+        }
+        .stat-card {
+            background: rgba(255,255,255,.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 16px; padding: 18px 24px;
+            text-align: center; color: #fff;
+            min-width: 130px;
+        }
+        .stat-card .num {
+            font-size: 2rem; font-weight: 900;
+            background: linear-gradient(135deg, var(--sky), var(--cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .lbl { font-size: .8rem; opacity: .7; margin-top: 2px; }
+
+        @media (max-width: 768px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-stats { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .stat-card { min-width: 100px; padding: 14px 16px; }
+            .stat-card .num { font-size: 1.5rem; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ─── SECTIONS ─── */
+        .section { padding: clamp(60px, 8vw, 100px) 0; }
+        .bg-light { background: var(--off-white); }
+        .bg-dark { background: var(--navy); }
+
+        .section-header {
+            text-align: center; margin-bottom: clamp(40px, 6vw, 70px);
+        }
+        .section-tag {
+            display: inline-block;
+            background: rgba(46,141,224,.1);
+            color: var(--sky); font-size: .78rem; font-weight: 700;
+            padding: 5px 16px; border-radius: 50px;
+            margin-bottom: 14px; letter-spacing: .04em;
+        }
+        .section-header h2 {
+            font-size: clamp(1.7rem, 4vw, 2.5rem);
+            font-weight: 900; color: var(--navy);
+            margin-bottom: 14px;
+        }
+        .section-header.light h2 { color: #fff; }
+        .section-header.light .section-tag { background: rgba(0,188,212,.12); color: var(--cyan); }
+        .section-header p { color: var(--muted); font-size: 1rem; max-width: 520px; margin: auto; }
+        .section-header.light p { color: rgba(255,255,255,.6); }
+        .divider {
+            width: 56px; height: 3px;
+            background: linear-gradient(90deg, var(--sky), var(--cyan));
+            border-radius: 2px; margin: 12px auto 0;
+        }
+
+        /* Reveal animation */
+        .reveal {
+            opacity: 0; transform: translateY(35px);
+            transition: opacity .7s var(--ease), transform .7s var(--ease);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .d1 { transition-delay: .1s; }
+        .d2 { transition-delay: .2s; }
+        .d3 { transition-delay: .3s; }
+        .d4 { transition-delay: .4s; }
+
+        /* ─── ABOUT ─── */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+        .about-visual {
+            position: relative; border-radius: 24px; overflow: hidden;
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            padding: 50px 30px;
+            min-height: 320px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .about-visual::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 30% 70%, rgba(0,188,212,.2) 0%, transparent 60%);
+        }
+        .about-visual-icon {
+            font-size: 7rem; color: rgba(255,255,255,.06);
+            position: absolute; bottom: -10px; left: 10px;
+        }
+        .about-visual-content { position: relative; z-index: 1; text-align: center; }
+        .about-visual-content i { font-size: 4rem; color: var(--cyan); margin-bottom: 16px; }
+        .about-visual-content p { color: rgba(255,255,255,.7); font-size: 1rem; }
+
+        .about-content h3 {
+            font-size: clamp(1.4rem, 3vw, 1.9rem);
+            font-weight: 900; color: var(--navy); margin-bottom: 16px;
+        }
+        .about-content p { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+
+        .feat-list { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+        .feat-item {
+            display: flex; align-items: center; gap: 14px;
+            background: var(--off-white); border-radius: 14px;
+            padding: 16px 20px;
+            transition: all .3s;
+        }
+        .feat-item:hover { background: #e3edf8; transform: translateX(-4px); }
+        .feat-icon {
+            width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--sky), var(--cyan));
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(46,141,224,.3);
+        }
+        .feat-item span { font-weight: 700; color: var(--text); font-size: .95rem; }
+
+        /* ─── BRANDS ─── */
+        .brands-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+        .brand-card {
+            background: var(--white);
+            border: 1px solid #dde6ef; border-radius: 20px;
+            padding: 36px 24px; text-align: center;
+            transition: all .35s var(--ease);
+            cursor: default; position: relative; overflow: hidden;
+        }
+        .brand-card::before {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--sky), var(--cyan));
+            transform: scaleX(0); transition: transform .4s;
+        }
+        .brand-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: transparent; }
+        .brand-card:hover::before { transform: scaleX(1); }
+        .brand-logo {
+            font-size: 1.9rem; font-weight: 900;
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom: 10px;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .brand-origin {
+            font-size: .82rem; color: var(--muted); font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .brand-origin i { color: var(--sky); }
+
+        /* ─── PRODUCTS ─── */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; }
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 20px; overflow: hidden;
+            border: 1px solid #dde6ef;
+            transition: all .35s var(--ease);
+            display: flex; flex-direction: column;
+        }
+        .product-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); border-color: transparent; }
+
+        .card-top {
+            padding: 36px 28px 24px;
+            background: linear-gradient(150deg, var(--navy), var(--blue));
+            position: relative; overflow: hidden; text-align: center;
+        }
+        .card-top::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 80% 20%, rgba(0,188,212,.2) 0%, transparent 60%);
+        }
+        .card-icon {
+            width: 72px; height: 72px; border-radius: 18px;
+            background: rgba(255,255,255,.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,.2);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px; position: relative; z-index: 1;
+            transition: all .35s;
+        }
+        .product-card:hover .card-icon {
+            background: rgba(0,188,212,.25);
+            border-color: rgba(0,188,212,.5);
+        }
+        .card-icon i { font-size: 2rem; color: #fff; }
+        .card-top h3 {
+            font-size: 1.1rem; font-weight: 800; color: #fff;
+            position: relative; z-index: 1; margin-bottom: 4px;
+        }
+        .card-top .eng {
+            font-size: .78rem; color: rgba(255,255,255,.55);
+            position: relative; z-index: 1;
+        }
+
+        .card-body { padding: 22px 24px; flex: 1; display: flex; flex-direction: column; }
+        .card-body p { font-size: .9rem; color: var(--muted); flex: 1; margin-bottom: 20px; line-height: 1.65; }
+
+        .btn-catalog {
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+            background: var(--off-white); color: var(--navy);
+            text-decoration: none; padding: 12px 20px;
+            border-radius: 12px; font-weight: 700; font-size: .9rem;
+            transition: all .3s; border: 2px solid transparent;
+        }
+        .btn-catalog:hover {
+            background: linear-gradient(135deg, var(--sky), var(--cyan));
+            color: #fff; border-color: transparent;
+            box-shadow: 0 6px 20px rgba(46,141,224,.35);
+        }
+
+        /* ─── CONTACT / FOOTER ─── */
+        .footer-body {
+            background: var(--navy);
+            padding: clamp(50px, 8vw, 80px) 0 0;
+        }
+        .footer-grid {
+            display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 40px; padding-bottom: 50px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+        .footer-brand p {
+            color: rgba(255,255,255,.55); font-size: .9rem;
+            margin-top: 16px; line-height: 1.8; max-width: 300px;
+        }
+
+        .footer-col h4 {
+            color: var(--cyan); font-size: 1rem; font-weight: 700;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+        }
+        .footer-col h4 i { opacity: .7; }
+
+        .contact-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            color: rgba(255,255,255,.65); font-size: .9rem;
+            margin-bottom: 14px;
+        }
+        .contact-item i {
+            color: var(--sky); margin-top: 3px; width: 16px;
+            flex-shrink: 0; text-align: center;
+        }
+
+        .contact-item a {
+            color: rgba(255,255,255,.65); text-decoration: none;
+            transition: color .3s;
+        }
+        .contact-item a:hover { color: var(--cyan); }
+
+        .map-embed {
+            border-radius: 12px; overflow: hidden; margin-top: 10px;
+            border: 1px solid rgba(255,255,255,.1);
+        }
+        .map-embed iframe { display: block; width: 100%; height: 130px; filter: grayscale(.6); }
+
+        .footer-bottom {
+            padding: 22px 0; text-align: center;
+            color: rgba(255,255,255,.35); font-size: .82rem;
+        }
+
+        /* ─── WHATSAPP ─── */
+        .wa-btn {
+            position: fixed; bottom: 28px; left: 28px;
+            width: 58px; height: 58px; border-radius: 50%;
+            background: #25d366;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; color: #fff; text-decoration: none;
+            box-shadow: 0 6px 24px rgba(37,211,102,.45);
+            z-index: 8888; transition: all .35s var(--ease);
+        }
+        .wa-btn:hover { transform: scale(1.12); box-shadow: 0 10px 32px rgba(37,211,102,.6); }
+        .wa-btn::before {
+            content: 'تواصل معنا';
+            position: absolute; right: 68px;
+            background: var(--text); color: #fff;
+            font-size: .75rem; font-weight: 700;
+            padding: 6px 12px; border-radius: 8px; white-space: nowrap;
+            opacity: 0; transform: translateX(8px);
+            transition: all .3s; pointer-events: none;
+        }
+        .wa-btn:hover::before { opacity: 1; transform: translateX(0); }
+
+        /* ─── SCROLL TO TOP ─── */
+        .scroll-top {
+            position: fixed; bottom: 28px; right: 28px;
+            width: 46px; height: 46px; border-radius: 12px;
+            background: var(--blue); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; cursor: pointer; border: none;
+            box-shadow: var(--shadow); z-index: 8888;
+            opacity: 0; transform: translateY(20px);
+            transition: all .35s var(--ease);
+        }
+        .scroll-top.visible { opacity: 1; transform: translateY(0); }
+        .scroll-top:hover { background: var(--sky); }
+
+        /* ─── UTILITIES ─── */
+        @media (max-width: 480px) {
+            .hero-actions { flex-direction: column; }
+            .hero-actions a { text-align: center; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header id="main-header">
+    <div class="container navbar">
+        <a href="#home" class="logo-box">
+            <div class="logo-icon"><i class="fas fa-x-ray"></i></div>
+            <div class="logo-text">
+                <h1>الشفاء المتقدم</h1>
+                <span>لتجارة أجهزة ومستلزمات الأشعة</span>
+            </div>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#about">من نحن</a></li>
+            <li><a href="#brands">وكالاتنا</a></li>
+            <li><a href="#products">الأجهزة</a></li>
+            <li><a href="#contact" class="cta">اتصل بنا</a></li>
+        </ul>
+
+        <button class="hamburger" id="hamburger" aria-label="القائمة">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav" id="mobile-nav">
+    <a href="#home" onclick="closeNav()">الرئيسية</a>
+    <a href="#about" onclick="closeNav()">من نحن</a>
+    <a href="#brands" onclick="closeNav()">وكالاتنا</a>
+    <a href="#products" onclick="closeNav()">الأجهزة</a>
+    <a href="#contact" class="cta-mob" onclick="closeNav()">اتصل بنا</a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="home" class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div>
+                <div class="hero-badge"><i class="fas fa-circle-check"></i> الوكيل الحصري في العراق</div>
+                <h2>دقة في التشخيص<br><em>ثقة في الأداء</em></h2>
+                <p>نجهّز المستشفيات والعيادات العراقية بأحدث أنظمة الأشعة الرقمية من أرقى الشركات العالمية — مع تركيب وصيانة وتدريب متكامل.</p>
+                <div class="hero-actions">
+                    <a href="#products" class="btn-primary"><i class="fas fa-layer-group"></i> استعرض أجهزتنا</a>
+                    <a href="#contact" class="btn-outline"><i class="fas fa-phone"></i> تواصل معنا</a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="num">+10</div>
+                    <div class="lbl">سنوات خبرة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">2</div>
+                    <div class="lbl">وكالة عالمية</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">6</div>
+                    <div class="lbl">أنظمة تصوير</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about" class="section bg-light">
+    <div class="container about-grid">
+        <div class="about-visual reveal">
+            <i class="fas fa-hospital-alt about-visual-icon"></i>
+            <div class="about-visual-content">
+                <i class="fas fa-satellite-dish"></i>
+                <p style="color:rgba(255,255,255,.75); font-size:1rem; max-width:240px;">نحن أكثر من مزوّد أجهزة — نحن شريكك التقني الموثوق</p>
+            </div>
+        </div>
+        <div class="about-content">
+            <div class="section-tag reveal">نبذة عن الشركة</div>
+            <h3 class="reveal d1">حلول متكاملة للتصوير الطبي في العراق</h3>
+            <p class="reveal d2">تأسست شركة الشفاء المتقدم لتلبية حاجة القطاع الصحي العراقي لتقنيات التصوير الطبي الحديثة. نحن لا نبيع الأجهزة فحسب، بل نقدم حلولاً شاملة تبدأ من الاستشارة وتنتهي بالتدريب.</p>
+            <p class="reveal d2">خبرتنا الواسعة وشراكاتنا العالمية تضمن لك أعلى معايير الجودة وأفضل خدمة ما بعد البيع في السوق العراقي.</p>
+            <div class="feat-list">
+                <div class="feat-item reveal d2">
+                    <div class="feat-icon"><i class="fas fa-tools"></i></div>
+                    <span>صيانة دورية معتمدة من الشركة المصنّعة</span>
+                </div>
+                <div class="feat-item reveal d3">
+                    <div class="feat-icon"><i class="fas fa-certificate"></i></div>
+                    <span>ضمان رسمي وقطع غيار أصلية</span>
+                </div>
+                <div class="feat-item reveal d3">
+                    <div class="feat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <span>تدريب متخصص لفريق الكوادر الطبية</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ BRANDS ══ -->
+<section id="brands" class="section">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-tag">وكالاتنا العالمية</div>
+            <h2>شراكات مع الأفضل عالمياً</h2>
+            <div class="divider"></div>
+            <p>نفخر بتمثيل كبرى الشركات المصنّعة لأجهزة الأشعة لضمان أعلى جودة لعملائنا في العراق</p>
+        </div>
+        <div class="brands-grid">
+            <div class="brand-card reveal d1">
+                <div class="brand-logo">ECOMAX</div>
+                <div class="brand-origin"><i class="fas fa-globe"></i> تركيا — X-Ray Systems</div>
+            </div>
+            <div class="brand-card reveal d2">
+                <div class="brand-logo">FUJIFILM</div>
+                <div class="brand-origin"><i class="fas fa-globe"></i> اليابان — CR & Imaging</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ PRODUCTS ══ -->
+<section id="products" class="section bg-light">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-tag">كتالوجات الأجهزة</div>
+            <h2>تصفّح مواصفاتنا الفنية</h2>
+            <div class="divider"></div>
+            <p>اختر الجهاز وحمّل ملف PDF الكامل بالمواصفات التقنية</p>
+        </div>
+
+        <div class="products-grid">
+
+            <div class="product-card reveal d1">
+                <div class="card-top">
+                    <div class="card-icon"><i class="fas fa-briefcase-medical"></i></div>
+                    <h3>أجهزة الأشعة المحمولة</h3>
+                    <div class="eng">Portable X-Ray Machines</div>
+                </div>
+                <div class="card-body">
+                    <p>أجهزة خفيفة وعالية الأداء مناسبة للطوارئ والعمل الميداني داخل أروقة المستشفى.</p>
+                    <a href="pdfs/بورتبل.pdf" target="_blank" class="btn-catalog">
+                        <i class="fas fa-file-pdf"></i> تحميل الكتالوج
+                    </a>
+                </div>
+            </div>
+
+            <div class="product-card reveal d2">
+                <div class="card-top">
+                    <div class="card-icon"><i class="fas fa-microscope"></i></div>
+                    <h3>أنظمة C-Arm الجراحية</h3>
+                    <div class="eng">Mobile Digital C-Arm</div>
+                </div>
+                <div class="card-body">
+                    <p>أنظمة التصوير الديناميكي المصاحبة للجراحة توفر رؤية فورية ودقيقة في غرف العمليات.</p>
+                    <a href="pdfs/سي ارم .pdf" target="_blank" class="btn-catalog">
+                        <i class="fas fa-file-pdf"></i> تحميل الكتالوج
+                    </a>
+                </div>
+            </div>
+
+            <div class="product-card reveal d3">
+                <div class="card-top">
+                    <div class="card-icon"><i class="fas fa-vial"></i></div>
+                    <h3>أنظمة U-Arm الرقمية</h3>
+                    <div class="eng">U-Arm Digital Radiography</div>
+                </div>
+                <div class="card-body">
+                    <p>نظام DR ثابت عالي المرونة يدعم تصوير كامل الجسم بجرعة إشعاعية منخفضة وصورة واضحة.</p>
+                    <a href="pdfs/يو ارم.pdf" target="_blank" class="btn-catalog">
+                        <i class="fas fa-file-pdf"></i> تحميل الكتالوج
+                    </a>
+                </div>
+            </div>
+
+            <div class="product-card reveal d1">
+                <div class="card-top">
+                    <div class="card-icon"><i class="fas fa-desktop"></i></div>
+                    <h3>أنظمة Fujifilm CR</h3>
+                    <div class="eng">CR Prima T2 Systems</div>
+                </div>
+                <div class="card-body">
+                    <p>أنظمة التصوير المحوسب من فوجي فيلم بمعالجة ذكية تمنح صوراً رقمية فائقة الوضوح.</p>
+                    <a href="pdfs/Cr.pdf" target="_blank" class="btn-catalog">
+                        <i class="fas fa-file-pdf"></i> تحميل الكتالوج
+                    </a>
+                </div>
+            </div>
+
+            <div class="product-card reveal d2">
+                <div class="card-top">
+                    <div class="card-icon"><i class="fas fa-print"></i></div>
+                    <h3>طابعات الأفلام الرقمية</h3>
+                    <div class="eng">Drymax Film Printers</div>
+                </div>
+                <div class="card-body">
+                    <p>طابعات الجفاف بالحرارة لإنتاج أفلام طبية عالية الدقة دون استخدام مواد كيميائية.</p>
+                    <a href="pdfs/طابعة.pdf" target="_blank" class="btn-catalog">
+                        <i class="fas fa-file-pdf"></i> تحميل الكتالوج
+                    </a>
+                </div>
+            </div>
+
+            <div class="product-card reveal d3">
+                <div class="card-top">
+                    <div class="card-icon"><i class="fas fa-truck-medical"></i></div>
+                    <h3>الأنظمة المتحركة والاقتصادية</h3>
+                    <div class="eng">Mobile & Economic X-Ray</div>
+                </div>
+                <div class="card-body">
+                    <p>خيار مثالي للعيادات والمراكز ذات الميزانية المحدودة دون التنازل عن جودة التصوير.</p>
+                    <a href="pdfs/متحرك .pdf" target="_blank" class="btn-catalog">
+                        <i class="fas fa-file-pdf"></i> تحميل الكتالوج
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER / CONTACT ══ -->
+<footer id="contact" class="footer-body">
+    <div class="container">
+        <div class="footer-grid">
+
+            <div class="footer-brand reveal">
+                <a href="#home" class="logo-box">
+                    <div class="logo-icon"><i class="fas fa-x-ray"></i></div>
+                    <div class="logo-text">
+                        <h1>الشفاء المتقدم</h1>
+                        <span>لتجارة الأجهزة الطبية</span>
+                    </div>
+                </a>
+                <p>شريكك الموثوق في تجهيز أحدث تقنيات الأشعة الطبية في العراق — بجودة عالمية ودعم محلي متكامل.</p>
+            </div>
+
+            <div class="footer-col reveal d1">
+                <h4><i class="fas fa-phone-alt"></i> تواصل معنا</h4>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:07782281899">07782281899</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/9647782281899" target="_blank">واتساب مباشر</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>السبت – الخميس: 8ص – 6م</span>
+                </div>
+            </div>
+
+            <div class="footer-col reveal d2">
+                <h4><i class="fas fa-map-marker-alt"></i> موقعنا</h4>
+                <div class="contact-item">
+                    <i class="fas fa-map-pin"></i>
+                    <span>العراق، بغداد<br>شارع المغرب — حي الأطباء</span>
+                </div>
+                <div class="map-embed">
+                    <iframe
+                        src="https://www.openstreetmap.org/export/embed.html?bbox=44.35,33.29,44.45,33.37&layer=mapnik"
+                        frameborder="0"
+                        allowfullscreen
+                        loading="lazy"
+                        title="موقع الشركة">
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+        <div class="footer-bottom reveal">
+            &copy; 2026 شركة الشفاء المتقدم لتجارة الأجهزة الطبية — جميع الحقوق محفوظة
+        </div>
+    </div>
+</footer>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/9647782281899" class="wa-btn" target="_blank" title="واتساب">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Scroll Top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+    // ── Header scroll
+    const header = document.getElementById('main-header');
+    const scrollTopBtn = document.getElementById('scrollTop');
+
+    window.addEventListener('scroll', () => {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+        scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+        revealElements();
+    });
+
+    // ── Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        mobileNav.classList.toggle('open');
+        document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+    });
+
+    function closeNav() {
+        hamburger.classList.remove('active');
+        mobileNav.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ── Reveal on scroll
+    function revealElements() {
+        document.querySelectorAll('.reveal').forEach(el => {
+            const top = el.getBoundingClientRect().top;
+            if (top < window.innerHeight - 80) el.classList.add('active');
+        });
+    }
+    revealElements();
+
+    // ── Smooth nav active state
+    const sections = document.querySelectorAll('section[id], footer[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(a => {
+                    a.style.color = a.getAttribute('href') === '#' + entry.target.id
+                        ? 'var(--cyan)' : '';
+                });
+            }
+        });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
