@@ -1,267 +1,935 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumeBuilder Pro - إنشاء السير الذاتية الاحترافية</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منشئ السيرة الذاتية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root {
+    --navy: #1e2d4a;
+    --navy-light: #2a3f66;
+    --gold: #c9a84c;
+    --white: #ffffff;
+    --light-gray: #f4f6f9;
+    --text-dark: #1a1a2e;
+    --text-mid: #4a5568;
+    --accent: #3d5a8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: #eef2f7;
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  /* ===== EDITOR PANEL ===== */
+  .app-wrapper {
+    display: flex;
+    min-height: 100vh;
+    gap: 0;
+  }
+
+  .editor-panel {
+    width: 380px;
+    min-width: 380px;
+    background: var(--navy);
+    color: white;
+    overflow-y: auto;
+    padding: 0;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+
+  .editor-header {
+    background: linear-gradient(135deg, var(--navy-light), var(--navy));
+    padding: 24px 20px;
+    border-bottom: 2px solid var(--gold);
+    text-align: center;
+  }
+
+  .editor-header h1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .editor-header p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .editor-body {
+    padding: 16px;
+  }
+
+  .section-tab {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .section-tab-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+    transition: background 0.2s;
+  }
+
+  .section-tab-header:hover { background: rgba(255,255,255,0.1); }
+
+  .section-tab-header span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .section-tab-header .arrow {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    transition: transform 0.3s;
+  }
+
+  .section-tab-header.open .arrow { transform: rotate(180deg); }
+
+  .section-tab-body {
+    display: none;
+    padding: 12px;
+  }
+
+  .section-tab-body.open { display: block; }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 7px;
+    color: white;
+    padding: 8px 10px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    direction: rtl;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.12);
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+
+  .form-group textarea { min-height: 70px; }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,168,76,0.15);
+    border: 1px dashed var(--gold);
+    color: var(--gold);
+    padding: 8px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    font-size: 12px;
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+    transition: all 0.2s;
+  }
+
+  .add-btn:hover { background: rgba(201,168,76,0.25); }
+
+  .remove-btn {
+    background: rgba(220,50,50,0.2);
+    border: none;
+    color: #ff6b6b;
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 11px;
+    font-family: 'Cairo', sans-serif;
+    margin-top: 6px;
+  }
+
+  .item-block {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .photo-upload-area {
+    background: rgba(255,255,255,0.05);
+    border: 2px dashed rgba(201,168,76,0.4);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .photo-upload-area:hover { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+
+  .photo-upload-area input { display: none; }
+
+  .photo-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 8px;
+    display: block;
+    border: 3px solid var(--gold);
+  }
+
+  .photo-upload-area p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .skill-range {
+    -webkit-appearance: none;
+    background: linear-gradient(to left, var(--gold) var(--val), rgba(255,255,255,0.2) var(--val));
+    height: 4px;
+    border-radius: 2px;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .export-btn {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 0 16px 16px;
+    background: linear-gradient(135deg, var(--gold), #a8843c);
+    color: var(--navy);
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(201,168,76,0.4);
+  }
+
+  .export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(201,168,76,0.5);
+  }
+
+  /* ===== CV PREVIEW ===== */
+  .preview-area {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: #dde3ec;
+    overflow-y: auto;
+  }
+
+  #cv-preview {
+    width: 794px;
+    min-height: 1123px;
+    background: white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    display: flex;
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* RIGHT SIDE - Main Content */
+  .cv-main {
+    flex: 1;
+    padding: 40px 40px 40px 30px;
+    background: white;
+  }
+
+  .cv-name {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--text-dark);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .cv-title {
+    font-size: 16px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 30px;
+  }
+
+  .cv-section-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-dark);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--navy);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cv-section { margin-bottom: 28px; }
+
+  .exp-item { margin-bottom: 16px; }
+
+  .exp-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .exp-title::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--navy);
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .exp-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-right: 16px;
+    margin-top: 4px;
+    line-height: 1.6;
+  }
+
+  /* LEFT SIDE - Sidebar */
+  .cv-sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--navy);
+    color: white;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-top {
+    background: linear-gradient(160deg, var(--navy-light) 0%, var(--navy) 60%);
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 3px solid var(--gold);
+  }
+
+  .sidebar-photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid var(--gold);
+    object-fit: cover;
+    margin: 0 auto 0;
+    display: block;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .sidebar-photo-placeholder {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid var(--gold);
+    background: rgba(255,255,255,0.1);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .sidebar-body { padding: 20px 18px; }
+
+  .sidebar-section-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sidebar-section { margin-bottom: 22px; }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .contact-icon {
+    width: 24px;
+    height: 24px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .about-text {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+    text-align: justify;
+  }
+
+  .skill-item { margin-bottom: 10px; }
+
+  .skill-name {
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .skill-name::before {
+    content: '•';
+    color: var(--gold);
+  }
+
+  .skill-bar-bg {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    height: 5px;
+    width: 100%;
+  }
+
+  .skill-bar-fill {
+    height: 5px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--gold), #e8c96a);
+  }
+
+  .lang-item {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-item::before {
+    content: '•';
+    color: var(--gold);
+  }
+
+  .ref-item {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 4px;
+  }
+
+  /* Skill without bar */
+  .skill-plain { margin-bottom: 6px; }
+
+  @media print {
+    body { background: white; }
+    .editor-panel, .preview-area > *:not(#cv-preview) { display: none; }
+  }
+</style>
 </head>
 <body>
-    <!-- شريط التنقل -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <i class="fas fa-file-alt"></i>
-                <span>ResumeBuilder Pro</span>
-            </div>
-            <div class="nav-menu" id="navMenu">
-                <a href="#features" class="nav-link">الميزات</a>
-                <a href="#templates" class="nav-link">القوالب</a>
-                <a href="#pricing" class="nav-link">الأسعار</a>
-                <button class="btn btn-outline">تسجيل الدخول</button>
-                <button class="btn btn-primary">ابدأ الآن مجاناً</button>
-            </div>
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
 
-    <!-- القسم الرئيسي -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-text fade-in">
-                    <div class="hero-badge">
-                        أداة إنشاء السير الذاتية الاحترافية
-                    </div>
-                    <h1 class="hero-title">
-                        اصنع سيرتك الذاتية
-                        <span class="text-accent">الاحترافية</span>
-                        <br>في دقائق
-                    </h1>
-                    <p class="hero-description">
-                        أنشئ سيرة ذاتية مميزة وجذابة باستخدام قوالبنا الاحترافية وأدوات التحرير المتقدمة. 
-                        اجعل سيرتك الذاتية تبرز من بين المتقدمين الآخرين.
-                    </p>
-                    <div class="hero-buttons">
-                        <a href="editor.html" class="btn btn-accent btn-large">
-                            ابدأ الآن مجاناً
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
-                        <button class="btn btn-outline-white btn-large">
-                            استعرض القوالب
-                        </button>
-                    </div>
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-star"></i>
-                            <span class="stat-number">4.9</span>
-                            <span class="stat-label">تقييم</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-users"></i>
-                            <span class="stat-number">+100k</span>
-                            <span class="stat-label">مستخدم</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-download"></i>
-                            <span class="stat-number">+500k</span>
-                            <span class="stat-label">تحميل</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-preview slide-in-left">
-                    <div class="preview-container">
-                        <div class="resume-preview">
-                            <div class="resume-header">
-                                <div class="avatar"></div>
-                                <div class="resume-info">
-                                    <h3>أحمد محمد علي</h3>
-                                    <p>مطور واجهات أمامية</p>
-                                </div>
-                            </div>
-                            <div class="resume-content">
-                                <div class="content-line full"></div>
-                                <div class="content-line medium"></div>
-                                <div class="content-line small"></div>
-                                <div class="experience-section">
-                                    <h4>الخبرات</h4>
-                                    <div class="experience-item">
-                                        <span class="job-title">React Developer</span>
-                                        <span class="job-date">2022-2024</span>
-                                    </div>
-                                    <div class="experience-item">
-                                        <span class="job-title">Frontend Developer</span>
-                                        <span class="job-date">2020-2022</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="app-wrapper">
 
-    <!-- قسم الميزات -->
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-header">
-                <h2>لماذا تختار ResumeBuilder Pro؟</h2>
-                <p>نوفر لك جميع الأدوات التي تحتاجها لإنشاء سيرة ذاتية احترافية تساعدك في الحصول على الوظيفة المثالية</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card fade-in-up" data-delay="0">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>سرعة وسهولة</h3>
-                    <p>أنشئ سيرتك الذاتية في دقائق معدودة باستخدام واجهتنا البديهية والسهلة</p>
-                </div>
-                <div class="feature-card fade-in-up" data-delay="100">
-                    <div class="feature-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>قوالب احترافية</h3>
-                    <p>اختر من بين أكثر من 50 قالب احترافي مصمم خصيصاً لمختلف المجالات</p>
-                </div>
-                <div class="feature-card fade-in-up" data-delay="200">
-                    <div class="feature-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h3>تخصيص كامل</h3>
-                    <p>تحكم في كل تفصيل من الألوان والخطوط إلى التخطيط والمحتوى</p>
-                </div>
-                <div class="feature-card fade-in-up" data-delay="300">
-                    <div class="feature-icon">
-                        <i class="fas fa-file-export"></i>
-                    </div>
-                    <h3>تصدير متعدد</h3>
-                    <p>صدّر سيرتك الذاتية بصيغة PDF عالية الجودة أو شاركها عبر رابط مباشر</p>
-                </div>
-                <div class="feature-card fade-in-up" data-delay="400">
-                    <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>ذكاء اصطناعي</h3>
-                    <p>احصل على اقتراحات ذكية للمحتوى وتحسينات لزيادة فرص قبولك</p>
-                </div>
-                <div class="feature-card fade-in-up" data-delay="500">
-                    <div class="feature-icon">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <h3>دعم 24/7</h3>
-                    <p>فريق الدعم متاح على مدار الساعة لمساعدتك في أي استفسار</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- ===== EDITOR PANEL ===== -->
+  <div class="editor-panel">
+    <div class="editor-header">
+      <h1>🗂️ منشئ السيرة الذاتية</h1>
+      <p>أدخل بياناتك وشاهد المعاينة فوراً</p>
+    </div>
 
-    <!-- قسم الأسعار -->
-    <section id="pricing" class="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2>خطط تناسب احتياجاتك</h2>
-                <p>ابدأ مجاناً أو اختر الخطة المناسبة لك</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card fade-in-up" data-delay="0">
-                    <div class="pricing-header">
-                        <h3>المجانية</h3>
-                        <div class="price">
-                            <span class="currency">0</span>
-                            <span class="period">/شهر</span>
-                        </div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> 3 قوالب أساسية</li>
-                        <li><i class="fas fa-check"></i> تصدير PDF</li>
-                        <li><i class="fas fa-check"></i> سيرة ذاتية واحدة</li>
-                    </ul>
-                    <button class="btn btn-outline btn-full">ابدأ مجاناً</button>
-                </div>
-                <div class="pricing-card featured fade-in-up" data-delay="100">
-                    <div class="popular-badge">الأكثر شعبية</div>
-                    <div class="pricing-header">
-                        <h3>المحترفة</h3>
-                        <div class="price">
-                            <span class="currency">29</span>
-                            <span class="period">/شهر</span>
-                        </div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> جميع القوالب (50+)</li>
-                        <li><i class="fas fa-check"></i> تخصيص كامل</li>
-                        <li><i class="fas fa-check"></i> سير ذاتية غير محدودة</li>
-                        <li><i class="fas fa-check"></i> اقتراحات الذكاء الاصطناعي</li>
-                    </ul>
-                    <button class="btn btn-primary btn-full">اشترك الآن</button>
-                </div>
-                <div class="pricing-card fade-in-up" data-delay="200">
-                    <div class="pricing-header">
-                        <h3>المؤسسات</h3>
-                        <div class="price">
-                            <span class="currency">99</span>
-                            <span class="period">/شهر</span>
-                        </div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> جميع ميزات المحترفة</li>
-                        <li><i class="fas fa-check"></i> إدارة الفريق</li>
-                        <li><i class="fas fa-check"></i> تحليلات متقدمة</li>
-                        <li><i class="fas fa-check"></i> دعم أولوية</li>
-                    </ul>
-                    <button class="btn btn-outline btn-full">تواصل معنا</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="editor-body">
 
-    <!-- التذييل -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="brand">
-                        <i class="fas fa-file-alt"></i>
-                        <span>ResumeBuilder Pro</span>
-                    </div>
-                    <p>أداة إنشاء السير الذاتية الاحترافية الأولى في المنطقة</p>
-                </div>
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>المنتج</h4>
-                        <a href="#features">الميزات</a>
-                        <a href="#templates">القوالب</a>
-                        <a href="#pricing">الأسعار</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>الدعم</h4>
-                        <a href="#">مركز المساعدة</a>
-                        <a href="#">تواصل معنا</a>
-                        <a href="#">الأسئلة الشائعة</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>الشركة</h4>
-                        <a href="#">من نحن</a>
-                        <a href="#">المدونة</a>
-                        <a href="#">الوظائف</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 ResumeBuilder Pro. جميع الحقوق محفوظة.</p>
-            </div>
+      <!-- Photo -->
+      <div class="section-tab">
+        <div class="section-tab-header open" onclick="toggleTab(this)">
+          <span>📷 الصورة الشخصية</span>
+          <span class="arrow">▼</span>
         </div>
-    </footer>
+        <div class="section-tab-body open">
+          <label class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
+            <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(this)">
+            <img id="photoPreviewEditor" class="photo-preview" style="display:none" src="" alt="">
+            <p id="photoUploadText">اضغط لرفع الصورة الشخصية</p>
+          </label>
+        </div>
+      </div>
 
-    <script src="js/main.js"></script>
+      <!-- Personal Info -->
+      <div class="section-tab">
+        <div class="section-tab-header open" onclick="toggleTab(this)">
+          <span>👤 المعلومات الشخصية</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="section-tab-body open">
+          <div class="form-group">
+            <label>الاسم الكامل</label>
+            <input type="text" id="fullName" placeholder="عباس عبد الرزاق" oninput="updatePreview()">
+          </div>
+          <div class="form-group">
+            <label>المسمى الوظيفي</label>
+            <input type="text" id="jobTitle" placeholder="فني تبريد" oninput="updatePreview()">
+          </div>
+          <div class="form-group">
+            <label>📞 رقم الهاتف</label>
+            <input type="text" id="phone" placeholder="07728536577" oninput="updatePreview()">
+          </div>
+          <div class="form-group">
+            <label>📍 المدينة / العنوان</label>
+            <input type="text" id="city" placeholder="بغداد" oninput="updatePreview()">
+          </div>
+          <div class="form-group">
+            <label>✉️ البريد الإلكتروني (اختياري)</label>
+            <input type="text" id="email" placeholder="example@email.com" oninput="updatePreview()">
+          </div>
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="section-tab">
+        <div class="section-tab-header" onclick="toggleTab(this)">
+          <span>📝 نبذة عني</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="section-tab-body">
+          <div class="form-group">
+            <textarea id="aboutText" placeholder="اكتب نبذة مختصرة عن نفسك وخبراتك..." oninput="updatePreview()"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="section-tab">
+        <div class="section-tab-header open" onclick="toggleTab(this)">
+          <span>💼 الخبرات المهنية</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="section-tab-body open">
+          <div id="expContainer"></div>
+          <button class="add-btn" onclick="addExp()">+ إضافة خبرة</button>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="section-tab">
+        <div class="section-tab-header open" onclick="toggleTab(this)">
+          <span>⚙️ المهارات</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="section-tab-body open">
+          <div id="skillsContainer"></div>
+          <button class="add-btn" onclick="addSkill()">+ إضافة مهارة</button>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="section-tab">
+        <div class="section-tab-header" onclick="toggleTab(this)">
+          <span>🌐 اللغات</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="section-tab-body">
+          <div id="langsContainer"></div>
+          <button class="add-btn" onclick="addLang()">+ إضافة لغة</button>
+        </div>
+      </div>
+
+      <!-- References -->
+      <div class="section-tab">
+        <div class="section-tab-header" onclick="toggleTab(this)">
+          <span>📋 المراجع المهنية</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="section-tab-body">
+          <div id="refsContainer"></div>
+          <button class="add-btn" onclick="addRef()">+ إضافة مرجع</button>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="export-btn" onclick="exportPDF()">
+      ⬇️ تصدير PDF باسم الشخص
+    </button>
+  </div>
+
+  <!-- ===== PREVIEW ===== -->
+  <div class="preview-area">
+    <div id="cv-preview">
+
+      <!-- MAIN CONTENT (Right) -->
+      <div class="cv-main">
+        <div id="cv-name-display" class="cv-name">الاسم الكامل</div>
+        <div id="cv-title-display" class="cv-title">المسمى الوظيفي</div>
+
+        <!-- Experience Section -->
+        <div class="cv-section">
+          <div class="cv-section-title">الخبرات المهنية</div>
+          <div id="cv-exp-list">
+            <p style="color:#aaa;font-size:12px">لم يتم إضافة خبرات بعد</p>
+          </div>
+        </div>
+
+        <!-- References -->
+        <div class="cv-section">
+          <div class="cv-section-title">المراجع المهنية</div>
+          <div id="cv-refs-list">
+            <p style="color:#aaa;font-size:12px">لم يتم إضافة مراجع بعد</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR (Left) -->
+      <div class="cv-sidebar">
+        <div class="sidebar-top">
+          <div id="cv-photo-wrap">
+            <div class="sidebar-photo-placeholder" id="cv-photo-placeholder">👤</div>
+            <img id="cv-photo" class="sidebar-photo" style="display:none" src="" alt="">
+          </div>
+        </div>
+
+        <div class="sidebar-body">
+
+          <!-- Contact -->
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">معلومات التواصل</div>
+            <div id="cv-contact-list">
+              <p style="color:rgba(255,255,255,0.4);font-size:11px">لم يتم إضافة معلومات</p>
+            </div>
+          </div>
+
+          <!-- About -->
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">نبذة عني</div>
+            <p id="cv-about-display" class="about-text" style="color:rgba(255,255,255,0.4);font-size:11px">لم يتم إضافة نبذة</p>
+          </div>
+
+          <!-- Skills -->
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">المهارات</div>
+            <div id="cv-skills-list">
+              <p style="color:rgba(255,255,255,0.4);font-size:11px">لم يتم إضافة مهارات</p>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">اللغات</div>
+            <div id="cv-langs-list">
+              <p style="color:rgba(255,255,255,0.4);font-size:11px">لم يتم إضافة لغات</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let expCount = 0;
+let skillCount = 0;
+let langCount = 0;
+let refCount = 0;
+let photoDataUrl = null;
+
+// ===== TOGGLE TABS =====
+function toggleTab(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ===== PHOTO =====
+function handlePhoto(input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    photoDataUrl = e.target.result;
+    document.getElementById('photoPreviewEditor').src = photoDataUrl;
+    document.getElementById('photoPreviewEditor').style.display = 'block';
+    document.getElementById('photoUploadText').style.display = 'none';
+    updatePreview();
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// ===== ADD EXPERIENCE =====
+function addExp() {
+  expCount++;
+  const id = expCount;
+  const container = document.getElementById('expContainer');
+  const div = document.createElement('div');
+  div.className = 'item-block';
+  div.id = `exp-block-${id}`;
+  div.innerHTML = `
+    <div class="form-group">
+      <label>اسم الجهة / المشروع</label>
+      <input type="text" id="exp-place-${id}" placeholder="مستشفى التوحد - البصرة" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>الوصف / المهام</label>
+      <textarea id="exp-desc-${id}" placeholder="وصف المهام والمسؤوليات..." oninput="updatePreview()"></textarea>
+    </div>
+    <button class="remove-btn" onclick="removeItem('exp-block-${id}')">✕ حذف</button>
+  `;
+  container.appendChild(div);
+}
+
+// ===== ADD SKILL =====
+function addSkill() {
+  skillCount++;
+  const id = skillCount;
+  const container = document.getElementById('skillsContainer');
+  const div = document.createElement('div');
+  div.className = 'item-block';
+  div.id = `skill-block-${id}`;
+  div.innerHTML = `
+    <div class="form-group">
+      <label>اسم المهارة</label>
+      <input type="text" id="skill-name-${id}" placeholder="تنصيب وحدات التبريد" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>المستوى (0-100)</label>
+      <input type="range" id="skill-level-${id}" min="0" max="100" value="80" oninput="updatePreview()" style="width:100%;accent-color:#c9a84c">
+    </div>
+    <button class="remove-btn" onclick="removeItem('skill-block-${id}')">✕ حذف</button>
+  `;
+  container.appendChild(div);
+}
+
+// ===== ADD LANGUAGE =====
+function addLang() {
+  langCount++;
+  const id = langCount;
+  const container = document.getElementById('langsContainer');
+  const div = document.createElement('div');
+  div.className = 'item-block';
+  div.id = `lang-block-${id}`;
+  div.innerHTML = `
+    <div class="form-group">
+      <label>اللغة والمستوى</label>
+      <input type="text" id="lang-val-${id}" placeholder="العربية 100% اللغة الأم" oninput="updatePreview()">
+    </div>
+    <button class="remove-btn" onclick="removeItem('lang-block-${id}')">✕ حذف</button>
+  `;
+  container.appendChild(div);
+}
+
+// ===== ADD REFERENCE =====
+function addRef() {
+  refCount++;
+  const id = refCount;
+  const container = document.getElementById('refsContainer');
+  const div = document.createElement('div');
+  div.className = 'item-block';
+  div.id = `ref-block-${id}`;
+  div.innerHTML = `
+    <div class="form-group">
+      <label>اسم المرجع / الجهة</label>
+      <input type="text" id="ref-val-${id}" placeholder="شركة نسيم الوارث" oninput="updatePreview()">
+    </div>
+    <button class="remove-btn" onclick="removeItem('ref-block-${id}')">✕ حذف</button>
+  `;
+  container.appendChild(div);
+}
+
+// ===== REMOVE =====
+function removeItem(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+  updatePreview();
+}
+
+// ===== UPDATE PREVIEW =====
+function updatePreview() {
+  // Name & Title
+  const name = document.getElementById('fullName').value || 'الاسم الكامل';
+  const title = document.getElementById('jobTitle').value || 'المسمى الوظيفي';
+  document.getElementById('cv-name-display').textContent = name;
+  document.getElementById('cv-title-display').textContent = title;
+
+  // Photo
+  if (photoDataUrl) {
+    document.getElementById('cv-photo').src = photoDataUrl;
+    document.getElementById('cv-photo').style.display = 'block';
+    document.getElementById('cv-photo-placeholder').style.display = 'none';
+  }
+
+  // Contact
+  const phone = document.getElementById('phone').value;
+  const city = document.getElementById('city').value;
+  const email = document.getElementById('email').value;
+  let contactHtml = '';
+  if (phone) contactHtml += `<div class="contact-item"><span class="contact-icon">📞</span><span>${phone}</span></div>`;
+  if (city) contactHtml += `<div class="contact-item"><span class="contact-icon">📍</span><span>${city}</span></div>`;
+  if (email) contactHtml += `<div class="contact-item"><span class="contact-icon">✉️</span><span>${email}</span></div>`;
+  document.getElementById('cv-contact-list').innerHTML = contactHtml || '<p style="color:rgba(255,255,255,0.4);font-size:11px">لم يتم إضافة معلومات</p>';
+
+  // About
+  const about = document.getElementById('aboutText').value;
+  const aboutEl = document.getElementById('cv-about-display');
+  aboutEl.textContent = about || 'لم يتم إضافة نبذة';
+  aboutEl.style.color = about ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.4)';
+  aboutEl.style.fontSize = about ? '11.5px' : '11px';
+
+  // Experience
+  let expHtml = '';
+  for (let i = 1; i <= expCount; i++) {
+    const placeEl = document.getElementById(`exp-place-${i}`);
+    const descEl = document.getElementById(`exp-desc-${i}`);
+    if (!placeEl) continue;
+    const place = placeEl.value;
+    const desc = descEl.value;
+    if (!place && !desc) continue;
+    expHtml += `<div class="exp-item">`;
+    if (place) expHtml += `<div class="exp-title">${place}</div>`;
+    if (desc) expHtml += `<div class="exp-desc">${desc.replace(/\n/g, '<br>')}</div>`;
+    expHtml += `</div>`;
+  }
+  document.getElementById('cv-exp-list').innerHTML = expHtml || '<p style="color:#aaa;font-size:12px">لم يتم إضافة خبرات بعد</p>';
+
+  // Skills
+  let skillsHtml = '';
+  for (let i = 1; i <= skillCount; i++) {
+    const nameEl = document.getElementById(`skill-name-${i}`);
+    const levelEl = document.getElementById(`skill-level-${i}`);
+    if (!nameEl) continue;
+    const sName = nameEl.value;
+    const sLevel = levelEl ? levelEl.value : 80;
+    if (!sName) continue;
+    skillsHtml += `
+      <div class="skill-item">
+        <div class="skill-name">${sName}</div>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width:${sLevel}%"></div></div>
+      </div>`;
+  }
+  document.getElementById('cv-skills-list').innerHTML = skillsHtml || '<p style="color:rgba(255,255,255,0.4);font-size:11px">لم يتم إضافة مهارات</p>';
+
+  // Languages
+  let langsHtml = '';
+  for (let i = 1; i <= langCount; i++) {
+    const el = document.getElementById(`lang-val-${i}`);
+    if (!el || !el.value) continue;
+    langsHtml += `<div class="lang-item">${el.value}</div>`;
+  }
+  document.getElementById('cv-langs-list').innerHTML = langsHtml || '<p style="color:rgba(255,255,255,0.4);font-size:11px">لم يتم إضافة لغات</p>';
+
+  // References
+  let refsHtml = '';
+  for (let i = 1; i <= refCount; i++) {
+    const el = document.getElementById(`ref-val-${i}`);
+    if (!el || !el.value) continue;
+    refsHtml += `<div class="ref-item" style="color:#555;font-size:13px">• ${el.value}</div>`;
+  }
+  document.getElementById('cv-refs-list').innerHTML = refsHtml || '<p style="color:#aaa;font-size:12px">لم يتم إضافة مراجع بعد</p>';
+}
+
+// ===== EXPORT PDF =====
+async function exportPDF() {
+  const name = document.getElementById('fullName').value || 'السيرة_الذاتية';
+  const filename = `${name}.pdf`;
+
+  const element = document.getElementById('cv-preview');
+
+  const opt = {
+    margin: 0,
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      width: 794,
+      logging: false
+    },
+    jsPDF: {
+      unit: 'px',
+      format: [794, 1123],
+      orientation: 'portrait'
+    }
+  };
+
+  const btn = document.querySelector('.export-btn');
+  btn.textContent = '⏳ جاري التصدير...';
+  btn.disabled = true;
+
+  try {
+    await html2pdf().set(opt).from(element).save();
+  } finally {
+    btn.textContent = '⬇️ تصدير PDF باسم الشخص';
+    btn.disabled = false;
+  }
+}
+
+// Initialize with empty state
+updatePreview();
+</script>
 </body>
 </html>
-
